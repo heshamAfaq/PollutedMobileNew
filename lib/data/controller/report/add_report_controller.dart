@@ -1491,11 +1491,17 @@ class AddReportController extends GetxController {
 
   List<dynamic> selectedPlayer = [];
   var selectedPlayerValue = ''.obs;
+  final _picker = ImagePicker();
+  final _image = ''.obs;
+  String get images => _image.value;
 
-  final cardList = <Widget>[].obs;
+  selectImage() async {
+    try {
+      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
 
-  addCardWidget(Widget widget) {
-    cardList.add(widget);
-    update();
+      if (image != null) _image.value = image.path;
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }
