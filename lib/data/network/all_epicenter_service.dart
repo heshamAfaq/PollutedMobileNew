@@ -1,7 +1,7 @@
 import 'dart:convert';
-
 import 'package:enivronment/domain/model/EpicintersModel.dart';
 import 'package:enivronment/domain/model/ReportModel.dart';
+import 'package:enivronment/domain/model/ReportsModels.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -46,10 +46,11 @@ class AllEpicenterServices {
     return 400;
   }
 
-  getEpicenters(int pageNum, int regionId) async {
+  getEpicenters(int pageNum, int regionId, int status) async {
     http.Response res = await http.get(
       Uri.parse(
-          '${Constants.baseUrl}/Epicenters/GetAllEpicenters?page=$pageNum&pageSize=10&regionId=$regionId'),
+        '${Constants.baseUrl}/Epicenters/GetAllEpicenters?page=$pageNum&pageSize=10&regionId=$regionId&status=$status',
+      ),
       headers: <String, String>{
         "Content-type": "application/json",
         'Accept': 'application/json',
@@ -77,6 +78,31 @@ class AllEpicenterServices {
       return 500;
     }
     return 400;
+  }
+
+  Future<List<ReportsModels>?> getReports(int id) async {
+    try {
+      http.Response res = await http.get(
+        Uri.parse("${Constants.baseUrl}/Reports/getallreport/$id"),
+        headers: <String, String>{
+          "Content-type": "application/json",
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${SharedPreferencesHelper.getTokenValue()}',
+          'lang': Get.locale!.languageCode
+        },
+      );
+
+      print(res.body);
+      print("akdoura");
+      if (res.statusCode == 200) {
+        print(res.body);
+        final mList = List<ReportsModels>.from(
+            jsonDecode(res.body).map((i) => ReportsModels.fromJson(i)));
+
+        return mList;
+      }
+    } catch (e) {}
+    return null;
   }
 
   getEpicentersbyId(int id) async {

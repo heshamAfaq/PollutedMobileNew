@@ -190,8 +190,27 @@ const Map<String, String> en = {
   "s": "m/s",
   "o": "m g / m3",
   "d": "°m",
-  "air pollution":"air pollution",
-  "Soil contamination":"Soil contamination",
-  "Water Pollution":"Water Pollution",
-  "continue to add report":"continue to add report",
+  "m/g": "mg/L",
+  "air pollution": "air pollution",
+  "Soil contamination": "Soil contamination",
+  "Water Pollution": "Water Pollution",
+  "continue to add report": "continue to add report",
+  "air condition at the time of measurement":
+      "air condition at the time of measurement",
+  "choose wind direction": "choose wind direction",
+  "volume All": "volume All",
+  "choose buildings": "choose buildings",
+  "choose natural Region": "choose natural Region",
+  "Select the medium that has been contaminated":
+      "Select the medium that has been contaminated",
+  "Choosing pollution markers": "Choosing pollution markers",
+  "choose natural land": "choose natural land",
+  "choose Competent authority": "choose Competent authority",
+  "choose type of water": "choose type of water",
+  "choose Description of the site of contamination":
+      "choose Description of the site of contamination",
+  "Choose the type of vegetation": "Choose the type of vegetation",
+  "Choose the type of groundwater": "Choose the type of groundwater",
+  "reports": "reports",
+  "no found reports": "no found reports"
 };

@@ -222,16 +222,20 @@
 //   }
 // }
 import 'dart:developer';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:enivronment/app/constants.dart';
 import 'package:enivronment/app/shared_widgets/bubbled_loader_widget.dart';
 import 'package:enivronment/data/controller/epicenter/nearst_epicenters_controller.dart';
 import 'package:enivronment/presentation/Home/update_report.dart';
 import 'package:enivronment/presentation/report/add_report_screen.dart';
 import 'package:enivronment/presentation/report/widget/report_divider_widget.dart';
 import 'package:enivronment/presentation/resources/constants_manager.dart';
+import 'package:enivronment/presentation/widget/load_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:number_pagination/number_pagination.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../app/app_prefs.dart';
 import '../../app/shared_widgets/loader_widget.dart';
 import '../../data/controller/epicenter/all_epicenter_controller.dart';
@@ -260,7 +264,7 @@ class HomeScreen extends StatelessWidget {
     List<Tab> tabs = <Tab>[
       Tab(text: 'All HotSpots'.tr),
       Tab(text: 'Nearst HotSpots'.tr),
-
+      Tab(text: 'reports'.tr),
     ];
 
     SizeConfig().init(context);
@@ -327,6 +331,8 @@ class HomeScreen extends StatelessWidget {
                 onTap: (index) {
                   if (index == 1) {
                     epicenterCtrl.getNearest();
+                  } else if (index == 2) {
+                    epicenterCtrl.getReports();
                   }
                 },
                 labelColor: ColorManager.secondary,
@@ -375,6 +381,7 @@ class HomeScreen extends StatelessWidget {
                                                   epicenterCtrl.getAllCities(
                                                       epicenterCtrl
                                                           .allregion[index].id);
+                                                  Navigator.pop(context);
                                                 },
                                                 child: Padding(
                                                   padding: const EdgeInsets
@@ -553,156 +560,134 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                     Expanded(
-                        child: Obx(
-                      () => Container(
-                        padding: const EdgeInsets.only(
-                            bottom: AppPadding.p8,
-                            top: AppPadding.p20,
-                            right: AppPadding.p14,
-                            left: AppPadding.p14),
-                        width: double.infinity,
-                        color: ColorManager.lightGrey,
-                        child: epicenterCtrl.loading.value == true
-                            ? const LoaderWidget()
-                            : epicenterCtrl
-                            .epicintersModel!.epicenters!.isEmpty
-                                ? Center(child: Text("Not found epicenters".tr))
-                                : ListView.builder(
-                                    itemCount: epicenterCtrl
-                                        .epicintersModel!.epicenters!.length,
-                                    itemBuilder: (BuildContext context, index) {
-                                      return GestureDetector(
-                                        onTap: () async {
-                                          // await epicenterCtrl.getEpicenters(
-                                          //     epicenterCtrl.epicintersModel!
-                                          //         .epicenters![index].id!);
-                                          // if (epicenterCtrl.epicintersModel!
-                                          //         .epicenters![index].status ==
-                                          //     0) {
-                                          //   Get.to(() => AddReportScreen(
-                                          //         epicenterId: epicenterCtrl
-                                          //             .epicintersModel!
-                                          //             .epicenters![index]
-                                          //             .id!,
-                                          //       ));
-                                          // }else if(epicenterCtrl.epicintersModel!
-                                          //     .epicenters![index].status ==
-                                          //     4){
-                                          //   Get.to(() => UpdateReportScreen(
-                                          //     report: epicenterCtrl.reportModel,
-                                          //     epicenterId: epicenterCtrl
-                                          //         .epicintersModel!
-                                          //         .epicenters![index]
-                                          //         .id!,
-                                          //   ));
-                                          // }
-
-                                          //   },
-                                        },
-                                        child: ListItemWidget(
-                                          onNavigate: () async {
-                                            await epicenterCtrl.getEpicenters(
-                                                epicenterCtrl.epicintersModel!
-                                                    .epicenters![index].id!);
-                                            if (epicenterCtrl.epicintersModel!
-                                                .epicenters![index].status ==
-                                                0) {
-                                              Get.to(() => AddReportScreen(
-                                                epicenterId: epicenterCtrl
-                                                    .epicintersModel!
-                                                    .epicenters![index]
-                                                    .id!,
-                                              ));
-                                            }else if(epicenterCtrl.epicintersModel!
-                                                .epicenters![index].status ==
-                                                4){
-                                              Get.to(() => UpdateReportScreen(
-                                                report: epicenterCtrl.reportModel,
-                                                epicenterId: epicenterCtrl
-                                                    .epicintersModel!
-                                                    .epicenters![index]
-                                                    .id!,
-                                              ));
-                                            }
-
+                        child: Obx(() => Container(
+                              padding: const EdgeInsets.only(
+                                  bottom: AppPadding.p8,
+                                  top: AppPadding.p20,
+                                  right: AppPadding.p14,
+                                  left: AppPadding.p14),
+                              width: double.infinity,
+                              color: ColorManager.lightGrey,
+                              child: epicenterCtrl.loading.value == true
+                                  ? const LoaderWidget()
+                                  : epicenterCtrl.listEpicenters.isEmpty
+                                      ? Center(
+                                          child:
+                                              Text("Not found epicenters".tr))
+                                      : SmartRefresher(
+                                          controller:
+                                              epicenterCtrl.refreshController,
+                                          enablePullUp: true,
+                                          enablePullDown: false,
+                                          onLoading: () async {
+                                            await epicenterCtrl.loadMore();
+                                            epicenterCtrl.refreshController
+                                                .loadComplete();
                                           },
-                                          report: epicenterCtrl.epicintersModel!
-                                              .epicenters![index],
-                                          reportId: epicenterCtrl
-                                              .epicintersModel!
-                                              .epicenters![index]
-                                              .reportId,
-                                          status: epicenterCtrl.epicintersModel!
-                                              .epicenters![index].status,
-                                          city: epicenterCtrl.epicintersModel!
-                                              .epicenters![index].city!.name!,
-                                          governorate: epicenterCtrl
-                                              .epicintersModel!
-                                              .epicenters![index]
-                                              .city!
-                                              .governorate!
-                                              .name!,
-                                          images: epicenterCtrl
-                                              .epicintersModel!
-                                              .epicenters![index]
-                                              .epicenterPhotos!,
-                                          title: epicenterCtrl
-                                                  .epicintersModel!
-                                                  .epicenters![index]
-                                                  .description ??
-                                              '',
-                                          description: epicenterCtrl
-                                                  .epicintersModel!
-                                                  .epicenters![index]
-                                                  .description ??
-                                              '',
-                                          date: epicenterCtrl.epicintersModel!
-                                              .epicenters![index].creationDate!,
-                                          size: epicenterCtrl.epicintersModel!
-                                              .epicenters![index].size!
-                                              .toDouble(),
-                                          epicenterId: epicenterCtrl
-                                              .epicintersModel!
-                                              .epicenters![index]
-                                              .id!,
-                                          lat: epicenterCtrl.epicintersModel!
-                                              .epicenters![index].lat!,
-                                          long: epicenterCtrl.epicintersModel!
-                                              .epicenters![index].long!,
+                                          child: ListView.builder(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const BouncingScrollPhysics(),
+                                              itemCount: epicenterCtrl
+                                                  .listEpicenters.length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      index) {
+                                                return ListItemWidget(
+                                                  onNavigate: () async {
+                                                    await epicenterCtrl
+                                                        .getEpicenters(
+                                                            epicenterCtrl
+                                                                .listEpicenters[
+                                                                    index]
+                                                                .id!);
+
+                                                    Get.to(
+                                                        () => AddReportScreen(
+                                                              epicenterId:
+                                                                  epicenterCtrl
+                                                                      .listEpicenters[
+                                                                          index]
+                                                                      .id!,
+                                                            ));
+                                                  },
+                                                  // report: epicenterCtrl.epicintersModel!
+                                                  //     .epicenters![index],
+                                                  reportId: epicenterCtrl
+                                                      .listEpicenters[index]
+                                                      .reportId,
+                                                  status: epicenterCtrl
+                                                      .listEpicenters[index]
+                                                      .status,
+                                                  city: epicenterCtrl
+                                                      .listEpicenters[index]
+                                                      .city!
+                                                      .name!,
+                                                  governorate: epicenterCtrl
+                                                      .listEpicenters[index]
+                                                      .city!
+                                                      .governorate!
+                                                      .name!,
+                                                  images: epicenterCtrl
+                                                      .listEpicenters[index]
+                                                      .epicenterPhotos!,
+                                                  title: epicenterCtrl
+                                                          .listEpicenters[index]
+                                                          .description ??
+                                                      '',
+                                                  description: epicenterCtrl
+                                                          .listEpicenters[index]
+                                                          .description ??
+                                                      '',
+                                                  date: epicenterCtrl
+                                                      .listEpicenters[index]
+                                                      .creationDate!,
+                                                  size: epicenterCtrl
+                                                      .listEpicenters[index]
+                                                      .size!
+                                                      .toDouble(),
+                                                  epicenterId: epicenterCtrl
+                                                      .listEpicenters[index]
+                                                      .id!,
+                                                  lat: epicenterCtrl
+                                                      .listEpicenters[index]
+                                                      .lat!,
+                                                  long: epicenterCtrl
+                                                      .listEpicenters[index]
+                                                      .long!,
+                                                );
+                                              }),
                                         ),
-                                      );
-                                    }),
-                      ),
-                    )),
-                    SizedBox(
-                        height: 60,
-                        child: Obx(() {
-                          var totalItemCount =
-                              int.parse(epicenterCtrl.totalItem.value);
-                          var total = totalItemCount / 10;
-                          return NumberPagination(
-                            onPageChanged: (int pageNumber) {
-                              log("page number $pageNumber");
-                              // ctx.getAllEpicenter(pageNumber);
-                              epicenterCtrl.changPageNum(pageNumber);
-                            },
-                            fontSize: FontSize.s12,
-                            iconNext: Icon(
-                              epicenterCtrl.paginationNext,
-                              color: ColorManager.white,
-                            ),
-                            iconPrevious: Icon(
-                              epicenterCtrl.paginationPervious,
-                              color: ColorManager.white,
-                            ),
-                            pageTotal: total.ceil(),
-                            pageInit: 1,
-                            // picked number when init page
-                            colorPrimary: ColorManager.lightGrey,
-                            colorSub: ColorManager.secondary,
-                            threshold: AppConstants.paginationNumber,
-                          );
-                        }))
+                            ))),
+                    // SizedBox(
+                    //     height: 60,
+                    //     child: Obx(() {
+                    //       var totalItemCount =
+                    //           int.parse(epicenterCtrl.totalItem.value);
+                    //       var total = totalItemCount / 10;
+                    //       return NumberPagination(
+                    //         onPageChanged: (int pageNumber) {
+                    //           log("page number $pageNumber");
+                    //           // ctx.getAllEpicenter(pageNumber);
+                    //           epicenterCtrl.changPageNum(pageNumber);
+                    //         },
+                    //         fontSize: FontSize.s12,
+                    //         iconNext: Icon(
+                    //           epicenterCtrl.paginationNext,
+                    //           color: ColorManager.white,
+                    //         ),
+                    //         iconPrevious: Icon(
+                    //           epicenterCtrl.paginationPervious,
+                    //           color: ColorManager.white,
+                    //         ),
+                    //         pageTotal: total.ceil(),
+                    //         pageInit: 1,
+                    //         // picked number when init page
+                    //         colorPrimary: ColorManager.lightGrey,
+                    //         colorSub: ColorManager.secondary,
+                    //         threshold: AppConstants.paginationNumber,
+                    //       );
+                    //     }))
                   ],
                 ),
 
@@ -867,7 +852,320 @@ class HomeScreen extends StatelessWidget {
                 //                   ),
                 //                 ),
                 //               );
+                //
+                //
+                //
+                //
                 //             }))
+                Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: Column(
+                        children: [
+                          Obx(
+                            () => GestureDetector(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (ctx) => SizedBox(
+                                        height: SizeConfig.screenHeight! /
+                                            MediaSize.m2_5,
+                                        child: ListView.builder(
+                                            itemCount:
+                                                epicenterCtrl.allregion.length,
+                                            itemBuilder: (context, index) {
+                                              return InkWell(
+                                                onTap: () {
+                                                  epicenterCtrl
+                                                          .regionId2.value =
+                                                      epicenterCtrl
+                                                          .allregion[index].id;
+                                                  epicenterCtrl
+                                                          .regionText2.value =
+                                                      epicenterCtrl
+                                                          .allregion[index]
+                                                          .name;
+                                                  epicenterCtrl.getReports();
+                                                  epicenterCtrl.getAllCities2(
+                                                      epicenterCtrl
+                                                          .regionId2.value);
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Padding(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal:
+                                                          AppPadding.p60,
+                                                      vertical: AppPadding.p16),
+                                                  child: Container(
+                                                    alignment: Alignment.center,
+                                                    height: SizeConfig
+                                                            .screenHeight! /
+                                                        MediaSize.m12,
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                BorderRadiusValues
+                                                                    .br10),
+                                                        border: Border.all(
+                                                            width: AppSize.s1,
+                                                            color: ColorManager
+                                                                .grey)),
+                                                    child: Text(
+                                                        epicenterCtrl
+                                                            .allregion[index]
+                                                            .name,
+                                                        style: getSemiBoldStyle(
+                                                            color: ColorManager
+                                                                .secondary)),
+                                                  ),
+                                                ),
+                                              );
+                                            })),
+                                  );
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: AppPadding.p10),
+                                  margin: const EdgeInsets.only(
+                                      right: AppMargin.m30,
+                                      left: AppMargin.m30,
+                                      top: AppMargin.m20),
+                                  alignment: Alignment.centerRight,
+                                  height:
+                                      SizeConfig.screenHeight! / MediaSize.m16,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: AppSize.s1,
+                                        color: ColorManager.grey),
+                                    borderRadius: BorderRadius.circular(
+                                        BorderRadiusValues.br5),
+                                  ),
+                                  child: epicenterCtrl.loading.value == true
+                                      ? const BubbleLoader()
+                                      : Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Text(
+                                                epicenterCtrl.regionText2.value,
+                                                textAlign: TextAlign.center,
+                                                style: getSemiBoldStyle(
+                                                    color: ColorManager
+                                                        .secondary)),
+                                            const Spacer(),
+                                            Icon(
+                                              Icons.arrow_drop_down,
+                                              color: ColorManager.secondary,
+                                              size: AppSize.s30,
+                                            ),
+                                          ],
+                                        ),
+                                )),
+                          ),
+                          Obx(
+                            () => epicenterCtrl.allCities2.isEmpty
+                                ? const SizedBox()
+                                : GestureDetector(
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                        context: context,
+                                        builder: (ctx) => SizedBox(
+                                            height: SizeConfig.screenHeight! /
+                                                MediaSize.m2_5,
+                                            child: ListView.builder(
+                                                itemCount: epicenterCtrl
+                                                    .allCities2.length,
+                                                itemBuilder: (context, index) {
+                                                  return InkWell(
+                                                    onTap: () {
+                                                      epicenterCtrl
+                                                              .cityId2.value =
+                                                          epicenterCtrl
+                                                              .allCities2[index]
+                                                              .id;
+                                                      epicenterCtrl
+                                                              .cityName2.value =
+                                                          epicenterCtrl
+                                                              .allCities2[index]
+                                                              .name;
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Padding(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal:
+                                                              AppPadding.p60,
+                                                          vertical:
+                                                              AppPadding.p16),
+                                                      child: Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        height: SizeConfig
+                                                                .screenHeight! /
+                                                            MediaSize.m12,
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius.circular(
+                                                                    BorderRadiusValues
+                                                                        .br10),
+                                                            border: Border.all(
+                                                                width:
+                                                                    AppSize.s1,
+                                                                color:
+                                                                    ColorManager
+                                                                        .grey)),
+                                                        child: Text(
+                                                            epicenterCtrl
+                                                                .allCities2[
+                                                                    index]
+                                                                .name,
+                                                            style: getSemiBoldStyle(
+                                                                color: ColorManager
+                                                                    .secondary)),
+                                                      ),
+                                                    ),
+                                                  );
+                                                })),
+                                      );
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: AppPadding.p10),
+                                      margin: const EdgeInsets.only(
+                                          right: AppMargin.m30,
+                                          left: AppMargin.m30,
+                                          top: AppMargin.m20),
+                                      alignment: Alignment.centerRight,
+                                      height: SizeConfig.screenHeight! /
+                                          MediaSize.m16,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: AppSize.s1,
+                                            color: ColorManager.grey),
+                                        borderRadius: BorderRadius.circular(
+                                            BorderRadiusValues.br5),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Text(epicenterCtrl.cityName2.value,
+                                              textAlign: TextAlign.center,
+                                              style: getSemiBoldStyle(
+                                                  color:
+                                                      ColorManager.secondary)),
+                                          const Spacer(),
+                                          Icon(
+                                            Icons.arrow_drop_down,
+                                            color: ColorManager.secondary,
+                                            size: AppSize.s30,
+                                          ),
+                                        ],
+                                      ),
+                                    )),
+                          )
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                        child: Obx(() => Container(
+                              padding: const EdgeInsets.only(
+                                  bottom: AppPadding.p8,
+                                  top: AppPadding.p20,
+                                  right: AppPadding.p14,
+                                  left: AppPadding.p14),
+                              width: double.infinity,
+                              color: ColorManager.lightGrey,
+                              child: epicenterCtrl.loadReports.value == true
+                                  ? const LoaderWidget()
+                                  : epicenterCtrl.listReports.isEmpty
+                                      ? Center(
+                                          child:
+                                              Text("Not found epicenters".tr))
+                                      : SmartRefresher(
+                                          controller:
+                                              epicenterCtrl.refreshController2,
+                                          enablePullUp: true,
+                                          enablePullDown: false,
+                                          onLoading: () async {
+                                            await epicenterCtrl.loadMore2();
+                                            epicenterCtrl.refreshController2
+                                                .loadComplete();
+                                          },
+                                          child: ListView.builder(
+                                              itemCount: epicenterCtrl
+                                                  .listReports.length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      index) {
+                                                return ListItemWidget(
+                                                  onNavigate: () async {
+                                                    await epicenterCtrl
+                                                        .getEpicenters(
+                                                            epicenterCtrl
+                                                                .listReports[
+                                                                    index]
+                                                                .id!);
+
+                                                    Get.to(() =>
+                                                        UpdateReportScreen(
+                                                          report: epicenterCtrl
+                                                              .reportModel,
+                                                          epicenterId:
+                                                              epicenterCtrl
+                                                                  .listReports[
+                                                                      index]
+                                                                  .id!,
+                                                        ));
+                                                  },
+                                                  // report: epicenterCtrl.epicintersModel!
+                                                  //     .epicenters![index],
+                                                  reportId: epicenterCtrl
+                                                      .listReports[index]
+                                                      .reportId,
+                                                  status: epicenterCtrl
+                                                      .listReports[index]
+                                                      .status,
+                                                  city: epicenterCtrl
+                                                      .listReports[index]
+                                                      .city!
+                                                      .name!,
+                                                  governorate: epicenterCtrl
+                                                      .listReports[index]
+                                                      .city!
+                                                      .governorate!
+                                                      .name!,
+                                                  images: epicenterCtrl
+                                                      .listReports[index]
+                                                      .epicenterPhotos!,
+                                                  title: epicenterCtrl
+                                                          .listReports[index]
+                                                          .description ??
+                                                      '',
+                                                  description: epicenterCtrl
+                                                          .listReports[index]
+                                                          .description ??
+                                                      '',
+                                                  date: epicenterCtrl
+                                                      .listReports[index]
+                                                      .creationDate!,
+                                                  size: epicenterCtrl
+                                                      .listReports[index].size!
+                                                      .toDouble(),
+                                                  epicenterId: epicenterCtrl
+                                                      .listReports[index].id!,
+                                                  lat: epicenterCtrl
+                                                      .listReports[index].lat!,
+                                                  long: epicenterCtrl
+                                                      .listReports[index].long!,
+                                                );
+                                              }),
+                                        ),
+                            ))),
+                  ],
+                ),
               ],
             )));
   }

@@ -49,6 +49,7 @@ class AddReportController extends GetxController {
   final polluationDescription = "".obs;
   final epicenterSize = 0.0.obs;
   final polluationSize = 0.0.obs;
+  final firstLoading = false.obs;
 
   //!===============================
   final temperature = '0.0'.obs;
@@ -79,7 +80,7 @@ class AddReportController extends GetxController {
   final epicenterWidth = 0.0.obs;
   final epicenterVolume = 0.0.obs;
 
-  final responsibleText = "ResponsibleAuthorities".tr.obs;
+  final responsibleText = "choose Competent authority".tr.obs;
   final responsibleId = 0.obs;
   final plantsList = <String>[].obs;
   final underGroundList = <String>[].obs;
@@ -166,17 +167,17 @@ class AddReportController extends GetxController {
   //   }
   //   update();
   // }
-  final hardness =  '0.0'.obs;
+  final hardness = '0.0'.obs;
   final acidity = '0.0'.obs;
   final addServices = AddReportService();
   final underGroundWater = <CitiesModel>[].obs;
-  final groundWaterText = ''.obs;
+  final groundWaterText = 'Choose the type of groundwater'.tr.obs;
   final waterGroundId = 0.obs;
   final plantList = <CitiesModel>[].obs;
-  final plantText = ''.obs;
+  final plantText = 'Choose the type of vegetation'.tr.obs;
   final plantId = 0.obs;
   final semanticPollution = <CitiesModel>[].obs;
-  final semanticPollutionText = ''.obs;
+  final semanticPollutionText = 'اختيار دلالات التلوث'.tr.obs;
   final semanticPollutionId = 0.obs;
   final surroundedMediums = <CitiesModel>[].obs;
   final surroundedMediumsList = [].obs;
@@ -185,20 +186,22 @@ class AddReportController extends GetxController {
   final semanticPollutionList = [].obs;
   final surroundingBuildingsList = [].obs;
 
-  final surroundedMediumsText = ''.obs;
+  final surroundedMediumsText =
+      'Select the medium that has been contaminated'.tr.obs;
   final surroundedMediumsId = 0.obs;
   final natureOfEpicenter = <CitiesModel>[].obs;
-  final natureOfEpicenterText = ''.obs;
+  final natureOfEpicenterText = 'choose natural Region'.tr.obs;
   final natureOfEpicenterId = 0.obs;
   final surroundingBuildings = <CitiesModel>[].obs;
-  final surroundingBuildingsText = ''.obs;
+  final surroundingBuildingsText = 'choose buildings'.tr.obs;
   final surroundingBuildingsId = 0.obs;
   final getAllWindDirection = <CitiesModel>[].obs;
-  final getAllWindDirectionText = ''.obs;
+  final getAllWindDirectionText = 'choose wind direction'.tr.obs;
   final getAllWindDirectionId = 0.obs;
   final listDistance = <ReportBuildings>[].obs;
   final distanceOfList = <ReportBuildings>[].obs;
-
+  final adddistanceOfList = <ReportBuildings>[].obs;
+  TextEditingController distanceController = TextEditingController();
   final load = false.obs;
   final listOfsurroundedMediums = <int>[].obs;
   final listOfsemanticPollution = <int>[].obs;
@@ -208,16 +211,19 @@ class AddReportController extends GetxController {
   final listsurroundingBuildings = <int>[].obs;
   final listsurroundingBuildingsDistance = <double>[].obs;
   final listofTrues = <bool>[false].obs;
+  final listOfPollutions = <String>[].obs;
 
   addsurroundedMediumsList(
     int index,
     int id,
+    String label,
   ) {
     if (surroundedMediumsList[index] == true) {
       print(surroundedMediumsList[index]);
 
       print("f");
       listOfsurroundedMediums.add(id);
+      mediumPollution.add(label);
 
       listofTrues.add(surroundedMediumsList[index]);
       print(id);
@@ -228,6 +234,7 @@ class AddReportController extends GetxController {
       print(air.value);
       print("remove");
       listOfsurroundedMediums.removeWhere((item) => item.isEqual(id));
+      mediumPollution.removeWhere((item) => item == (label));
       listofTrues.removeWhere((item) => (surroundedMediumsList[index]));
       print(listOfsurroundedMediums.length);
     }
@@ -239,14 +246,20 @@ class AddReportController extends GetxController {
     int index,
     int id,
     double distance,
+    String name,
   ) {
     if (surroundingBuildingsList[index] == true) {
       print("Added");
       listDistance
           .add(ReportBuildings(surroundingBuildingId: id, distance: distance));
+      distanceOfList.add(ReportBuildings(
+          surroundingBuildingId: id,
+          distance: distance,
+          surroundingBuilding: SurroundingBuilding(id: id, name: name)));
     } else {
       print("remove");
       listDistance.removeWhere((item) => item.surroundingBuildingId == id);
+      distanceOfList.removeWhere((item) => item.surroundingBuildingId == id);
       listDistance.forEach((element) {
         print(element.toJson());
       });
@@ -255,43 +268,53 @@ class AddReportController extends GetxController {
 
   final distanceMap = <int, double>{}.obs;
   final listOfDistances = [].obs;
+  final semanticList = <String>[].obs;
 
-  addsemanticPollutionList(int index, int id) {
+  addsemanticPollutionList(int index, int id, String label) {
     if (semanticPollutionList[index] == true) {
       print("Added");
       listOfsemanticPollution.add(id);
+      pollution.add(label);
       print(id);
       print(listOfsemanticPollution.length);
     } else {
       print("remove");
       listOfsemanticPollution.removeWhere((item) => item.isEqual(id));
+      pollution.removeWhere((item) => item == (id));
       print(listOfsemanticPollution.length);
     }
   }
 
-  addunderGroundWaterList(int index, int id) {
+  addunderGroundWaterList(int index, int id, String label) {
     if (underGroundWaterList[index] == true) {
       print("Added");
       listunderGroundWater.add(id);
+      underGroundList.add(label);
       print(id);
       print(listunderGroundWater.length);
     } else {
       print("remove");
       listunderGroundWater.removeWhere((item) => item.isEqual(id));
+      underGroundList.removeWhere((item) => item == (label));
       print(listunderGroundWater.length);
     }
   }
 
-  addPlantList(int index, int id) {
+  addPlantList(int index, int id, String label) {
     if (plantListList[index] == true) {
       print("Added");
+
       listPlantPlaces.add(id);
+      plantsList.add(label);
       print(id);
       print(listPlantPlaces.length);
+      print(plantsList.length);
     } else {
       print("remove");
       listPlantPlaces.removeWhere((item) => item.isEqual(id));
+      plantsList.removeWhere((item) => item == (label));
       print(listPlantPlaces.length);
+      print(plantsList.length);
     }
   }
 
@@ -311,13 +334,13 @@ class AddReportController extends GetxController {
     natureOfEpicenter.value = (await addServices.natureOfEpicenter())!;
     surroundingBuildings.value = (await addServices.getSurroundingBuildings())!;
     getAllWindDirection.value = (await addServices.getAllWindDirection())!;
-    groundWaterText.value = underGroundWater.first.name;
-    plantText.value = plantList.first.name;
-    semanticPollutionText.value = semanticPollution.first.name;
-    surroundedMediumsText.value = surroundedMediums.first.name;
-    natureOfEpicenterText.value = natureOfEpicenter.first.name;
-    getAllWindDirectionText.value = getAllWindDirection.first.name;
-    surroundingBuildingsText.value = surroundingBuildings.first.name;
+    // groundWaterText.value = underGroundWater.first.name;
+    // plantText.value = plantList.first.name;
+    // semanticPollutionText.value = semanticPollution.first.name;
+    // surroundedMediumsText.value = surroundedMediums.first.name;
+    // natureOfEpicenterText.value = natureOfEpicenter.first.name;
+    // getAllWindDirectionText.value = getAllWindDirection.first.name;
+    // surroundingBuildingsText.value = surroundingBuildings.first.name;
     surroundedMediumsList.value = List.filled(surroundedMediums.length, false);
     // listofTrues.value=List.filled(surroundedMediums.length, false);
     semanticPollutionList.value = List.filled(semanticPollution.length, false);
@@ -841,6 +864,11 @@ class AddReportController extends GetxController {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("WaterTemperature Required".tr)));
     } else {
+      adddistanceOfList.clear();
+      plantsList.clear();
+      underGroundList.clear();
+      listOfPollutions.clear();
+      semanticList.clear();
       send.value = true;
       await addServices.UpdateReport(
         Report(
@@ -1045,6 +1073,11 @@ class AddReportController extends GetxController {
       //       .showSnackBar(SnackBar(content: Text("acidity".tr)));
       // }
       else {
+        adddistanceOfList.clear();
+        plantsList.clear();
+        underGroundList.clear();
+        listOfPollutions.clear();
+        semanticList.clear();
         send.value = true;
         await addServices.add(Report(
           FirstCarpone: FirstCarpone.value,
@@ -1142,7 +1175,7 @@ class AddReportController extends GetxController {
   }
 
   final loading = true.obs;
-  RxString landFormText = "Land Form ".tr.obs;
+  RxString landFormText = "choose natural land".tr.obs;
   final landFormId = 0.obs;
 
   void onTapSelected(BuildContext con, int id, String name) {
@@ -1229,7 +1262,8 @@ class AddReportController extends GetxController {
   //   });
   // }
 
-  RxString pollutantPlaceText = "Pollutant Places".tr.obs;
+  RxString pollutantPlaceText =
+      "choose Description of the site of contamination".tr.obs;
   final pollutantPlaceId = 0.obs;
 
   void onTapSelectedPlace(BuildContext con, int id, String name) {
@@ -1272,7 +1306,7 @@ class AddReportController extends GetxController {
     });
   }
 
-  RxString surfaceWaterText = "Surface Water".tr.obs;
+  RxString surfaceWaterText = "choose type of water".tr.obs;
   RxInt surfaceWaterId = 0.obs;
 
   onTapSelectedSurface(BuildContext con, int id, String name) {

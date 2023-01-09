@@ -328,7 +328,7 @@ class ListItemWidget extends StatelessWidget {
       required this.long,
       this.onNavigate,
       this.reportId,
-      this.report,
+      // this.report,
       this.status,
       required this.city,
       required this.governorate})
@@ -346,7 +346,7 @@ class ListItemWidget extends StatelessWidget {
   final int? status;
   final int? reportId;
   final Function()? onNavigate;
-  final Epicenters? report;
+  // final Epicenters? report;
 
   Future<void> openMap(double lat, double long) async {
     String googleMapUrl =
