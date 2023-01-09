@@ -346,6 +346,7 @@ class ListItemWidget extends StatelessWidget {
   final int? status;
   final int? reportId;
   final Function()? onNavigate;
+
   // final Epicenters? report;
 
   Future<void> openMap(double lat, double long) async {
@@ -472,11 +473,25 @@ class ListItemWidget extends StatelessWidget {
                       style: TextButton.styleFrom(
                         backgroundColor: ColorManager.primary,
                       ),
-                      child: Text(
-                          status == 4 ? "update report".tr : "Add Report".tr,
-                          style: TextStyle(
-                            color: ColorManager.white,
-                          ))),
+                      child:
+                          // Text((() {
+                          //   if (status == 1) {
+                          //     return "البؤره محتملة من GIS";
+                          //   } else if (status == 2) {
+                          //
+                          //   } else if (status == 3) {}
+                          //   else if (status == 4) {}
+                          //   else if (status == 5) {}
+                          //
+                          //   return "anything but true";
+                          // })())
+                          Text(
+                              status == 4
+                                  ? "update report".tr
+                                  : "Add Report".tr,
+                              style: TextStyle(
+                                color: ColorManager.white,
+                              ))),
                 ],
               ),
               //! Location ,Size and Date

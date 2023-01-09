@@ -126,8 +126,7 @@ class AllEpicenterController extends GetxController {
     await getLocation();
     loading.value = true;
     print("success");
-    epicintersModel =
-        await services.getEpicenters(pageNumber.value, regionId.value, 0);
+    epicintersModel = await services.getEpicenters(status: 0,pageNum: 1);
     listEpicenters.assignAll(epicintersModel!.epicenters!);
     allregion.value = (await servicess.getRegion())!;
     // regionText.value = allregion.first.name;
@@ -159,8 +158,9 @@ class AllEpicenterController extends GetxController {
 
   getReports() async {
     loadReports.value = true;
+    pageNumber2.value = 1;
     epicintersModelReport =
-        await services.getEpicenters(pageNumber2.value, regionId2.value, 4);
+        await services.getEpicenters(pageNum: pageNumber2.value, status: 4);
     listReports.assignAll(epicintersModelReport!.epicenters!);
     loadReports.value = false;
   }
@@ -196,26 +196,26 @@ class AllEpicenterController extends GetxController {
 
   final pageNumber2 = 1.obs;
 
-  changPageNum(int pageNum) async {
-    loading.value = true;
-    // update();
-    pageNumber.value = pageNum;
-    epicintersModel =
-        await services.getEpicenters(pageNumber.value, regionId.value, 0);
-    update();
-    loading.value = false;
-    // print("donia");
-    // print(pageNumber.value);
-  }
+  // changPageNum(int pageNum) async {
+  //   loading.value = true;
+  //   // update();
+  //   pageNumber.value = pageNum;
+  //   epicintersModel =
+  //       await services.getEpicenters(pageNumber.value, regionId.value, 0);
+  //   update();
+  //   loading.value = false;
+  //   // print("donia");
+  //   // print(pageNumber.value);
+  // }
 
-  changPageNum2(int pageNum) async {
-    loadReports.value = true;
-    pageNumber2.value = pageNum;
-    epicintersModelReport =
-        await services.getEpicenters(pageNumber2.value, regionId2.value, 4);
-    loadReports.value = false;
-    update();
-  }
+  // changPageNum2(int pageNum) async {
+  //   loadReports.value = true;
+  //   pageNumber2.value = pageNum;
+  //   epicintersModelReport =
+  //       await services.getEpicenters(pageNumber2.value, regionId2.value, 4);
+  //   loadReports.value = false;
+  //   update();
+  // }
 
   void getAllEpicenter(
     int pageNumber,
@@ -265,8 +265,8 @@ class AllEpicenterController extends GetxController {
     loading.value = true;
     regionId.value = id;
     regionText.value = name;
-    epicintersModel =
-        await services.getEpicenters(pageNumber.value, regionId.value, 0);
+    epicintersModel = await services.getEpicenters(
+        pageNum: pageNumber.value, regionId: regionId.value, status: 0);
     listEpicenters.assignAll(epicintersModel!.epicenters!);
 
     update();
@@ -281,8 +281,8 @@ class AllEpicenterController extends GetxController {
     loadReports.value = true;
     regionId2.value = id;
     regionText2.value = name;
-    epicintersModelReport =
-        await services.getEpicenters(pageNumber2.value, regionId2.value, 4);
+    epicintersModelReport = await services.getEpicenters(
+        status: 4, regionId: regionId2.value, pageNum: pageNumber2.value);
     listReports.assignAll(epicintersModelReport!.epicenters!);
     update();
 
@@ -292,8 +292,10 @@ class AllEpicenterController extends GetxController {
   loadMore() async {
     if (listEpicenters.isNotEmpty) {
       pageNumber.value++;
-      epicintersModel =
-          await services.getEpicenters(pageNumber.value, regionId.value, 0);
+      epicintersModel = await services.getEpicenters(
+        pageNum: pageNumber.value,
+        status: 0,
+      );
       listEpicenters.addAll(epicintersModel!.epicenters!);
       print("loading");
       print(pageNumber.value);
@@ -305,8 +307,10 @@ class AllEpicenterController extends GetxController {
   loadMore2() async {
     if (listEpicenters.isNotEmpty) {
       pageNumber2.value++;
-      epicintersModelReport =
-          await services.getEpicenters(pageNumber2.value, regionId2.value, 4);
+      epicintersModelReport = await services.getEpicenters(
+        pageNum: pageNumber2.value,
+        status: 4,
+      );
       listReports.addAll(epicintersModelReport!.epicenters!);
       print("loading");
       print(pageNumber2.value);

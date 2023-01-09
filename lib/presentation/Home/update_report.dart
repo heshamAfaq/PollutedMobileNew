@@ -8,11 +8,13 @@ import 'package:enivronment/presentation/widget/load_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 import '../../app/shared_widgets/bubbled_loader_widget.dart';
 import '../../app/shared_widgets/label_widget.dart';
 import '../../data/controller/report/add_report_controller.dart';
 import '../../domain/model/potential_pollutants/potential_pollutants_model.dart';
+import '../../rejon_model.dart';
 import '../resources/color_manager.dart';
 import '../resources/font_manager.dart';
 import '../resources/size_manager.dart';
@@ -773,162 +775,358 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                               ],
                             ),
                             Obx(() => reportCtrl.plants.value == true
-                                ? Obx(() => GestureDetector(
-                                    onTap: () {
-                                      showModalBottomSheet(
-                                        context: context,
-                                        builder: (ctx) => SizedBox(
-                                            height: SizeConfig.screenHeight! /
-                                                MediaSize.m2_5,
-                                            child: ListView.builder(
-                                                itemCount:
-                                                    reportCtrl.plantList.length,
-                                                itemBuilder: (context, index) {
-                                                  return InkWell(
-                                                    onTap: () {
-                                                      reportCtrl
-                                                              .plantText.value =
-                                                          reportCtrl
-                                                              .plantList[index]
-                                                              .name;
-                                                      reportCtrl.plantId.value =
-                                                          reportCtrl
-                                                              .plantList[index]
-                                                              .id;
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child: Padding(
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          horizontal:
-                                                              AppPadding.p60,
-                                                          vertical:
-                                                              AppPadding.p16),
-                                                      child: Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        height: SizeConfig
-                                                                .screenHeight! /
-                                                            MediaSize.m12,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius.circular(
-                                                                    BorderRadiusValues
-                                                                        .br10),
-                                                            border: Border.all(
-                                                                width:
-                                                                    AppSize.s1,
-                                                                color:
-                                                                    ColorManager
-                                                                        .grey)),
-                                                        child: Row(
-                                                          children: [
-                                                            Obx(() => Checkbox(
-                                                                activeColor:
-                                                                    ColorManager
-                                                                        .primary,
-                                                                value: reportCtrl
-                                                                        .plantListList[
-                                                                    index],
-                                                                onChanged: (v) {
-                                                                  reportCtrl
-                                                                          .plantListList[
-                                                                      index] = v;
-                                                                  reportCtrl
-                                                                          .plantId
-                                                                          .value =
-                                                                      reportCtrl
-                                                                          .plantList[
-                                                                              index]
-                                                                          .id;
-                                                                  reportCtrl
-                                                                      .addPlantList(
-                                                                    index,
-                                                                    reportCtrl
-                                                                            .plantId
-                                                                            .value =
-                                                                        reportCtrl
-                                                                            .plantList[index]
-                                                                            .id,
-                                                                    reportCtrl
-                                                                        .plantList[
-                                                                            index]
-                                                                        .name,
-                                                                  );
-                                                                  print(v);
-                                                                })),
-                                                            Flexible(
-                                                              child: Text(
-                                                                  reportCtrl
-                                                                      .plantList[
-                                                                          index]
-                                                                      .name,
-                                                                  style: getSemiBoldStyle(
-                                                                      color: ColorManager
-                                                                          .secondary)),
-                                                            ),
-                                                            Spacer(),
-                                                            GestureDetector(
-                                                              onTap: () {
-                                                                Navigator.pop(
-                                                                    context);
-                                                              },
-                                                              child: Container(
-                                                                  width: 25,
-                                                                  height: 25,
-                                                                  color: ColorManager
-                                                                      .primary,
-                                                                  child: Icon(
-                                                                    Icons.add,
-                                                                    color: Colors
-                                                                        .white,
-                                                                  )),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  );
-                                                })),
-                                      );
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: AppPadding.p10),
-                                      margin: const EdgeInsets.only(
-                                          right: AppMargin.m30,
-                                          left: AppMargin.m30,
-                                          top: AppMargin.m20),
-                                      alignment: Alignment.centerRight,
-                                      height: SizeConfig.screenHeight! /
-                                          MediaSize.m16,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                            width: AppSize.s1,
-                                            color: ColorManager.grey),
-                                        borderRadius: BorderRadius.circular(
-                                            BorderRadiusValues.br5),
-                                      ),
-                                      child: reportCtrl.load.value
-                                          ? const BubbleLoader()
-                                          : Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              children: [
-                                                Text(reportCtrl.plantText.value,
-                                                    textAlign: TextAlign.center,
-                                                    style: getSemiBoldStyle(
-                                                        color: ColorManager
-                                                            .secondary)),
-                                                const Spacer(),
-                                                Icon(
-                                                  Icons.arrow_drop_down,
-                                                  color: ColorManager.secondary,
-                                                  size: AppSize.s30,
-                                                ),
-                                              ],
-                                            ),
-                                    )))
+                                ? Obx(
+                                  () => Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 30),
+                                child: MultiSelectDialogField(
+                                  listType: MultiSelectListType.LIST,
+                                  chipDisplay: MultiSelectChipDisplay(
+                                    textStyle: const TextStyle(
+                                        color: Colors.white),
+                                    chipColor: ColorManager.primary,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.blue.withOpacity(0.1),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(10)),
+                                    border: Border.all(
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  buttonIcon: const Icon(
+                                    Icons.arrow_drop_down_sharp,
+                                    color: Colors.grey,
+                                  ),
+                                  buttonText: Text(
+                                    reportCtrl.plantText.value,
+                                    style: TextStyle(
+                                      color: ColorManager.secondary,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  items: reportCtrl.plantList
+                                      .map((player) =>
+                                      MultiSelectItem<CitiesModel>(
+                                          player, player.name))
+                                      .toList(),
+                                  selectedColor: Colors.blue,
+                                  searchable: true,
+                                  onConfirm: (results) {
+                                    reportCtrl.selectedPlayer = results;
+                                    reportCtrl.selectedPlayerValue.value =
+                                    "";
+                                    reportCtrl.selectedPlayer
+                                        .forEach((element) {
+                                      reportCtrl.listPlantPlaces
+                                          .add(element.id);
+                                      print(element.id);
+                                      reportCtrl
+                                          .selectedPlayerValue.value =
+                                          "${reportCtrl.selectedPlayerValue.value} " +
+                                              element.name;
+                                    });
+                                  },
+                                ),
+                              ),
+                              // GestureDetector(
+                              //     onTap: () {
+                              //       showModalBottomSheet(
+                              //         context: context,
+                              //         builder: (ctx) => SizedBox(
+                              //             height: SizeConfig.screenHeight! /
+                              //                 MediaSize.m2_5,
+                              //             child: ListView.builder(
+                              //                 itemCount:
+                              //                     reportCtrl.plantList.length,
+                              //                 itemBuilder: (context, index) {
+                              //                   return Padding(
+                              //                     padding: const EdgeInsets
+                              //                             .symmetric(
+                              //                         horizontal:
+                              //                             AppPadding.p60,
+                              //                         vertical:
+                              //                             AppPadding.p16),
+                              //                     child: Container(
+                              //                       alignment:
+                              //                           Alignment.center,
+                              //                       height: SizeConfig
+                              //                               .screenHeight! /
+                              //                           MediaSize.m12,
+                              //                       decoration: BoxDecoration(
+                              //                           borderRadius:
+                              //                               BorderRadius.circular(
+                              //                                   BorderRadiusValues
+                              //                                       .br10),
+                              //                           border: Border.all(
+                              //                               width: AppSize.s1,
+                              //                               color:
+                              //                                   ColorManager
+                              //                                       .grey)),
+                              //                       child: Row(
+                              //                         children: [
+                              //                           Obx(() => Checkbox(
+                              //                               activeColor:
+                              //                                   ColorManager
+                              //                                       .primary,
+                              //                               value: reportCtrl
+                              //                                       .plantListList[
+                              //                                   index],
+                              //                               onChanged: (v) {
+                              //                                 reportCtrl
+                              //                                         .plantListList[
+                              //                                     index] = v;
+                              //                                 reportCtrl
+                              //                                         .plantId
+                              //                                         .value =
+                              //                                     reportCtrl
+                              //                                         .plantList[
+                              //                                             index]
+                              //                                         .id;
+                              //                                 reportCtrl.addPlantList(
+                              //                                     index,
+                              //                                     reportCtrl
+                              //                                             .plantId
+                              //                                             .value =
+                              //                                         reportCtrl
+                              //                                             .plantList[
+                              //                                                 index]
+                              //                                             .id,
+                              //                                     reportCtrl
+                              //                                         .plantList[
+                              //                                             index]
+                              //                                         .name);
+                              //                                 print(v);
+                              //                               })),
+                              //                           Flexible(
+                              //                             child: Text(
+                              //                                 reportCtrl
+                              //                                     .plantList[
+                              //                                         index]
+                              //                                     .name,
+                              //                                 style: getSemiBoldStyle(
+                              //                                     color: ColorManager
+                              //                                         .secondary)),
+                              //                           ),
+                              //                           Spacer(),
+                              //                           GestureDetector(
+                              //                             onTap: () {
+                              //                               Navigator.pop(
+                              //                                   context);
+                              //                             },
+                              //                             child: Container(
+                              //                                 width: 25,
+                              //                                 height: 25,
+                              //                                 color:
+                              //                                     ColorManager
+                              //                                         .primary,
+                              //                                 child: Icon(
+                              //                                   Icons.add,
+                              //                                   color: Colors
+                              //                                       .white,
+                              //                                 )),
+                              //                           ),
+                              //                         ],
+                              //                       ),
+                              //                     ),
+                              //                   );
+                              //                 })),
+                              //       );
+                              //     },
+                              //     child: Container(
+                              //       padding: const EdgeInsets.symmetric(
+                              //           horizontal: AppPadding.p10),
+                              //       margin: const EdgeInsets.only(
+                              //           right: AppMargin.m30,
+                              //           left: AppMargin.m30,
+                              //           top: AppMargin.m20),
+                              //       alignment: Alignment.centerRight,
+                              //       height: SizeConfig.screenHeight! /
+                              //           MediaSize.m16,
+                              //       decoration: BoxDecoration(
+                              //         border: Border.all(
+                              //             width: AppSize.s1,
+                              //             color: ColorManager.grey),
+                              //         borderRadius: BorderRadius.circular(
+                              //             BorderRadiusValues.br5),
+                              //       ),
+                              //       child: reportCtrl.load.value
+                              //           ? const BubbleLoader()
+                              //           : Row(
+                              //               mainAxisAlignment:
+                              //                   MainAxisAlignment.spaceAround,
+                              //               children: [
+                              //                 Text(reportCtrl.plantText.value,
+                              //                     textAlign: TextAlign.center,
+                              //                     style: getSemiBoldStyle(
+                              //                         color: ColorManager
+                              //                             .secondary)),
+                              //                 const Spacer(),
+                              //                 Icon(
+                              //                   Icons.arrow_drop_down,
+                              //                   color: ColorManager.secondary,
+                              //                   size: AppSize.s30,
+                              //                 ),
+                              //               ],
+                              //             ),
+                              //     ))
+                            )
+                            // Obx(() => GestureDetector(
+                            //         onTap: () {
+                            //           showModalBottomSheet(
+                            //             context: context,
+                            //             builder: (ctx) => SizedBox(
+                            //                 height: SizeConfig.screenHeight! /
+                            //                     MediaSize.m2_5,
+                            //                 child: ListView.builder(
+                            //                     itemCount:
+                            //                         reportCtrl.plantList.length,
+                            //                     itemBuilder: (context, index) {
+                            //                       return InkWell(
+                            //                         onTap: () {
+                            //                           reportCtrl
+                            //                                   .plantText.value =
+                            //                               reportCtrl
+                            //                                   .plantList[index]
+                            //                                   .name;
+                            //                           reportCtrl.plantId.value =
+                            //                               reportCtrl
+                            //                                   .plantList[index]
+                            //                                   .id;
+                            //                           Navigator.pop(context);
+                            //                         },
+                            //                         child: Padding(
+                            //                           padding: const EdgeInsets
+                            //                                   .symmetric(
+                            //                               horizontal:
+                            //                                   AppPadding.p60,
+                            //                               vertical:
+                            //                                   AppPadding.p16),
+                            //                           child: Container(
+                            //                             alignment:
+                            //                                 Alignment.center,
+                            //                             height: SizeConfig
+                            //                                     .screenHeight! /
+                            //                                 MediaSize.m12,
+                            //                             decoration: BoxDecoration(
+                            //                                 borderRadius:
+                            //                                     BorderRadius.circular(
+                            //                                         BorderRadiusValues
+                            //                                             .br10),
+                            //                                 border: Border.all(
+                            //                                     width:
+                            //                                         AppSize.s1,
+                            //                                     color:
+                            //                                         ColorManager
+                            //                                             .grey)),
+                            //                             child: Row(
+                            //                               children: [
+                            //                                 Obx(() => Checkbox(
+                            //                                     activeColor:
+                            //                                         ColorManager
+                            //                                             .primary,
+                            //                                     value: reportCtrl
+                            //                                             .plantListList[
+                            //                                         index],
+                            //                                     onChanged: (v) {
+                            //                                       reportCtrl
+                            //                                               .plantListList[
+                            //                                           index] = v;
+                            //                                       reportCtrl
+                            //                                               .plantId
+                            //                                               .value =
+                            //                                           reportCtrl
+                            //                                               .plantList[
+                            //                                                   index]
+                            //                                               .id;
+                            //                                       reportCtrl
+                            //                                           .addPlantList(
+                            //                                         index,
+                            //                                         reportCtrl
+                            //                                                 .plantId
+                            //                                                 .value =
+                            //                                             reportCtrl
+                            //                                                 .plantList[index]
+                            //                                                 .id,
+                            //                                         reportCtrl
+                            //                                             .plantList[
+                            //                                                 index]
+                            //                                             .name,
+                            //                                       );
+                            //                                       print(v);
+                            //                                     })),
+                            //                                 Flexible(
+                            //                                   child: Text(
+                            //                                       reportCtrl
+                            //                                           .plantList[
+                            //                                               index]
+                            //                                           .name,
+                            //                                       style: getSemiBoldStyle(
+                            //                                           color: ColorManager
+                            //                                               .secondary)),
+                            //                                 ),
+                            //                                 Spacer(),
+                            //                                 GestureDetector(
+                            //                                   onTap: () {
+                            //                                     Navigator.pop(
+                            //                                         context);
+                            //                                   },
+                            //                                   child: Container(
+                            //                                       width: 25,
+                            //                                       height: 25,
+                            //                                       color: ColorManager
+                            //                                           .primary,
+                            //                                       child: Icon(
+                            //                                         Icons.add,
+                            //                                         color: Colors
+                            //                                             .white,
+                            //                                       )),
+                            //                                 ),
+                            //                               ],
+                            //                             ),
+                            //                           ),
+                            //                         ),
+                            //                       );
+                            //                     })),
+                            //           );
+                            //         },
+                            //         child: Container(
+                            //           padding: const EdgeInsets.symmetric(
+                            //               horizontal: AppPadding.p10),
+                            //           margin: const EdgeInsets.only(
+                            //               right: AppMargin.m30,
+                            //               left: AppMargin.m30,
+                            //               top: AppMargin.m20),
+                            //           alignment: Alignment.centerRight,
+                            //           height: SizeConfig.screenHeight! /
+                            //               MediaSize.m16,
+                            //           decoration: BoxDecoration(
+                            //             border: Border.all(
+                            //                 width: AppSize.s1,
+                            //                 color: ColorManager.grey),
+                            //             borderRadius: BorderRadius.circular(
+                            //                 BorderRadiusValues.br5),
+                            //           ),
+                            //           child: reportCtrl.load.value
+                            //               ? const BubbleLoader()
+                            //               : Row(
+                            //                   mainAxisAlignment:
+                            //                       MainAxisAlignment.spaceAround,
+                            //                   children: [
+                            //                     Text(reportCtrl.plantText.value,
+                            //                         textAlign: TextAlign.center,
+                            //                         style: getSemiBoldStyle(
+                            //                             color: ColorManager
+                            //                                 .secondary)),
+                            //                     const Spacer(),
+                            //                     Icon(
+                            //                       Icons.arrow_drop_down,
+                            //                       color: ColorManager.secondary,
+                            //                       size: AppSize.s30,
+                            //                     ),
+                            //                   ],
+                            //                 ),
+                            //         )))
                                 : const SizedBox()),
 
                             Obx(() => reportCtrl.plantsList.isNotEmpty &&
@@ -1011,163 +1209,215 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                             ),
 
                             Obx(() => reportCtrl.underGround.value
-                                ? GestureDetector(
-                                    onTap: () {
-                                      showModalBottomSheet(
-                                        context: context,
-                                        builder: (ctx) => SizedBox(
-                                            height: SizeConfig.screenHeight! /
-                                                MediaSize.m2_5,
-                                            child: ListView.builder(
-                                                itemCount: reportCtrl
-                                                    .underGroundWater.length,
-                                                itemBuilder: (context, index) {
-                                                  return InkWell(
-                                                    onTap: () {
-                                                      reportCtrl.groundWaterText
-                                                              .value =
-                                                          reportCtrl
-                                                              .underGroundWater[
-                                                                  index]
-                                                              .name;
-                                                      reportCtrl.waterGroundId
-                                                              .value =
-                                                          reportCtrl
-                                                              .underGroundWater[
-                                                                  index]
-                                                              .id;
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child: Padding(
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          horizontal:
-                                                              AppPadding.p60,
-                                                          vertical:
-                                                              AppPadding.p16),
-                                                      child: Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        height: SizeConfig
-                                                                .screenHeight! /
-                                                            MediaSize.m12,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius.circular(
-                                                                    BorderRadiusValues
-                                                                        .br10),
-                                                            border: Border.all(
-                                                                width:
-                                                                    AppSize.s1,
-                                                                color:
-                                                                    ColorManager
-                                                                        .grey)),
-                                                        child: Row(
-                                                          children: [
-                                                            Obx(() => Checkbox(
-                                                                activeColor:
-                                                                    ColorManager
-                                                                        .primary,
-                                                                value: reportCtrl
-                                                                        .underGroundWaterList[
-                                                                    index],
-                                                                onChanged: (v) {
-                                                                  reportCtrl
-                                                                          .underGroundWaterList[
-                                                                      index] = v;
-                                                                  reportCtrl
-                                                                          .waterGroundId
-                                                                          .value =
-                                                                      reportCtrl
-                                                                          .underGroundWater[
-                                                                              index]
-                                                                          .id;
-                                                                  reportCtrl.addunderGroundWaterList(
-                                                                      index,
-                                                                      reportCtrl
-                                                                          .waterGroundId
-                                                                          .value,
-                                                                      reportCtrl
-                                                                          .underGroundWater[
-                                                                              index]
-                                                                          .name);
-                                                                  print(v);
-                                                                })),
-                                                            Flexible(
-                                                              child: Text(
-                                                                  reportCtrl
-                                                                      .underGroundWater[
-                                                                          index]
-                                                                      .name,
-                                                                  style: getSemiBoldStyle(
-                                                                      color: ColorManager
-                                                                          .secondary)),
-                                                            ),
-                                                            Spacer(),
-                                                            GestureDetector(
-                                                              onTap: () {
-                                                                Navigator.pop(
-                                                                    context);
-                                                              },
-                                                              child: Container(
-                                                                  width: 25,
-                                                                  height: 25,
-                                                                  color: ColorManager
-                                                                      .primary,
-                                                                  child: Icon(
-                                                                    Icons.add,
-                                                                    color: Colors
-                                                                        .white,
-                                                                  )),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  );
-                                                })),
-                                      );
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: AppPadding.p10),
-                                      margin: const EdgeInsets.only(
-                                          right: AppMargin.m30,
-                                          left: AppMargin.m30,
-                                          top: AppMargin.m20),
-                                      alignment: Alignment.centerRight,
-                                      height: SizeConfig.screenHeight! /
-                                          MediaSize.m16,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                            width: AppSize.s1,
-                                            color: ColorManager.grey),
-                                        borderRadius: BorderRadius.circular(
-                                            BorderRadiusValues.br5),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          Obx(() => reportCtrl
-                                                  .groundWaterText.isEmpty
-                                              ? BubbleLoader()
-                                              : Text(
-                                                  reportCtrl
-                                                      .groundWaterText.value,
-                                                  textAlign: TextAlign.center,
-                                                  style: getSemiBoldStyle(
-                                                      color: ColorManager
-                                                          .secondary))),
-                                          const Spacer(),
-                                          Icon(
-                                            Icons.arrow_drop_down,
-                                            color: ColorManager.secondary,
-                                            size: AppSize.s30,
-                                          ),
-                                        ],
-                                      ),
-                                    ))
+                                ? Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 30),
+                              child: MultiSelectDialogField(
+                                listType: MultiSelectListType.LIST,
+                                chipDisplay: MultiSelectChipDisplay(
+                                  textStyle: const TextStyle(
+                                      color: Colors.white),
+                                  chipColor: ColorManager.primary,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.blue.withOpacity(0.1),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10)),
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                buttonIcon: const Icon(
+                                  Icons.arrow_drop_down_sharp,
+                                  color: Colors.grey,
+                                ),
+                                buttonText: Text(
+                                  reportCtrl.groundWaterText.value,
+                                  style: TextStyle(
+                                    color: ColorManager.secondary,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                items: reportCtrl.underGroundWater
+                                    .map((player) =>
+                                    MultiSelectItem<CitiesModel>(
+                                        player, player.name))
+                                    .toList(),
+                                selectedColor: Colors.blue,
+                                searchable: true,
+                                onConfirm: (results) {
+                                  reportCtrl.selectedPlayer = results;
+                                  reportCtrl.selectedPlayerValue.value =
+                                  "";
+                                  reportCtrl.selectedPlayer
+                                      .forEach((element) {
+                                    reportCtrl.listunderGroundWater
+                                        .add(element.id);
+                                    print(element.id);
+                                    reportCtrl.selectedPlayerValue.value =
+                                        "${reportCtrl.selectedPlayerValue.value} " +
+                                            element.name;
+                                  });
+                                },
+                              ),
+                            )
+                            // GestureDetector(
+                            //         onTap: () {
+                            //           showModalBottomSheet(
+                            //             context: context,
+                            //             builder: (ctx) => SizedBox(
+                            //                 height: SizeConfig.screenHeight! /
+                            //                     MediaSize.m2_5,
+                            //                 child: ListView.builder(
+                            //                     itemCount: reportCtrl
+                            //                         .underGroundWater.length,
+                            //                     itemBuilder: (context, index) {
+                            //                       return InkWell(
+                            //                         onTap: () {
+                            //                           reportCtrl.groundWaterText
+                            //                                   .value =
+                            //                               reportCtrl
+                            //                                   .underGroundWater[
+                            //                                       index]
+                            //                                   .name;
+                            //                           reportCtrl.waterGroundId
+                            //                                   .value =
+                            //                               reportCtrl
+                            //                                   .underGroundWater[
+                            //                                       index]
+                            //                                   .id;
+                            //                           Navigator.pop(context);
+                            //                         },
+                            //                         child: Padding(
+                            //                           padding: const EdgeInsets
+                            //                                   .symmetric(
+                            //                               horizontal:
+                            //                                   AppPadding.p60,
+                            //                               vertical:
+                            //                                   AppPadding.p16),
+                            //                           child: Container(
+                            //                             alignment:
+                            //                                 Alignment.center,
+                            //                             height: SizeConfig
+                            //                                     .screenHeight! /
+                            //                                 MediaSize.m12,
+                            //                             decoration: BoxDecoration(
+                            //                                 borderRadius:
+                            //                                     BorderRadius.circular(
+                            //                                         BorderRadiusValues
+                            //                                             .br10),
+                            //                                 border: Border.all(
+                            //                                     width:
+                            //                                         AppSize.s1,
+                            //                                     color:
+                            //                                         ColorManager
+                            //                                             .grey)),
+                            //                             child: Row(
+                            //                               children: [
+                            //                                 Obx(() => Checkbox(
+                            //                                     activeColor:
+                            //                                         ColorManager
+                            //                                             .primary,
+                            //                                     value: reportCtrl
+                            //                                             .underGroundWaterList[
+                            //                                         index],
+                            //                                     onChanged: (v) {
+                            //                                       reportCtrl
+                            //                                               .underGroundWaterList[
+                            //                                           index] = v;
+                            //                                       reportCtrl
+                            //                                               .waterGroundId
+                            //                                               .value =
+                            //                                           reportCtrl
+                            //                                               .underGroundWater[
+                            //                                                   index]
+                            //                                               .id;
+                            //                                       reportCtrl.addunderGroundWaterList(
+                            //                                           index,
+                            //                                           reportCtrl
+                            //                                               .waterGroundId
+                            //                                               .value,
+                            //                                           reportCtrl
+                            //                                               .underGroundWater[
+                            //                                                   index]
+                            //                                               .name);
+                            //                                       print(v);
+                            //                                     })),
+                            //                                 Flexible(
+                            //                                   child: Text(
+                            //                                       reportCtrl
+                            //                                           .underGroundWater[
+                            //                                               index]
+                            //                                           .name,
+                            //                                       style: getSemiBoldStyle(
+                            //                                           color: ColorManager
+                            //                                               .secondary)),
+                            //                                 ),
+                            //                                 Spacer(),
+                            //                                 GestureDetector(
+                            //                                   onTap: () {
+                            //                                     Navigator.pop(
+                            //                                         context);
+                            //                                   },
+                            //                                   child: Container(
+                            //                                       width: 25,
+                            //                                       height: 25,
+                            //                                       color: ColorManager
+                            //                                           .primary,
+                            //                                       child: Icon(
+                            //                                         Icons.add,
+                            //                                         color: Colors
+                            //                                             .white,
+                            //                                       )),
+                            //                                 ),
+                            //                               ],
+                            //                             ),
+                            //                           ),
+                            //                         ),
+                            //                       );
+                            //                     })),
+                            //           );
+                            //         },
+                            //         child: Container(
+                            //           padding: const EdgeInsets.symmetric(
+                            //               horizontal: AppPadding.p10),
+                            //           margin: const EdgeInsets.only(
+                            //               right: AppMargin.m30,
+                            //               left: AppMargin.m30,
+                            //               top: AppMargin.m20),
+                            //           alignment: Alignment.centerRight,
+                            //           height: SizeConfig.screenHeight! /
+                            //               MediaSize.m16,
+                            //           decoration: BoxDecoration(
+                            //             border: Border.all(
+                            //                 width: AppSize.s1,
+                            //                 color: ColorManager.grey),
+                            //             borderRadius: BorderRadius.circular(
+                            //                 BorderRadiusValues.br5),
+                            //           ),
+                            //           child: Row(
+                            //             mainAxisAlignment:
+                            //                 MainAxisAlignment.spaceAround,
+                            //             children: [
+                            //               Obx(() => reportCtrl
+                            //                       .groundWaterText.isEmpty
+                            //                   ? BubbleLoader()
+                            //                   : Text(
+                            //                       reportCtrl
+                            //                           .groundWaterText.value,
+                            //                       textAlign: TextAlign.center,
+                            //                       style: getSemiBoldStyle(
+                            //                           color: ColorManager
+                            //                               .secondary))),
+                            //               const Spacer(),
+                            //               Icon(
+                            //                 Icons.arrow_drop_down,
+                            //                 color: ColorManager.secondary,
+                            //                 size: AppSize.s30,
+                            //               ),
+                            //             ],
+                            //           ),
+                            //         ))
                                 : SizedBox()),
                             Obx(() => reportCtrl.underGroundList.isNotEmpty &&
                                     reportCtrl.underGround.isTrue
@@ -1677,161 +1927,211 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
 
                             const ReportDividerWidget(),
                             LabelWidget(label: "connotations of pollution".tr),
-                            GestureDetector(
-                                onTap: () {
-                                  showModalBottomSheet(
-                                    context: context,
-                                    builder: (ctx) => SizedBox(
-                                        height: SizeConfig.screenHeight! /
-                                            MediaSize.m2_5,
-                                        child: ListView.builder(
-                                            itemCount: reportCtrl
-                                                .semanticPollution.length,
-                                            itemBuilder: (context, index) {
-                                              return InkWell(
-                                                onTap: () {
-                                                  reportCtrl
-                                                          .semanticPollutionText
-                                                          .value =
-                                                      reportCtrl
-                                                          .semanticPollution[
-                                                              index]
-                                                          .name;
-                                                  reportCtrl.semanticPollutionId
-                                                          .value =
-                                                      reportCtrl
-                                                          .semanticPollution[
-                                                              index]
-                                                          .id;
-                                                },
-                                                child: Padding(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal:
-                                                          AppPadding.p60,
-                                                      vertical: AppPadding.p16),
-                                                  child: Container(
-                                                    alignment: Alignment.center,
-                                                    height: SizeConfig
-                                                            .screenHeight! /
-                                                        MediaSize.m12,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                BorderRadiusValues
-                                                                    .br10),
-                                                        border: Border.all(
-                                                            width: AppSize.s1,
-                                                            color: ColorManager
-                                                                .grey)),
-                                                    child: Row(
-                                                      children: [
-                                                        Obx(() => Checkbox(
-                                                            activeColor:
-                                                                ColorManager
-                                                                    .primary,
-                                                            value: reportCtrl
-                                                                    .semanticPollutionList[
-                                                                index],
-                                                            onChanged: (v) {
-                                                              reportCtrl
-                                                                      .semanticPollutionList[
-                                                                  index] = v;
-                                                              reportCtrl
-                                                                      .semanticPollutionId
-                                                                      .value =
-                                                                  reportCtrl
-                                                                      .semanticPollution[
-                                                                          index]
-                                                                      .id;
-                                                              reportCtrl.addsemanticPollutionList(
-                                                                  index,
-                                                                  reportCtrl
-                                                                      .semanticPollution[
-                                                                          index]
-                                                                      .id,
-                                                                  reportCtrl
-                                                                      .semanticPollution[
-                                                                          index]
-                                                                      .name);
-                                                              print(v);
-                                                            })),
-                                                        Flexible(
-                                                          child: Text(
-                                                              reportCtrl
-                                                                  .semanticPollution[
-                                                                      index]
-                                                                  .name,
-                                                              style: getSemiBoldStyle(
-                                                                  color: ColorManager
-                                                                      .secondary)),
-                                                        ),
-                                                        Spacer(),
-                                                        GestureDetector(
-                                                          onTap: () {
-                                                            Navigator.pop(
-                                                                context);
-                                                          },
-                                                          child: Container(
-                                                              width: 25,
-                                                              height: 25,
-                                                              color:
-                                                                  ColorManager
-                                                                      .primary,
-                                                              child: Icon(
-                                                                Icons.add,
-                                                                color: Colors
-                                                                    .white,
-                                                              )),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              );
-                                            })),
-                                  );
+                            Padding(
+                              padding:
+                              const EdgeInsets.symmetric(horizontal: 30),
+                              child: MultiSelectDialogField(
+                                listType: MultiSelectListType.LIST,
+                                chipDisplay: MultiSelectChipDisplay(
+                                  textStyle:
+                                  const TextStyle(color: Colors.white),
+                                  chipColor: ColorManager.primary,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.blue.withOpacity(0.1),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10)),
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                buttonIcon: const Icon(
+                                  Icons.arrow_drop_down_sharp,
+                                  color: Colors.grey,
+                                ),
+                                buttonText: Text(
+                                  'اختيار دلالات التلوث'.tr,
+                                  style: TextStyle(
+                                    color: ColorManager.secondary,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                items: reportCtrl.semanticPollution
+                                    .map((player) =>
+                                    MultiSelectItem<CitiesModel>(
+                                        player, player.name))
+                                    .toList(),
+                                selectedColor: Colors.blue,
+                                searchable: true,
+                                onConfirm: (results) {
+                                  reportCtrl.selectedPlayer = results;
+                                  reportCtrl.selectedPlayerValue.value = "";
+                                  reportCtrl.selectedPlayer.forEach((element) {
+                                    reportCtrl.listOfsemanticPollution
+                                        .add(element.id);
+                                    print(element.id);
+                                    reportCtrl.selectedPlayerValue.value =
+                                        "${reportCtrl.selectedPlayerValue.value} " +
+                                            element.name;
+                                  });
                                 },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: AppPadding.p10),
-                                  margin: const EdgeInsets.only(
-                                      right: AppMargin.m30,
-                                      left: AppMargin.m30,
-                                      top: AppMargin.m20),
-                                  alignment: Alignment.centerRight,
-                                  height:
-                                      SizeConfig.screenHeight! / MediaSize.m16,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: AppSize.s1,
-                                        color: ColorManager.grey),
-                                    borderRadius: BorderRadius.circular(
-                                        BorderRadiusValues.br5),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Obx(() => reportCtrl
-                                              .semanticPollutionText.isEmpty
-                                          ? BubbleLoader()
-                                          : Text(
-                                              reportCtrl
-                                                  .semanticPollutionText.value,
-                                              textAlign: TextAlign.center,
-                                              style: getSemiBoldStyle(
-                                                  color:
-                                                      ColorManager.secondary))),
-                                      const Spacer(),
-                                      Icon(
-                                        Icons.arrow_drop_down,
-                                        color: ColorManager.secondary,
-                                        size: AppSize.s30,
-                                      ),
-                                    ],
-                                  ),
-                                )),
+                              ),
+                            ),
+                            // GestureDetector(
+                            //     onTap: () {
+                            //       showModalBottomSheet(
+                            //         context: context,
+                            //         builder: (ctx) => SizedBox(
+                            //             height: SizeConfig.screenHeight! /
+                            //                 MediaSize.m2_5,
+                            //             child: ListView.builder(
+                            //                 itemCount: reportCtrl
+                            //                     .semanticPollution.length,
+                            //                 itemBuilder: (context, index) {
+                            //                   return InkWell(
+                            //                     onTap: () {
+                            //                       reportCtrl
+                            //                               .semanticPollutionText
+                            //                               .value =
+                            //                           reportCtrl
+                            //                               .semanticPollution[
+                            //                                   index]
+                            //                               .name;
+                            //                       reportCtrl.semanticPollutionId
+                            //                               .value =
+                            //                           reportCtrl
+                            //                               .semanticPollution[
+                            //                                   index]
+                            //                               .id;
+                            //                     },
+                            //                     child: Padding(
+                            //                       padding: const EdgeInsets
+                            //                               .symmetric(
+                            //                           horizontal:
+                            //                               AppPadding.p60,
+                            //                           vertical: AppPadding.p16),
+                            //                       child: Container(
+                            //                         alignment: Alignment.center,
+                            //                         height: SizeConfig
+                            //                                 .screenHeight! /
+                            //                             MediaSize.m12,
+                            //                         decoration: BoxDecoration(
+                            //                             borderRadius:
+                            //                                 BorderRadius.circular(
+                            //                                     BorderRadiusValues
+                            //                                         .br10),
+                            //                             border: Border.all(
+                            //                                 width: AppSize.s1,
+                            //                                 color: ColorManager
+                            //                                     .grey)),
+                            //                         child: Row(
+                            //                           children: [
+                            //                             Obx(() => Checkbox(
+                            //                                 activeColor:
+                            //                                     ColorManager
+                            //                                         .primary,
+                            //                                 value: reportCtrl
+                            //                                         .semanticPollutionList[
+                            //                                     index],
+                            //                                 onChanged: (v) {
+                            //                                   reportCtrl
+                            //                                           .semanticPollutionList[
+                            //                                       index] = v;
+                            //                                   reportCtrl
+                            //                                           .semanticPollutionId
+                            //                                           .value =
+                            //                                       reportCtrl
+                            //                                           .semanticPollution[
+                            //                                               index]
+                            //                                           .id;
+                            //                                   reportCtrl.addsemanticPollutionList(
+                            //                                       index,
+                            //                                       reportCtrl
+                            //                                           .semanticPollution[
+                            //                                               index]
+                            //                                           .id,
+                            //                                       reportCtrl
+                            //                                           .semanticPollution[
+                            //                                               index]
+                            //                                           .name);
+                            //                                   print(v);
+                            //                                 })),
+                            //                             Flexible(
+                            //                               child: Text(
+                            //                                   reportCtrl
+                            //                                       .semanticPollution[
+                            //                                           index]
+                            //                                       .name,
+                            //                                   style: getSemiBoldStyle(
+                            //                                       color: ColorManager
+                            //                                           .secondary)),
+                            //                             ),
+                            //                             Spacer(),
+                            //                             GestureDetector(
+                            //                               onTap: () {
+                            //                                 Navigator.pop(
+                            //                                     context);
+                            //                               },
+                            //                               child: Container(
+                            //                                   width: 25,
+                            //                                   height: 25,
+                            //                                   color:
+                            //                                       ColorManager
+                            //                                           .primary,
+                            //                                   child: Icon(
+                            //                                     Icons.add,
+                            //                                     color: Colors
+                            //                                         .white,
+                            //                                   )),
+                            //                             ),
+                            //                           ],
+                            //                         ),
+                            //                       ),
+                            //                     ),
+                            //                   );
+                            //                 })),
+                            //       );
+                            //     },
+                            //     child: Container(
+                            //       padding: const EdgeInsets.symmetric(
+                            //           horizontal: AppPadding.p10),
+                            //       margin: const EdgeInsets.only(
+                            //           right: AppMargin.m30,
+                            //           left: AppMargin.m30,
+                            //           top: AppMargin.m20),
+                            //       alignment: Alignment.centerRight,
+                            //       height:
+                            //           SizeConfig.screenHeight! / MediaSize.m16,
+                            //       decoration: BoxDecoration(
+                            //         border: Border.all(
+                            //             width: AppSize.s1,
+                            //             color: ColorManager.grey),
+                            //         borderRadius: BorderRadius.circular(
+                            //             BorderRadiusValues.br5),
+                            //       ),
+                            //       child: Row(
+                            //         mainAxisAlignment:
+                            //             MainAxisAlignment.spaceAround,
+                            //         children: [
+                            //           Obx(() => reportCtrl
+                            //                   .semanticPollutionText.isEmpty
+                            //               ? BubbleLoader()
+                            //               : Text(
+                            //                   reportCtrl
+                            //                       .semanticPollutionText.value,
+                            //                   textAlign: TextAlign.center,
+                            //                   style: getSemiBoldStyle(
+                            //                       color:
+                            //                           ColorManager.secondary))),
+                            //           const Spacer(),
+                            //           Icon(
+                            //             Icons.arrow_drop_down,
+                            //             color: ColorManager.secondary,
+                            //             size: AppSize.s30,
+                            //           ),
+                            //         ],
+                            //       ),
+                            //     )),
                             Obx(() => reportCtrl.pollution.isNotEmpty
                                 ? SizedBox(
                                     height: 50,
@@ -3204,25 +3504,48 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                       scrollDirection: Axis.horizontal,
                                       itemBuilder: (_, index) => Padding(
                                         padding: const EdgeInsets.all(8),
-                                        child: Container(
-                                          width: 250,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: ColorManager.secondary
-                                                  .withOpacity(
-                                                      OpicityValue.o3)),
-                                          child: Center(
-                                            child: Text(
-                                                "${reportCtrl.distanceOfList[index].surroundingBuilding!.name!}:  ${reportCtrl.distanceOfList[index].distance!}${"M".tr}",
-                                                overflow:
-                                                    TextOverflow.ellipsis),
-                                          ),
+                                        child: Stack(
+                                          alignment: Alignment.topLeft,
+                                          children: [
+                                            Container(
+                                              width: 250,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  color: ColorManager.secondary
+                                                      .withOpacity(
+                                                          OpicityValue.o3)),
+                                              child: Center(
+                                                child: Text(
+                                                    "${reportCtrl.distanceOfList[index].surroundingBuilding!.name!}:  ${reportCtrl.distanceOfList[index].distance!}${"M".tr}",
+                                                    overflow:
+                                                        TextOverflow.ellipsis),
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                reportCtrl.removeDiatance(
+                                                    reportCtrl
+                                                        .distanceOfList[index]
+                                                        .surroundingBuildingId!);
+                                              },
+                                              child: Container(
+                                                height: 25,
+                                                width: 25,
+                                                decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: Colors.red),
+                                                child: Icon(Icons.clear,
+                                                    color: Colors.white),
+                                              ),
+                                            )
+                                          ],
                                         ),
                                       ),
                                     ),
                                   )
                                 : SizedBox()),
+
                             const ReportDividerWidget(),
                             ReportTextFieldWidget(
                                 symbol: "M".tr,

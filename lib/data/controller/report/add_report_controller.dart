@@ -43,6 +43,8 @@ import 'package:location/location.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 
 import '../../../app/constants.dart';
+import 'package:multi_select_flutter/dialog/mult_select_dialog.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class AddReportController extends GetxController {
   final send = false.obs;
@@ -264,6 +266,15 @@ class AddReportController extends GetxController {
         print(element.toJson());
       });
     }
+  }
+
+  removeDiatance(int id) {
+    print("remove");
+    listDistance.removeWhere((item) => item.surroundingBuildingId == id);
+    distanceOfList.removeWhere((item) => item.surroundingBuildingId == id);
+    listDistance.forEach((element) {
+      print(element.toJson());
+    });
   }
 
   final distanceMap = <int, double>{}.obs;
@@ -1476,5 +1487,15 @@ class AddReportController extends GetxController {
     } on PlatformException catch (e) {
       log("failed pick image $e");
     }
+  }
+
+  List<dynamic> selectedPlayer = [];
+  var selectedPlayerValue = ''.obs;
+
+  final cardList = <Widget>[].obs;
+
+  addCardWidget(Widget widget) {
+    cardList.add(widget);
+    update();
   }
 }
