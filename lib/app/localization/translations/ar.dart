@@ -206,6 +206,10 @@ const Map<String, String> ar = {
   "choose Description of the site of contamination": "اختيار وصف مكان التلوث ",
   "Choose the type of vegetation": "اختيار نوع الغطاء النباتى",
   "Choose the type of groundwater": "اختيار نوع المياه الجوفيه",
-  "reports":"التقارير",
-  "no found reports":"لاتوجد تقارير"
+  "reports": "التقارير",
+  "no found reports": "لاتوجد تقارير",
+  "Choose the type of industrial activity": "اختار نوع النشاط ",
+  "description": "الوصف",
+  "Industrial activity": "الانشطه الصناعيه",
+  "choose image":"اختيار صوره"
 };

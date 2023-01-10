@@ -212,5 +212,10 @@ const Map<String, String> en = {
   "Choose the type of vegetation": "Choose the type of vegetation",
   "Choose the type of groundwater": "Choose the type of groundwater",
   "reports": "reports",
-  "no found reports": "no found reports"
+  "no found reports": "no found reports",
+  "Choose the type of industrial activity":
+      "Choose the type of  activity",
+  "description":"description",
+  "Industrial activity": "Industrial activity",
+  "choose image":"choose image"
 };

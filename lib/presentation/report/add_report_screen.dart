@@ -2116,12 +2116,110 @@ class _AddReportScreenState extends State<AddReportScreen> {
                                 ))
                             : SizedBox()),
                         const ReportDividerWidget(),
+                        LabelWidget(label: "polluted medium".tr),
+
+                        Obx(() => Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 30),
+                              child: MultiSelectDialogField(
+                                confirmText: Text(
+                                  'ok'.tr,
+                                  style: getSemiBoldStyle(
+                                      color: ColorManager.secondary),
+                                  overflow: TextOverflow.fade,
+                                ),
+                                cancelText: Text(
+                                  'cancel'.tr,
+                                  style: getSemiBoldStyle(
+                                      color: ColorManager.secondary),
+                                  overflow: TextOverflow.fade,
+                                ),
+                                items: reportCtrl.itemsPolluationSources,
+                                title: reportCtrl.loading.value == true
+                                    ? const BubbleLoader()
+                                    : Text("polluted medium".tr),
+                                selectedColor: ColorManager.secondary,
+                                decoration: BoxDecoration(
+                                  color: ColorManager.secondary
+                                      .withOpacity(OpicityValue.o1),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(BorderRadiusValues.br10)),
+                                  border: Border.all(
+                                    color: ColorManager.secondary,
+                                    width: AppSize.s2,
+                                  ),
+                                ),
+                                buttonIcon: Icon(
+                                  Icons.list,
+                                  color: ColorManager.secondary,
+                                ),
+                                buttonText: Text(
+                                  "polluted medium".tr,
+                                  style: getSemiBoldStyle(
+                                      color: ColorManager.secondary),
+                                ),
+                                onConfirm:
+                                    (List<PolluationSourcesModel> results) {
+                                  reportCtrl.getSelectedDataPolluationSources(
+                                      results);
+                                },
+                              ),
+                            )),
+                        //? divider
+                        const ReportDividerWidget(),
+                        LabelWidget(label: "Potential Pollutants".tr),
+                        Obx(() => Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 30),
+                              child: MultiSelectDialogField(
+                                confirmText: Text(
+                                  'ok'.tr,
+                                  style: getSemiBoldStyle(
+                                      color: ColorManager.secondary),
+                                  overflow: TextOverflow.fade,
+                                ),
+                                cancelText: Text(
+                                  'cancel'.tr,
+                                  style: getSemiBoldStyle(
+                                      color: ColorManager.secondary),
+                                  overflow: TextOverflow.fade,
+                                ),
+                                items: reportCtrl.itemsPollutants,
+                                title: reportCtrl.loading.value == true
+                                    ? const BubbleLoader()
+                                    : Text("Potential Pollutants".tr),
+                                selectedColor: ColorManager.secondary,
+                                decoration: BoxDecoration(
+                                  color: ColorManager.secondary
+                                      .withOpacity(OpicityValue.o1),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(BorderRadiusValues.br10)),
+                                  border: Border.all(
+                                    color: ColorManager.secondary,
+                                    width: AppSize.s2,
+                                  ),
+                                ),
+                                buttonIcon: Icon(
+                                  Icons.list,
+                                  color: ColorManager.secondary,
+                                ),
+                                buttonText: Text(
+                                  "Potential Pollutants".tr,
+                                  style: getSemiBoldStyle(
+                                      color: ColorManager.secondary),
+                                ),
+                                onConfirm:
+                                    (List<PotentialPollutantsModel> results) {
+                                  reportCtrl.getSelectedDataPollutants(results);
+                                },
+                              ),
+                            )),
+                        //? divider
+                        const ReportDividerWidget(),
+
                         LabelWidget(label: 'Another Notes'.tr),
                         Padding(
-                          padding: const EdgeInsets.only(
-                              left: AppPadding.p12,
-                              right: AppPadding.p12,
-                              top: AppPadding.p12),
+                          padding: const EdgeInsets.symmetric(horizontal: 30),
                           child: TextFormField(
                             controller: controllerotherNote,
                             keyboardType: TextInputType.text,
@@ -2167,6 +2265,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
                           ),
                         ),
                         const ReportDividerWidget(),
+                        LabelWidget(label: 'choose image'.tr),
                         SizedBox(
                           height: 120,
                           child: Row(
@@ -2248,7 +2347,289 @@ class _AddReportScreenState extends State<AddReportScreen> {
                             ],
                           ),
                         ),
+                        const ReportDividerWidget(),
+                        //!Polluation Source
+                        // const ReportPolluationSourcesWidget(),
 
+                        LabelWidget(label: 'Industrial activity'.tr),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                          context: context,
+                                          builder: (ctx) => SizedBox(
+                                                height: SizeConfig.screenHeight,
+                                                child: Obx(() => reportCtrl
+                                                        .allIndustrialActivities
+                                                        .isEmpty
+                                                    ? const Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      )
+                                                    : ListView.builder(
+                                                        itemCount: reportCtrl
+                                                            .allIndustrialActivities
+                                                            .length,
+                                                        itemBuilder:
+                                                            (context, index) {
+                                                          return Padding(
+                                                            padding: const EdgeInsets
+                                                                    .symmetric(
+                                                                horizontal:
+                                                                    AppPadding
+                                                                        .p60,
+                                                                vertical:
+                                                                    AppPadding
+                                                                        .p16),
+                                                            child:
+                                                                GestureDetector(
+                                                              onTap: () {
+                                                                reportCtrl
+                                                                        .allIndustrialActivitiesText
+                                                                        .value =
+                                                                    reportCtrl
+                                                                        .allIndustrialActivities[
+                                                                            index]
+                                                                        .name;
+                                                                reportCtrl
+                                                                        .allIndustrialActivitiesId
+                                                                        .value =
+                                                                    reportCtrl
+                                                                        .allIndustrialActivities[
+                                                                            index]
+                                                                        .id;
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                              child: Container(
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                height: SizeConfig
+                                                                        .screenHeight! /
+                                                                    MediaSize
+                                                                        .m12,
+                                                                width: double
+                                                                    .infinity,
+                                                                decoration: BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(BorderRadiusValues
+                                                                            .br10),
+                                                                    border: Border.all(
+                                                                        width: AppSize
+                                                                            .s1,
+                                                                        color: ColorManager
+                                                                            .grey)),
+                                                                child: Center(
+                                                                  child: Text(
+                                                                      reportCtrl
+                                                                          .allIndustrialActivities[
+                                                                              index]
+                                                                          .name,
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style: getSemiBoldStyle(
+                                                                          color:
+                                                                              ColorManager.secondary)),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          );
+                                                        })),
+                                              ));
+                                    },
+                                    child: Container(
+                                        width: 150,
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: ColorManager.secondary),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          color: Colors.white,
+                                        ),
+                                        child: Center(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Flexible(
+                                                child: Text(
+                                                    reportCtrl
+                                                        .allIndustrialActivitiesText
+                                                        .value,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    maxLines: 1),
+                                              ),
+                                              const Icon(
+                                                  Icons.arrow_drop_down_rounded)
+                                            ],
+                                          ),
+                                        )),
+                                  ),
+                                  const Spacer(),
+                                  Text("Distance".tr),
+                                  const Spacer(),
+                                  Expanded(
+                                      child: SizedBox(
+                                          height: 40,
+                                          child: TextFormField(
+                                            keyboardType: TextInputType.number,
+                                            onChanged: (v) {
+                                              reportCtrl
+                                                  .allIndustrialActivitiesDistance
+                                                  .value = double.parse(v);
+                                            },
+                                            initialValue: "0.0",
+                                            decoration: const InputDecoration(),
+                                          ))),
+                                ],
+                              ),
+                              SizedBox(height: 25),
+                              Row(
+                                children: [
+                                  Stack(
+                                    alignment: Alignment.bottomLeft,
+                                    children: [
+                                      Container(
+                                          clipBehavior: Clip.antiAlias,
+                                          height: 100,
+                                          width: 100,
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey,
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          child: Obx(
+                                            () =>
+                                                reportCtrl.imageIndustrail != ""
+                                                    ? Image.file(
+                                                        File(reportCtrl
+                                                            .imageIndustrail),
+                                                        fit: BoxFit.cover,
+                                                      )
+                                                    : SizedBox(),
+                                          )),
+                                      GestureDetector(
+                                        onTap: () {
+                                          reportCtrl.selectImageIndustrail();
+                                        },
+                                        child: Container(
+                                          width: 25,
+                                          height: 25,
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: ColorManager.secondary),
+                                          child: const Icon(
+                                            Icons.add,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(width: 10),
+                                  Text("description".tr),
+                                  SizedBox(width: 10),
+                                  Expanded(
+                                      child: SizedBox(
+                                          height: 40,
+                                          child: TextFormField(
+                                            keyboardType: TextInputType.text,
+                                            onChanged: (v) {
+                                              reportCtrl
+                                                  .allIndustrialActivitiesDescription
+                                                  .value = v;
+                                            },
+                                            decoration: const InputDecoration(
+                                                hintText: "ادخل الوصف"),
+                                          ))),
+                                ],
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  reportCtrl.addActivites(
+                                      reportCtrl
+                                          .allIndustrialActivitiesId.value,
+                                      reportCtrl.allIndustrialActivitiesDistance
+                                          .value,
+                                      reportCtrl
+                                          .allIndustrialActivitiesText.value,
+                                      File(reportCtrl.imageIndustrail),
+                                      reportCtrl
+                                          .allIndustrialActivitiesDescription
+                                          .value);
+                                },
+                                child: Container(
+                                  width: 40,
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                      color: ColorManager.primary,
+                                      borderRadius: BorderRadius.circular(4)),
+                                  child: const Icon(Icons.add,
+                                      color: Colors.white),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Obx(() => reportCtrl.ActvitesList.isNotEmpty
+                            ? SizedBox(
+                                height: 50,
+                                child: ListView.builder(
+                                  itemCount: reportCtrl.ActvitesList.length,
+                                  physics: const BouncingScrollPhysics(),
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (_, index) => Padding(
+                                    padding: const EdgeInsets.all(8),
+                                    child: Stack(
+                                      alignment: Alignment.topLeft,
+                                      children: [
+                                        Container(
+                                          width: 250,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color: ColorManager.secondary
+                                                  .withOpacity(
+                                                      OpicityValue.o3)),
+                                          child: Center(
+                                            child: Text(
+                                                "${reportCtrl.ActvitesList[index].industrialActivity!.name!}:  ${reportCtrl.ActvitesList[index].distance!}${"M".tr}",
+                                                overflow:
+                                                    TextOverflow.ellipsis),
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            reportCtrl.removeActivites(
+                                                reportCtrl.ActvitesList[index]
+                                                    .industrialActivityId!);
+                                          },
+                                          child: Container(
+                                            height: 25,
+                                            width: 25,
+                                            decoration: const BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: Colors.red),
+                                            child: const Icon(Icons.clear,
+                                                color: Colors.white),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : SizedBox()),
                         //!add images and preview images
                         // Obx(() => reportCtrl.imagesList.isNotEmpty
                         //     ? SizedBox(
@@ -2305,53 +2686,53 @@ class _AddReportScreenState extends State<AddReportScreen> {
                         //? divider
                         const ReportDividerWidget(),
                         //!Industrial Activities
-                        Obx(() => Padding(
-                              padding: const EdgeInsets.all(AppPadding.p20),
-                              child: MultiSelectDialogField(
-                                confirmText: Text(
-                                  'ok'.tr,
-                                  style: getSemiBoldStyle(
-                                      color: ColorManager.secondary),
-                                  overflow: TextOverflow.fade,
-                                ),
-                                cancelText: Text(
-                                  'cancel'.tr,
-                                  style: getSemiBoldStyle(
-                                      color: ColorManager.secondary),
-                                  overflow: TextOverflow.fade,
-                                ),
-                                items: reportCtrl.itemsindustrialActivities,
-                                title: reportCtrl.loading.value == true
-                                    ? const BubbleLoader()
-                                    : Text("Industrial Activites".tr),
-                                selectedColor: ColorManager.secondary,
-                                decoration: BoxDecoration(
-                                  color: ColorManager.secondary
-                                      .withOpacity(OpicityValue.o1),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(BorderRadiusValues.br10)),
-                                  border: Border.all(
-                                    color: ColorManager.secondary,
-                                    width: AppSize.s2,
-                                  ),
-                                ),
-                                buttonIcon: Icon(
-                                  Icons.list,
-                                  color: ColorManager.secondary,
-                                ),
-                                buttonText: Text(
-                                  "Industrial Activites".tr,
-                                  style: getSemiBoldStyle(
-                                      color: ColorManager.secondary),
-                                ),
-                                onConfirm:
-                                    (List<IndustrialActivitiesModel> results) {
-                                  reportCtrl
-                                      .getSelectedDataindustrialActivities(
-                                          results);
-                                },
-                              ),
-                            )),
+                        // Obx(() => Padding(
+                        //       padding: const EdgeInsets.all(AppPadding.p20),
+                        //       child: MultiSelectDialogField(
+                        //         confirmText: Text(
+                        //           'ok'.tr,
+                        //           style: getSemiBoldStyle(
+                        //               color: ColorManager.secondary),
+                        //           overflow: TextOverflow.fade,
+                        //         ),
+                        //         cancelText: Text(
+                        //           'cancel'.tr,
+                        //           style: getSemiBoldStyle(
+                        //               color: ColorManager.secondary),
+                        //           overflow: TextOverflow.fade,
+                        //         ),
+                        //         items: reportCtrl.itemsindustrialActivities,
+                        //         title: reportCtrl.loading.value == true
+                        //             ? const BubbleLoader()
+                        //             : Text("Industrial Activites".tr),
+                        //         selectedColor: ColorManager.secondary,
+                        //         decoration: BoxDecoration(
+                        //           color: ColorManager.secondary
+                        //               .withOpacity(OpicityValue.o1),
+                        //           borderRadius: const BorderRadius.all(
+                        //               Radius.circular(BorderRadiusValues.br10)),
+                        //           border: Border.all(
+                        //             color: ColorManager.secondary,
+                        //             width: AppSize.s2,
+                        //           ),
+                        //         ),
+                        //         buttonIcon: Icon(
+                        //           Icons.list,
+                        //           color: ColorManager.secondary,
+                        //         ),
+                        //         buttonText: Text(
+                        //           "Industrial Activites".tr,
+                        //           style: getSemiBoldStyle(
+                        //               color: ColorManager.secondary),
+                        //         ),
+                        //         onConfirm:
+                        //             (List<IndustrialActivitiesModel> results) {
+                        //           reportCtrl
+                        //               .getSelectedDataindustrialActivities(
+                        //                   results);
+                        //         },
+                        //       ),
+                        //     )),
                         // const ReportIndustrialActivitiesWidget(),
                         //? divider
                         // const ReportDividerWidget(),
@@ -2404,106 +2785,10 @@ class _AddReportScreenState extends State<AddReportScreen> {
                         //     )),
                         // const ReportIndustrialPolluationSourceWidget(),
                         //? divider
-                        const ReportDividerWidget(),
-                        //!Polluation Source
-                        // const ReportPolluationSourcesWidget(),
-                        Obx(() => Padding(
-                              padding: const EdgeInsets.all(AppPadding.p20),
-                              child: MultiSelectDialogField(
-                                confirmText: Text(
-                                  'ok'.tr,
-                                  style: getSemiBoldStyle(
-                                      color: ColorManager.secondary),
-                                  overflow: TextOverflow.fade,
-                                ),
-                                cancelText: Text(
-                                  'cancel'.tr,
-                                  style: getSemiBoldStyle(
-                                      color: ColorManager.secondary),
-                                  overflow: TextOverflow.fade,
-                                ),
-                                items: reportCtrl.itemsPolluationSources,
-                                title: reportCtrl.loading.value == true
-                                    ? const BubbleLoader()
-                                    : Text("polluted medium".tr),
-                                selectedColor: ColorManager.secondary,
-                                decoration: BoxDecoration(
-                                  color: ColorManager.secondary
-                                      .withOpacity(OpicityValue.o1),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(BorderRadiusValues.br10)),
-                                  border: Border.all(
-                                    color: ColorManager.secondary,
-                                    width: AppSize.s2,
-                                  ),
-                                ),
-                                buttonIcon: Icon(
-                                  Icons.list,
-                                  color: ColorManager.secondary,
-                                ),
-                                buttonText: Text(
-                                  "polluted medium".tr,
-                                  style: getSemiBoldStyle(
-                                      color: ColorManager.secondary),
-                                ),
-                                onConfirm:
-                                    (List<PolluationSourcesModel> results) {
-                                  reportCtrl.getSelectedDataPolluationSources(
-                                      results);
-                                },
-                              ),
-                            )),
-                        //? divider
-                        const ReportDividerWidget(),
+
                         //!Potential Pollutants
                         // const ReportPotentialPollutantsWidget(),
-                        Obx(() => Padding(
-                              padding: const EdgeInsets.all(AppPadding.p20),
-                              child: MultiSelectDialogField(
-                                confirmText: Text(
-                                  'ok'.tr,
-                                  style: getSemiBoldStyle(
-                                      color: ColorManager.secondary),
-                                  overflow: TextOverflow.fade,
-                                ),
-                                cancelText: Text(
-                                  'cancel'.tr,
-                                  style: getSemiBoldStyle(
-                                      color: ColorManager.secondary),
-                                  overflow: TextOverflow.fade,
-                                ),
-                                items: reportCtrl.itemsPollutants,
-                                title: reportCtrl.loading.value == true
-                                    ? const BubbleLoader()
-                                    : Text("Potential Pollutants".tr),
-                                selectedColor: ColorManager.secondary,
-                                decoration: BoxDecoration(
-                                  color: ColorManager.secondary
-                                      .withOpacity(OpicityValue.o1),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(BorderRadiusValues.br10)),
-                                  border: Border.all(
-                                    color: ColorManager.secondary,
-                                    width: AppSize.s2,
-                                  ),
-                                ),
-                                buttonIcon: Icon(
-                                  Icons.list,
-                                  color: ColorManager.secondary,
-                                ),
-                                buttonText: Text(
-                                  "Potential Pollutants".tr,
-                                  style: getSemiBoldStyle(
-                                      color: ColorManager.secondary),
-                                ),
-                                onConfirm:
-                                    (List<PotentialPollutantsModel> results) {
-                                  reportCtrl.getSelectedDataPollutants(results);
-                                },
-                              ),
-                            )),
-                        //? divider
-                        const ReportDividerWidget(),
+
                         //!Surrounding Buildings
                         // const ReportSurroundingBuildingsWidget(),
                         // Obx(() => Padding(
@@ -2552,242 +2837,193 @@ class _AddReportScreenState extends State<AddReportScreen> {
                         //     )),
 
                         LabelWidget(label: 'Surrounding Buildings'.tr),
-                        GestureDetector(
-                            onTap: () {
-                              showModalBottomSheet(
-                                  context: context,
-                                  builder: (ctx) => SizedBox(
-                                        height: SizeConfig.screenHeight,
-                                        child: Obx(() =>
-                                            reportCtrl.surroundingBuildings
-                                                    .isEmpty
-                                                ? const Center(
-                                                    child:
-                                                        CircularProgressIndicator(),
-                                                  )
-                                                : ListView.builder(
-                                                    itemCount: reportCtrl
-                                                        .surroundingBuildings
-                                                        .length,
-                                                    itemBuilder:
-                                                        (context, index) {
-                                                      return Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .symmetric(
-                                                                horizontal:
-                                                                    AppPadding
-                                                                        .p60,
-                                                                vertical:
-                                                                    AppPadding
-                                                                        .p16),
-                                                        child: Container(
-                                                          alignment:
-                                                              Alignment.center,
-                                                          height: SizeConfig
-                                                                  .screenHeight! /
-                                                              MediaSize.m12,
-                                                          width:
-                                                              double.infinity,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius.circular(
-                                                                      BorderRadiusValues
-                                                                          .br10),
-                                                              border: Border.all(
-                                                                  width: AppSize
-                                                                      .s1,
-                                                                  color:
-                                                                      ColorManager
-                                                                          .grey)),
-                                                          child: Row(
-                                                            children: [
-                                                              Obx(() =>
-                                                                  Checkbox(
-                                                                      activeColor:
-                                                                          ColorManager
-                                                                              .primary,
-                                                                      value: reportCtrl
-                                                                              .surroundingBuildingsList[
-                                                                          index],
-                                                                      onChanged:
-                                                                          (v) {
-                                                                        reportCtrl
-                                                                            .surroundingBuildingsList[index] = v;
-                                                                        reportCtrl
-                                                                            .surroundingBuildingsId
-                                                                            .value = reportCtrl.surroundingBuildings[index].id;
+                        // GestureDetector(
+                        //     onTap: () {
+                        //       showModalBottomSheet(
+                        //           context: context,
+                        //           builder: (ctx) => SizedBox(
+                        //                 height: SizeConfig.screenHeight,
+                        //                 child: Obx(() =>
+                        //                     reportCtrl.surroundingBuildings
+                        //                             .isEmpty
+                        //                         ? const Center(
+                        //                             child:
+                        //                                 CircularProgressIndicator(),
+                        //                           )
+                        //                         : ListView.builder(
+                        //                             itemCount: reportCtrl
+                        //                                 .surroundingBuildings
+                        //                                 .length,
+                        //                             itemBuilder:
+                        //                                 (context, index) {
+                        //                               return Padding(
+                        //                                 padding:
+                        //                                     const EdgeInsets
+                        //                                             .symmetric(
+                        //                                         horizontal:
+                        //                                             AppPadding
+                        //                                                 .p60,
+                        //                                         vertical:
+                        //                                             AppPadding
+                        //                                                 .p16),
+                        //                                 child: Container(
+                        //                                   alignment:
+                        //                                       Alignment.center,
+                        //                                   height: SizeConfig
+                        //                                           .screenHeight! /
+                        //                                       MediaSize.m12,
+                        //                                   width:
+                        //                                       double.infinity,
+                        //                                   decoration: BoxDecoration(
+                        //                                       borderRadius:
+                        //                                           BorderRadius.circular(
+                        //                                               BorderRadiusValues
+                        //                                                   .br10),
+                        //                                       border: Border.all(
+                        //                                           width: AppSize
+                        //                                               .s1,
+                        //                                           color:
+                        //                                               ColorManager
+                        //                                                   .grey)),
+                        //                                   child: Row(
+                        //                                     children: [
+                        //                                       Obx(() =>
+                        //                                           Checkbox(
+                        //                                               activeColor:
+                        //                                                   ColorManager
+                        //                                                       .primary,
+                        //                                               value: reportCtrl
+                        //                                                       .surroundingBuildingsList[
+                        //                                                   index],
+                        //                                               onChanged:
+                        //                                                   (v) {
+                        //                                                 reportCtrl
+                        //                                                     .surroundingBuildingsList[index] = v;
+                        //                                                 reportCtrl
+                        //                                                     .surroundingBuildingsId
+                        //                                                     .value = reportCtrl.surroundingBuildings[index].id;
+                        //
+                        //                                                 print(
+                        //                                                     v);
+                        //                                               })),
+                        //                                       Expanded(
+                        //                                         child: Text(
+                        //                                             reportCtrl
+                        //                                                 .surroundingBuildings[
+                        //                                                     index]
+                        //                                                 .name,
+                        //                                             style: getSemiBoldStyle(
+                        //                                                 color: ColorManager
+                        //                                                     .secondary)),
+                        //                                       ),
+                        //                                       Obx(() => reportCtrl
+                        //                                                       .surroundingBuildingsList[
+                        //                                                   index] ==
+                        //                                               true
+                        //                                           ? Text(
+                        //                                               "Distance"
+                        //                                                   .tr)
+                        //                                           : const SizedBox()),
+                        //                                       SizedBox(
+                        //                                           width: 5),
+                        //                                       Obx(() => reportCtrl
+                        //                                                       .surroundingBuildingsList[
+                        //                                                   index] ==
+                        //                                               true
+                        //                                           ? Expanded(
+                        //                                               flex: 2,
+                        //                                               child:
+                        //                                                   SizedBox(
+                        //                                                 height:
+                        //                                                     40,
+                        //                                                 child:
+                        //                                                     TextFormField(
+                        //                                                   initialValue:
+                        //                                                       "0.0",
+                        //                                                   onFieldSubmitted:
+                        //                                                       (v) {
+                        //                                                     reportCtrl.addsurroundingBuildingsList(
+                        //                                                         index,
+                        //                                                         reportCtrl.surroundingBuildingsId.value = reportCtrl.surroundingBuildings[index].id,
+                        //                                                         double.parse(v),
+                        //                                                         reportCtrl.surroundingBuildings[index].name);
+                        //                                                     print(reportCtrl.listDistance.length);
+                        //                                                     reportCtrl.listDistance.forEach((element) {
+                        //                                                       print(element.toJson());
+                        //                                                     });
+                        //                                                     reportCtrl.surroundingBuildingsList[index] =
+                        //                                                         !reportCtrl.surroundingBuildingsList[index];
+                        //                                                     Navigator.pop(context);
+                        //                                                   },
+                        //                                                   textAlignVertical:
+                        //                                                       TextAlignVertical.center,
+                        //                                                   textAlign:
+                        //                                                       TextAlign.right,
+                        //                                                   maxLines:
+                        //                                                       1,
+                        //                                                   keyboardType:
+                        //                                                       TextInputType.number,
+                        //                                                   decoration:
+                        //                                                       const InputDecoration(
+                        //                                                     enabledBorder:
+                        //                                                         OutlineInputBorder(
+                        //                                                       borderRadius: BorderRadius.all(
+                        //                                                         Radius.circular(5.0),
+                        //                                                       ),
+                        //                                                     ),
+                        //                                                     focusedBorder:
+                        //                                                         OutlineInputBorder(
+                        //                                                       borderRadius: BorderRadius.all(
+                        //                                                         Radius.circular(5.0),
+                        //                                                       ),
+                        //                                                     ),
+                        //                                                   ),
+                        //                                                 ),
+                        //                                               ),
+                        //                                             )
+                        //                                           : SizedBox()),
+                        //                                     ],
+                        //                                   ),
+                        //                                 ),
+                        //                               );
+                        //                             })),
+                        //               ));
+                        //     },
+                        //     child: Container(
+                        //       padding: const EdgeInsets.symmetric(
+                        //           horizontal: AppPadding.p10),
+                        //       margin: const EdgeInsets.only(
+                        //           right: AppMargin.m30,
+                        //           left: AppMargin.m30,
+                        //           top: AppMargin.m20),
+                        //       alignment: Alignment.centerRight,
+                        //       height: SizeConfig.screenHeight! / MediaSize.m16,
+                        //       decoration: BoxDecoration(
+                        //         border: Border.all(
+                        //             width: AppSize.s1,
+                        //             color: ColorManager.grey),
+                        //         borderRadius: BorderRadius.circular(
+                        //             BorderRadiusValues.br5),
+                        //       ),
+                        //       child: Row(
+                        //         mainAxisAlignment:
+                        //             MainAxisAlignment.spaceAround,
+                        //         children: [
+                        //           Text(
+                        //               reportCtrl.surroundingBuildingsText.value,
+                        //               textAlign: TextAlign.center,
+                        //               style: getSemiBoldStyle(
+                        //                   color: ColorManager.secondary)),
+                        //           const Spacer(),
+                        //           Icon(
+                        //             Icons.arrow_drop_down,
+                        //             color: ColorManager.secondary,
+                        //             size: AppSize.s30,
+                        //           ),
+                        //         ],
+                        //       ),
+                        //     )),
 
-                                                                        print(
-                                                                            v);
-                                                                      })),
-                                                              Expanded(
-                                                                child: Text(
-                                                                    reportCtrl
-                                                                        .surroundingBuildings[
-                                                                            index]
-                                                                        .name,
-                                                                    style: getSemiBoldStyle(
-                                                                        color: ColorManager
-                                                                            .secondary)),
-                                                              ),
-                                                              Obx(() => reportCtrl
-                                                                              .surroundingBuildingsList[
-                                                                          index] ==
-                                                                      true
-                                                                  ? Text(
-                                                                      "Distance"
-                                                                          .tr)
-                                                                  : const SizedBox()),
-                                                              SizedBox(
-                                                                  width: 5),
-                                                              Obx(() => reportCtrl
-                                                                              .surroundingBuildingsList[
-                                                                          index] ==
-                                                                      true
-                                                                  ? Expanded(
-                                                                      flex: 2,
-                                                                      child:
-                                                                          SizedBox(
-                                                                        height:
-                                                                            40,
-                                                                        child:
-                                                                            TextFormField(
-                                                                          initialValue:
-                                                                              "0.0",
-                                                                          onFieldSubmitted:
-                                                                              (v) {
-                                                                            reportCtrl.addsurroundingBuildingsList(
-                                                                                index,
-                                                                                reportCtrl.surroundingBuildingsId.value = reportCtrl.surroundingBuildings[index].id,
-                                                                                double.parse(v),
-                                                                                reportCtrl.surroundingBuildings[index].name);
-                                                                            print(reportCtrl.listDistance.length);
-                                                                            reportCtrl.listDistance.forEach((element) {
-                                                                              print(element.toJson());
-                                                                            });
-                                                                            reportCtrl.surroundingBuildingsList[index] =
-                                                                                !reportCtrl.surroundingBuildingsList[index];
-                                                                            Navigator.pop(context);
-                                                                          },
-                                                                          textAlignVertical:
-                                                                              TextAlignVertical.center,
-                                                                          textAlign:
-                                                                              TextAlign.right,
-                                                                          maxLines:
-                                                                              1,
-                                                                          keyboardType:
-                                                                              TextInputType.number,
-                                                                          decoration:
-                                                                              const InputDecoration(
-                                                                            enabledBorder:
-                                                                                OutlineInputBorder(
-                                                                              borderRadius: BorderRadius.all(
-                                                                                Radius.circular(5.0),
-                                                                              ),
-                                                                            ),
-                                                                            focusedBorder:
-                                                                                OutlineInputBorder(
-                                                                              borderRadius: BorderRadius.all(
-                                                                                Radius.circular(5.0),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    )
-                                                                  : SizedBox()),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      );
-                                                    })),
-                                      ));
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: AppPadding.p10),
-                              margin: const EdgeInsets.only(
-                                  right: AppMargin.m30,
-                                  left: AppMargin.m30,
-                                  top: AppMargin.m20),
-                              alignment: Alignment.centerRight,
-                              height: SizeConfig.screenHeight! / MediaSize.m16,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    width: AppSize.s1,
-                                    color: ColorManager.grey),
-                                borderRadius: BorderRadius.circular(
-                                    BorderRadiusValues.br5),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Text(
-                                      reportCtrl.surroundingBuildingsText.value,
-                                      textAlign: TextAlign.center,
-                                      style: getSemiBoldStyle(
-                                          color: ColorManager.secondary)),
-                                  const Spacer(),
-                                  Icon(
-                                    Icons.arrow_drop_down,
-                                    color: ColorManager.secondary,
-                                    size: AppSize.s30,
-                                  ),
-                                ],
-                              ),
-                            )),
-                        Obx(() => reportCtrl.distanceOfList.isNotEmpty
-                            ? SizedBox(
-                                height: 50,
-                                child: ListView.builder(
-                                  itemCount: reportCtrl.distanceOfList.length,
-                                  physics: const BouncingScrollPhysics(),
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.horizontal,
-                                  itemBuilder: (_, index) => Padding(
-                                    padding: const EdgeInsets.all(8),
-                                    child: Stack(
-                                      alignment: Alignment.topLeft,
-                                      children: [
-                                        Container(
-                                          width: 250,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: ColorManager.secondary
-                                                  .withOpacity(
-                                                      OpicityValue.o3)),
-                                          child: Center(
-                                            child: Text(
-                                                "${reportCtrl.distanceOfList[index].surroundingBuilding!.name!}:  ${reportCtrl.distanceOfList[index].distance!}${"M".tr}",
-                                                overflow:
-                                                    TextOverflow.ellipsis),
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            reportCtrl.removeDiatance(reportCtrl
-                                                .distanceOfList[index]
-                                                .surroundingBuildingId!);
-                                          },
-                                          child: Container(
-                                            height: 25,
-                                            width: 25,
-                                            decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: Colors.red),
-                                            child: Icon(Icons.clear,
-                                                color: Colors.white),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : SizedBox()),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
@@ -2832,6 +3068,13 @@ class _AddReportScreenState extends State<AddReportScreen> {
                                                                         .surroundingBuildings[
                                                                             index]
                                                                         .name;
+                                                                reportCtrl
+                                                                        .surroundingBuildingId
+                                                                        .value =
+                                                                    reportCtrl
+                                                                        .surroundingBuildings[
+                                                                            index]
+                                                                        .id;
                                                                 Navigator.pop(
                                                                     context);
                                                               },
@@ -2885,6 +3128,8 @@ class _AddReportScreenState extends State<AddReportScreen> {
                                         ),
                                         child: Center(
                                           child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             children: [
                                               Text(reportCtrl
                                                   .surroundingBuildingsText
@@ -2902,6 +3147,11 @@ class _AddReportScreenState extends State<AddReportScreen> {
                                       child: SizedBox(
                                           height: 40,
                                           child: TextFormField(
+                                            keyboardType: TextInputType.number,
+                                            onChanged: (v) {
+                                              reportCtrl.surroundingDistance
+                                                  .value = double.parse(v);
+                                            },
                                             initialValue: "0.0",
                                             decoration: const InputDecoration(),
                                           ))),
@@ -2950,7 +3200,15 @@ class _AddReportScreenState extends State<AddReportScreen> {
                                   ),
                                   Spacer(),
                                   GestureDetector(
-                                    onTap: () {},
+                                    onTap: () {
+                                      reportCtrl.addBuildingsList(
+                                          reportCtrl
+                                              .surroundingBuildingId.value,
+                                          reportCtrl.surroundingDistance.value,
+                                          reportCtrl
+                                              .surroundingBuildingsText.value,
+                                          File(reportCtrl.images));
+                                    },
                                     child: Container(
                                       width: 30,
                                       height: 30,
@@ -2963,30 +3221,62 @@ class _AddReportScreenState extends State<AddReportScreen> {
                                     ),
                                   ),
                                   Spacer(),
-                                  GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        popContainer();
-                                      });
-                                    },
-                                    child: Container(
-                                      width: 30,
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                          color: Colors.red,
-                                          borderRadius:
-                                              BorderRadius.circular(4)),
-                                      child: const Icon(Icons.remove,
-                                          color: Colors.white),
-                                    ),
-                                  ),
-                                  Spacer(),
                                 ],
                               )
                             ],
                           ),
                         ),
 
+                        Obx(() => reportCtrl.distanceOfList.isNotEmpty
+                            ? SizedBox(
+                                height: 50,
+                                child: ListView.builder(
+                                  itemCount: reportCtrl.distanceOfList.length,
+                                  physics: const BouncingScrollPhysics(),
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (_, index) => Padding(
+                                    padding: const EdgeInsets.all(8),
+                                    child: Stack(
+                                      alignment: Alignment.topLeft,
+                                      children: [
+                                        Container(
+                                          width: 250,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color: ColorManager.secondary
+                                                  .withOpacity(
+                                                      OpicityValue.o3)),
+                                          child: Center(
+                                            child: Text(
+                                                "${reportCtrl.distanceOfList[index].surroundingBuilding!.name!}:  ${reportCtrl.distanceOfList[index].distance!}${"M".tr}",
+                                                overflow:
+                                                    TextOverflow.ellipsis),
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            reportCtrl.removeDiatance(reportCtrl
+                                                .distanceOfList[index]
+                                                .surroundingBuildingId!);
+                                          },
+                                          child: Container(
+                                            height: 25,
+                                            width: 25,
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: Colors.red),
+                                            child: Icon(Icons.clear,
+                                                color: Colors.white),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : SizedBox()),
                         const ReportDividerWidget(),
 
                         LabelWidget(label: "Volume".tr),

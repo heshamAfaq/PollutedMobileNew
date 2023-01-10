@@ -33,8 +33,7 @@ class ReportTextFieldWidget extends StatelessWidget {
       children: [
         LabelWidget(label: title),
         Padding(
-          padding: const EdgeInsets.only(
-              left: AppPadding.p12, right: AppPadding.p12, top: AppPadding.p12),
+          padding: const EdgeInsets.symmetric(horizontal: 30),
           child: TextFormField(
             onFieldSubmitted: onSaved,
             controller: controller,

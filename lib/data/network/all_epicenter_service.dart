@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
+import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:enivronment/domain/model/EpicintersModel.dart';
 import 'package:enivronment/domain/model/ReportModel.dart';
 import 'package:enivronment/domain/model/ReportsModels.dart';
+import 'package:enivronment/rejon_model.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,6 +16,17 @@ import '../../domain/model/epicenter_model.dart';
 import '../../presentation/login/login_screen.dart';
 
 class AllEpicenterServices {
+  DioCacheManager? _dioCacheManager;
+  final _dio = Dio(BaseOptions(
+    baseUrl: Constants.baseUrl,
+    headers: {
+      "Content-type": "application/json",
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${SharedPreferencesHelper.getTokenValue()}',
+      'lang': Get.locale!.languageCode
+    },
+  ));
+
   static Future getAllEpicenter(int pageNum, int regionId) async {
     http.Response res = await http.get(
       Uri.parse(
@@ -58,6 +72,7 @@ class AllEpicenterServices {
         'lang': Get.locale!.languageCode
       },
     );
+    print(res.statusCode);
 
     print("Epicent");
     print(res.body);
@@ -68,6 +83,33 @@ class AllEpicenterServices {
       String encodedMap = json.encode(model);
       prefs.setString(Constants.epcinters, encodedMap);
 
+      return model;
+    } else if (res.statusCode == 401 || res.statusCode == 403) {
+      Get.offAll(() => const LoginScreen());
+    } else if (res.statusCode == 500 ||
+        res.statusCode == 501 ||
+        res.statusCode == 504 ||
+        res.statusCode == 502) {
+      return 500;
+    }
+    return 400;
+  }
+
+  getEpicentersCaching({int? pageNum, int? regionId, int? status}) async {
+    _dioCacheManager = DioCacheManager(CacheConfig());
+    Options _cacheOptions = buildCacheOptions(Duration(days: 7));
+    _dio.interceptors.add(_dioCacheManager!.interceptor);
+    final res = await _dio.get(
+        "/Epicenters/GetAllEpicenters?page=$pageNum&pageSize=10&regionId=$regionId&status=$status",
+        options: _cacheOptions);
+
+    print("Kadouraaaaaaaaaaa");
+    print(res.data);
+
+    if (res.statusCode == 200) {
+      print(res.data);
+
+      EpicintersModel model = EpicintersModel.fromJson(res.data);
       return model;
     } else if (res.statusCode == 401 || res.statusCode == 403) {
       Get.offAll(() => const LoginScreen());

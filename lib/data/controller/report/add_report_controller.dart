@@ -17,7 +17,6 @@ import 'package:enivronment/data/network/region_service.dart';
 import 'package:enivronment/data/network/surface_water_service.dart';
 import 'package:enivronment/data/network/surrounding_buildings_service.dart';
 import 'package:enivronment/data/network/weather_service.dart';
-import 'package:enivronment/domain/model/ReportModel.dart';
 import 'package:enivronment/domain/model/epicenter/epicenter_model.dart';
 import 'package:enivronment/domain/model/industrial_polluation_sources/industrial_polluation_sources_model.dart';
 import 'package:enivronment/domain/model/land_form/land_form_model.dart';
@@ -45,6 +44,8 @@ import 'package:multi_select_flutter/util/multi_select_item.dart';
 import '../../../app/constants.dart';
 import 'package:multi_select_flutter/dialog/mult_select_dialog.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+
+import '../../../domain/model/ReportModel.dart';
 
 class AddReportController extends GetxController {
   final send = false.obs;
@@ -200,8 +201,9 @@ class AddReportController extends GetxController {
   final getAllWindDirection = <CitiesModel>[].obs;
   final getAllWindDirectionText = 'choose wind direction'.tr.obs;
   final getAllWindDirectionId = 0.obs;
-  final listDistance = <ReportBuildings>[].obs;
-  final distanceOfList = <ReportBuildings>[].obs;
+  // final listDistance = <ReportBuildingss>[].obs;
+  final distanceOfList = <ReportBuildingss>[].obs;
+  final ActvitesList = <ReportIndustrialActivitiesss>[].obs;
   final adddistanceOfList = <ReportBuildings>[].obs;
   TextEditingController distanceController = TextEditingController();
   final load = false.obs;
@@ -244,37 +246,83 @@ class AddReportController extends GetxController {
 
   final distance = 0.0.obs;
 
-  addsurroundingBuildingsList(
-    int index,
+  // addsurroundingBuildingsList(
+  //   int index,
+  //   int id,
+  //   double distance,
+  //   String name,
+  // ) {
+  //   if (surroundingBuildingsList[index] == true) {
+  //     print("Added");
+  //     listDistance
+  //         .add(ReportBuildingss(surroundingBuildingId: id, distance: distance));
+  //     distanceOfList.add(ReportBuildings(
+  //         surroundingBuildingId: id,
+  //         distance: distance,
+  //         surroundingBuilding: SurroundingBuilding(id: id, name: name)));
+  //   } else {
+  //     print("remove");
+  //     listDistance.removeWhere((item) => item.surroundingBuildingId == id);
+  //     distanceOfList.removeWhere((item) => item.surroundingBuildingId == id);
+  //     listDistance.forEach((element) {
+  //       print(element.toJson());
+  //     });
+  //   }
+  // }
+
+  final surroundingBuildingId = 0.obs;
+  final surroundingDistance = 0.0.obs;
+  final surroundingName = "".obs;
+
+  addBuildingsList(
     int id,
     double distance,
     String name,
+    File file,
   ) {
-    if (surroundingBuildingsList[index] == true) {
-      print("Added");
-      listDistance
-          .add(ReportBuildings(surroundingBuildingId: id, distance: distance));
-      distanceOfList.add(ReportBuildings(
-          surroundingBuildingId: id,
-          distance: distance,
-          surroundingBuilding: SurroundingBuilding(id: id, name: name)));
-    } else {
-      print("remove");
-      listDistance.removeWhere((item) => item.surroundingBuildingId == id);
-      distanceOfList.removeWhere((item) => item.surroundingBuildingId == id);
-      listDistance.forEach((element) {
-        print(element.toJson());
-      });
-    }
+    print("Added");
+    print(file.path);
+    // listDistance.add(ReportBuildingss(
+    //     surroundingBuildingId: id, distance: distance, attachment: file));
+    distanceOfList.add(ReportBuildingss(
+        attachment: file,
+        surroundingBuildingId: id,
+        distance: distance,
+        surroundingBuilding: SurroundingBuilding(id: id, name: name)));
+  }
+
+  addActivites(
+    int id,
+    double distance,
+    String name,
+    File file,
+    String description,
+  ) {
+    print("Added");
+    print(file.path);
+    print(description);
+    ActvitesList.add(ReportIndustrialActivitiesss(
+        industrialActivityId: id,
+        distance: distance,
+        attachment: file,
+        description: description,
+    industrialActivity:IndustrialActivity(
+      name: name
+    ) ));
   }
 
   removeDiatance(int id) {
     print("remove");
-    listDistance.removeWhere((item) => item.surroundingBuildingId == id);
+    // listDistance.removeWhere((item) => item.surroundingBuildingId == id);
     distanceOfList.removeWhere((item) => item.surroundingBuildingId == id);
-    listDistance.forEach((element) {
-      print(element.toJson());
-    });
+    // listDistance.forEach((element) {
+    //   print(element.toJson());
+    // });
+  }
+
+  removeActivites(int id) {
+    print("remove");
+    ActvitesList.removeWhere((item) => item.industrialActivityId == id);
   }
 
   final distanceMap = <int, double>{}.obs;
@@ -345,6 +393,8 @@ class AddReportController extends GetxController {
     natureOfEpicenter.value = (await addServices.natureOfEpicenter())!;
     surroundingBuildings.value = (await addServices.getSurroundingBuildings())!;
     getAllWindDirection.value = (await addServices.getAllWindDirection())!;
+    allIndustrialActivities.value =
+        (await IndustrialActivityServices.getAllIndustrialActivities());
     // groundWaterText.value = underGroundWater.first.name;
     // plantText.value = plantList.first.name;
     // semanticPollutionText.value = semanticPollution.first.name;
@@ -637,8 +687,13 @@ class AddReportController extends GetxController {
   //   update();
   // }
 
-  final industrialActivitiesIds = <int>[].obs;
+  final industrialActivitiesIds = <ReportIndustrialActivitiess>[].obs;
   final allIndustrialActivities = <IndustrialActivitiesModel>[].obs;
+  final allIndustrialActivitiesText =
+      "Choose the type of industrial activity".tr.obs;
+  final allIndustrialActivitiesId = 0.obs;
+  final allIndustrialActivitiesDescription = "".obs;
+  final allIndustrialActivitiesDistance = 0.0.obs;
   final itemsindustrialActivities =
       <MultiSelectItem<IndustrialActivitiesModel>>[].obs;
 
@@ -678,13 +733,13 @@ class AddReportController extends GetxController {
     });
   }
 
-  void getSelectedDataindustrialActivities(
-      List<IndustrialActivitiesModel> dataList) {
-    for (var data in dataList) {
-      industrialActivitiesIds.add(data.id);
-    }
-    update();
-  }
+  // void getSelectedDataindustrialActivities(
+  //     List<IndustrialActivitiesModel> dataList) {
+  //   for (var data in dataList) {
+  //     industrialActivitiesIds.add(data.id);
+  //   }
+  //   update();
+  // }
 
   final listIgnoriedPhotos = <int>[].obs;
   final listOfImages = <String>[].obs;
@@ -786,7 +841,7 @@ class AddReportController extends GetxController {
     //   ScaffoldMessenger.of(context).showSnackBar(
     //       SnackBar(content: Text('please enter HotSpot Images'.tr)));
     // }
-    else if (industrialActivitiesIds.isEmpty) {
+    else if (ActvitesList.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('please enter Industrial Activites'.tr)));
     } else if (polluationSourcesIds.isEmpty) {
@@ -795,7 +850,7 @@ class AddReportController extends GetxController {
     } else if (potentialPollutantsIds.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Please Enter Potential Pollutants '.tr)));
-    } else if (listDistance.isEmpty) {
+    } else if (distanceOfList.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Please Enter Surrounding Buildings '.tr)));
     } else if (epicenterWidth!.isEmpty) {
@@ -913,10 +968,10 @@ class AddReportController extends GetxController {
             landFormId: landFormId.value,
             pollutantPlaceId: pollutantPlaceId.value,
             surfaceWaterId: surfaceWaterId.value,
-            reportIndustrialActivitiesIds: industrialActivitiesIds,
+            reportIndustrialActivitiesIds: ActvitesList,
             reportPolluationSourcesIds: polluationSourcesIds,
             reportPotentialPollutantsIds: potentialPollutantsIds,
-            reportSurroundingBuildingsIds: listDistance,
+            reportSurroundingBuildingsIds: distanceOfList,
             temperature: temperature,
             salinity: salinity,
             totalDissolvedSolids: totalDissolvedSolids,
@@ -995,7 +1050,7 @@ class AddReportController extends GetxController {
       } else if (imagesList.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('please enter HotSpot Images'.tr)));
-      } else if (industrialActivitiesIds.isEmpty) {
+      } else if (ActvitesList.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('please enter Industrial Activites'.tr)));
       } else if (polluationSourcesIds.isEmpty) {
@@ -1004,7 +1059,7 @@ class AddReportController extends GetxController {
       } else if (potentialPollutantsIds.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Please Enter Potential Pollutants '.tr)));
-      } else if (listDistance.isEmpty) {
+      } else if (distanceOfList.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Please Enter Surrounding Buildings '.tr)));
       } else if (epicenterWidth.value == 0.0) {
@@ -1114,7 +1169,7 @@ class AddReportController extends GetxController {
           surfaceWaterId: surfaceWaterId.value,
           reportPolluationSourcesIds: polluationSourcesIds,
           reportPotentialPollutantsIds: potentialPollutantsIds,
-          reportSurroundingBuildingsIds: listDistance,
+          reportSurroundingBuildingsIds: distanceOfList,
           temperature: temperature.value,
           // salinity: salinity.value,
           totalDissolvedSolids: totalDissolvedSolids.value,
@@ -1140,7 +1195,7 @@ class AddReportController extends GetxController {
           ReportSemanticPollutionIds: listOfsemanticPollution,
           ReportSurroundedMediumIds: listOfsurroundedMediums,
           ReportUndergroundWaterIds: listunderGroundWater,
-          reportIndustrialActivitiesIds: industrialActivitiesIds,
+          reportIndustrialActivitiesIds: ActvitesList,
         ));
         send.value = false;
       }
@@ -1493,7 +1548,11 @@ class AddReportController extends GetxController {
   var selectedPlayerValue = ''.obs;
   final _picker = ImagePicker();
   final _image = ''.obs;
+  final _imageIndustrail = ''.obs;
+
   String get images => _image.value;
+
+  String get imageIndustrail => _imageIndustrail.value;
 
   selectImage() async {
     try {
@@ -1504,4 +1563,78 @@ class AddReportController extends GetxController {
       print(e.toString());
     }
   }
+
+  selectImageIndustrail() async {
+    try {
+      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+
+      if (image != null) _imageIndustrail.value = image.path;
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+}
+class ReportBuildingss {
+  ReportBuildingss({
+    this.surroundingBuildingId,
+    this.surroundingBuilding,
+    this.distance,
+    this.attachment,});
+
+  ReportBuildingss.fromJson(dynamic json) {
+    surroundingBuildingId = json['surroundingBuildingId'];
+    surroundingBuilding = json['surroundingBuilding'] != null ? SurroundingBuilding.fromJson(json['surroundingBuilding']) : null;
+    distance = json['distance'];
+    attachment = json['attachment'];
+  }
+  int? surroundingBuildingId;
+  SurroundingBuilding? surroundingBuilding;
+  double? distance;
+  File? attachment;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['surroundingBuildingId'] = surroundingBuildingId;
+    if (surroundingBuilding != null) {
+      map['surroundingBuilding'] = surroundingBuilding?.toJson();
+    }
+    map['distance'] = distance;
+    map['attachment'] = attachment;
+    return map;
+  }
+
+}
+class ReportIndustrialActivitiesss {
+  ReportIndustrialActivitiesss({
+    this.attachment,
+    this.description,
+    this.distance,
+    this.industrialActivityId,
+    this.industrialActivity,});
+
+  ReportIndustrialActivitiesss.fromJson(dynamic json) {
+    attachment = json['attachment'];
+    description = json['description'];
+    distance = json['distance'];
+    industrialActivityId = json['industrialActivityId'];
+    industrialActivity = json['industrialActivity'] != null ? IndustrialActivity.fromJson(json['industrialActivity']) : null;
+  }
+  File? attachment;
+  String? description;
+  double? distance;
+  int? industrialActivityId;
+  IndustrialActivity? industrialActivity;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['attachment'] = attachment;
+    map['description'] = description;
+    map['distance'] = distance;
+    map['industrialActivityId'] = industrialActivityId;
+    if (industrialActivity != null) {
+      map['industrialActivity'] = industrialActivity?.toJson();
+    }
+    return map;
+  }
+
 }

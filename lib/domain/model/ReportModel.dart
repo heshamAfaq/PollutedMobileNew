@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:enivronment/domain/model/report/add_report_model.dart';
+
 class ReportModel {
   ReportModel({
     this.id,
@@ -302,7 +306,7 @@ class Reports {
     if (json['reportIndustrialActivities'] != null) {
       reportIndustrialActivities = [];
       json['reportIndustrialActivities'].forEach((v) {
-        reportIndustrialActivities?.add(ReportIndustrialActivities.fromJson(v));
+        reportIndustrialActivities?.add(ReportIndustrialActivitiess.fromJson(v));
       });
     }
     if (json['reportSemanticPollutions'] != null) {
@@ -384,7 +388,7 @@ class Reports {
   List<ReportPolluationSources>? reportPolluationSources;
   List<ReportPotentialPollutants>? reportPotentialPollutants;
   List<ReportBuildings>? reportSurroundingBuildings;
-  List<ReportIndustrialActivities>? reportIndustrialActivities;
+  List<ReportIndustrialActivitiess>? reportIndustrialActivities;
   List<ReportSemanticPollutions>? reportSemanticPollutions;
   List<ReportSurroundedMediums>? reportSurroundedMediums;
   List<ReportPlants>? reportPlants;
@@ -583,17 +587,24 @@ class ReportIndustrialActivities {
   });
 
   ReportIndustrialActivities.fromJson(dynamic json) {
+    attachment = json['attachment'];
+    description = json['description'];
+    distance = json['distance'];
     industrialActivityId = json['industrialActivityId'];
-    industrialActivity = json['industrialActivity'] != null
-        ? IndustrialActivity.fromJson(json['industrialActivity'])
-        : null;
+    industrialActivity = json['industrialActivity'] != null ? IndustrialActivity.fromJson(json['industrialActivity']) : null;
   }
 
+  File? attachment;
+  String? description;
+  double? distance;
   int? industrialActivityId;
   IndustrialActivity? industrialActivity;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
+    map['attachment'] = attachment;
+    map['description'] = description;
+    map['distance'] = distance;
     map['industrialActivityId'] = industrialActivityId;
     if (industrialActivity != null) {
       map['industrialActivity'] = industrialActivity?.toJson();
@@ -644,20 +655,19 @@ class ReportBuildings {
   ReportBuildings({
     this.surroundingBuildingId,
     this.surroundingBuilding,
-    this.distance = 0.0,
+    this.distance,
   });
 
   ReportBuildings.fromJson(dynamic json) {
     surroundingBuildingId = json['surroundingBuildingId'];
-    surroundingBuilding = json['surroundingBuilding'] != null
-        ? SurroundingBuilding.fromJson(json['surroundingBuilding'])
-        : null;
+    surroundingBuilding = json['surroundingBuilding'] != null ? SurroundingBuilding.fromJson(json['surroundingBuilding']) : null;
     distance = json['distance'];
-  }
 
+  }
   int? surroundingBuildingId;
   SurroundingBuilding? surroundingBuilding;
   double? distance;
+
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -666,9 +676,44 @@ class ReportBuildings {
       map['surroundingBuilding'] = surroundingBuilding?.toJson();
     }
     map['distance'] = distance;
+
     return map;
   }
+
 }
+
+// class ReportBuildings {
+//   ReportBuildings(
+//       {this.surroundingBuildingId,
+//       this.surroundingBuilding,
+//       this.distance = 0.0,
+//       this.file});
+//
+//   ReportBuildings.fromJson(dynamic json) {
+//     surroundingBuildingId = json['surroundingBuildingId'];
+//     surroundingBuilding = json['surroundingBuilding'] != null
+//         ? SurroundingBuilding.fromJson(json['surroundingBuilding'])
+//         : null;
+//     distance = json['distance'];
+//     file = json['Attachment'];
+//   }
+//
+//   int? surroundingBuildingId;
+//   SurroundingBuilding? surroundingBuilding;
+//   double? distance;
+//   File? file;
+//
+//   Map<String, dynamic> toJson() {
+//     final map = <String, dynamic>{};
+//     map['surroundingBuildingId'] = surroundingBuildingId;
+//     if (surroundingBuilding != null) {
+//       map['surroundingBuilding'] = surroundingBuilding?.toJson();
+//     }
+//     map['distance'] = distance;
+//     map['Attachment'] = file;
+//     return map;
+//   }
+// }
 
 class SurroundingBuilding {
   SurroundingBuilding({

@@ -580,7 +580,12 @@ class AddReportService {
     int reportSemanticPollutionIds = 0;
     int reportSurroundedMediumIds = 0;
     int reportPlantIds = 0;
+    int reportActivityIds = 0;
+    int reportDescriptionIds = 0;
+    int reportDistanceIds = 0;
     int reportUndergroundWaterIds = 0;
+    int reportSurrouningAttachments = 0;
+    int reportIndastrilAttachments = 0;
     var headers = {
       'Authorization': 'Bearer ${SharedPreferencesHelper.getTokenValue()}',
       'Cookie':
@@ -632,26 +637,55 @@ class AddReportService {
       'SecoundCarpone': allData.SecoundCarpone.toString(),
       'FirstCarpone': allData.FirstCarpone.toString(),
       'WaterTemperature': allData.WaterTemperature.toString(),
-      // 'ReportIndustrialPolluationSourcesIds[0]': '1',
-      // 'ReportSurroundingBuildings[0].Distance': '12.3',
-      // 'ReportSurroundingBuildings[0].SurroundingBuildingId': '1',
-      // 'ReportPolluationSourcesIds[0]': '1',
-      // 'ReportPotentialPollutantsIds[0]': '1',
-      // 'ReportSurroundingBuildingsIds[0]': '2',
-      // 'ReportSemanticPollutionIds[0]': '1',
-      // 'ReportSurroundedMediumIds[0]': '1',
-      // 'ReportPlantIds[0]': '1',
-      // 'ReportUndergroundWaterIds[0]': '1',
-      // 'ReportIndustrialActivitiesIds[0]': '1',
-      // 'ReportIndustrialActivitiesIds[1]': '22',
     });
+    for (var i = 0; i < allData.reportIndustrialActivitiesIds!.length; i++) {
+      request.fields["ReportIndustrialActivitiesIds[$i].IndustrialActivityId"] =
+          "${allData.reportIndustrialActivitiesIds![reportActivityIds].industrialActivityId}";
+      reportActivityIds++;
+    }
+    for (var i = 0; i < allData.reportIndustrialActivitiesIds!.length; i++) {
+      request.fields["ReportIndustrialActivitiesIds[$i].Discription"] =
+          "${allData.reportIndustrialActivitiesIds![reportDescriptionIds].description}";
+      reportDescriptionIds++;
+    }
+    for (var i = 0; i < allData.reportIndustrialActivitiesIds!.length; i++) {
+      request.fields["ReportIndustrialActivitiesIds[$i].Distance"] =
+          "${allData.reportIndustrialActivitiesIds![reportDistanceIds].distance}";
+      reportDistanceIds++;
+    }
+
+    for (var i = 0; i < allData.reportIndustrialActivitiesIds!.length; i++) {
+      if (allData.reportIndustrialActivitiesIds![i]
+          .attachment ==
+          null) {
+      } else {
+        request.files.add(await http.MultipartFile.fromPath(
+            'ReportIndustrialActivitiesIds[$i].Attachment',
+            allData.reportIndustrialActivitiesIds![reportIndastrilAttachments]
+                .attachment!.path));
+        reportIndastrilAttachments++;
+      }
+    }
+
+    for (var i = 0; i < allData.reportSurroundingBuildingsIds!.length; i++) {
+      if( allData.reportSurroundingBuildingsIds![i]
+          .attachment==null){}else{
+        request.files.add(await http.MultipartFile.fromPath(
+            'ReportSurroundingBuildings[$i].Attachment',
+            allData.reportSurroundingBuildingsIds![reportSurrouningAttachments]
+                .attachment!.path));
+        reportSurrouningAttachments++;
+      }}
     print(
         allData.reportSurroundingBuildingsIds?.map((v) => v.toJson()).toList());
+
     for (var i = 0; i < allData.reportSurroundingBuildingsIds!.length; i++) {
       request.fields["ReportSurroundingBuildings[$i].SurroundingBuildingId"] =
           "${allData.reportSurroundingBuildingsIds![reportSurroundingBuildingsIds].surroundingBuildingId}";
       reportSurroundingBuildingsIds++;
     }
+
+
     for (var i = 0; i < allData.reportSurroundingBuildingsIds!.length; i++) {
       request.fields["ReportSurroundingBuildings[$i].Distance"] =
           "${allData.reportSurroundingBuildingsIds![reportSurroundingBuildingsDistance].distance}";
@@ -667,12 +701,13 @@ class AddReportService {
       request.files.add(
           await http.MultipartFile.fromPath('Photos', allData.photos![i].path));
     }
-    for (var i = 0; i < allData.reportIndustrialActivitiesIds!.length; i++) {
-      request.fields[
-              "ReportIndustrialActivitiesIds[$industrialActivitiesIncrement]"] =
-          "${allData.reportIndustrialActivitiesIds![i]}";
-      industrialActivitiesIncrement++;
-    }
+
+    // for (var i = 0; i < allData.reportIndustrialActivitiesIds!.length; i++) {
+    //   request.fields[
+    //           "ReportIndustrialActivitiesIds[$industrialActivitiesIncrement]"] =
+    //       "${allData.reportIndustrialActivitiesIds![i]}";
+    //   industrialActivitiesIncrement++;
+    // }
 
     for (var i = 0; i < allData.reportPotentialPollutantsIds!.length; i++) {
       request.fields[
@@ -761,11 +796,16 @@ class AddReportService {
     int reportPotentialPollutantsIncrement = 0;
     int reportSurroundingBuildingsIncrement = 0;
     int reportSurroundingBuildingsIds = 0;
+    int reportActivityIds = 0;
+    int reportDescriptionIds = 0;
+    int reportDistanceIds = 0;
     int reportSurroundingBuildingsDistance = 0;
+    int reportSurrouningAttachments = 0;
     int reportSemanticPollutionIds = 0;
     int reportSurroundedMediumIds = 0;
     int reportPlantIds = 0;
     int reportUndergroundWaterIds = 0;
+    int reportIndastrilAttachments = 0;
     var headers = {
       'Authorization': 'Bearer ${SharedPreferencesHelper.getTokenValue()}',
       // 'Cookie':
@@ -808,7 +848,7 @@ class AddReportService {
       'EpicenterLenght': allData.EpicenterLenght.toString(),
       'EpicenterWidth': allData.EpicenterWidth.toString(),
       'EpicenterDepth': allData.EpicenterDepth.toString(),
-       'Humidity': allData.Humidity.toString(),
+      'Humidity': allData.Humidity.toString(),
       'WindDirectionId': allData.WindDirectionId.toString(),
       'WindSpeed': allData.WindSpeed.toString(),
       'SunRise': allData.SunRise.toString(),
@@ -816,28 +856,54 @@ class AddReportService {
       'SecoundCarpone': allData.SecoundCarpone.toString(),
       'FirstCarpone': allData.FirstCarpone.toString(),
       'WaterTemperature': allData.WaterTemperature.toString(),
-      // 'Acidity': allData.Acidity.toString(),
-
-      // 'ReportIndustrialPolluationSourcesIds[0]': '1',
-      // 'ReportSurroundingBuildings[0].Distance': '12.3',
-      // 'ReportSurroundingBuildings[0].SurroundingBuildingId': '1',
-      // 'ReportPolluationSourcesIds[0]': '1',
-      // 'ReportPotentialPollutantsIds[0]': '1',
-      // 'ReportSurroundingBuildingsIds[0]': '2',
-      // 'ReportSemanticPollutionIds[0]': '1',
-      // 'ReportSurroundedMediumIds[0]': '1',
-      // 'ReportPlantIds[0]': '1',
-      // 'ReportUndergroundWaterIds[0]': '1',
-      // 'ReportIndustrialActivitiesIds[0]': '1',
-      // 'ReportIndustrialActivitiesIds[1]': '22',
+      // 'ReportIndustrialActivitiesIds[0].IndustrialActivityId': '3',
+      // 'ReportIndustrialActivitiesIds[0].Discription': 'test',
+      // 'ReportIndustrialActivitiesIds[0].Distance': '12.2',
     });
-    print(
-        allData.reportSurroundingBuildingsIds?.map((v) => v.toJson()).toList());
+
+    for (var i = 0; i < allData.reportIndustrialActivitiesIds!.length; i++) {
+      request.fields["ReportIndustrialActivitiesIds[$i].IndustrialActivityId"] =
+          "${allData.reportIndustrialActivitiesIds![reportActivityIds].industrialActivityId}";
+      reportActivityIds++;
+    }
+    for (var i = 0; i < allData.reportIndustrialActivitiesIds!.length; i++) {
+      request.fields["ReportIndustrialActivitiesIds[$i].Discription"] =
+          "${allData.reportIndustrialActivitiesIds![reportDescriptionIds].description}";
+      reportDescriptionIds++;
+    }
+    for (var i = 0; i < allData.reportIndustrialActivitiesIds!.length; i++) {
+      request.fields["ReportIndustrialActivitiesIds[$i].Distance"] =
+          "${allData.reportIndustrialActivitiesIds![reportDistanceIds].distance}";
+      reportDistanceIds++;
+    }
+    for (var i = 0; i < allData.reportIndustrialActivitiesIds!.length; i++) {
+      if (allData.reportIndustrialActivitiesIds![i]
+              .attachment ==
+          null) {
+      } else {
+        request.files.add(await http.MultipartFile.fromPath(
+            'ReportIndustrialActivitiesIds[$i].Attachment',
+            allData.reportIndustrialActivitiesIds![reportIndastrilAttachments]
+                .attachment!.path));
+        reportIndastrilAttachments++;
+      }
+    }
+
+    for (var i = 0; i < allData.reportSurroundingBuildingsIds!.length; i++) {
+      if( allData.reportSurroundingBuildingsIds![i]
+          .attachment==null){}else{
+      request.files.add(await http.MultipartFile.fromPath(
+          'ReportSurroundingBuildings[$i].Attachment',
+          allData.reportSurroundingBuildingsIds![reportSurrouningAttachments]
+              .attachment!.path));
+      reportSurrouningAttachments++;
+    }}
     for (var i = 0; i < allData.reportSurroundingBuildingsIds!.length; i++) {
       request.fields["ReportSurroundingBuildings[$i].SurroundingBuildingId"] =
           "${allData.reportSurroundingBuildingsIds![reportSurroundingBuildingsIds].surroundingBuildingId}";
       reportSurroundingBuildingsIds++;
     }
+
     for (var i = 0; i < allData.reportSurroundingBuildingsIds!.length; i++) {
       request.fields["ReportSurroundingBuildings[$i].Distance"] =
           "${allData.reportSurroundingBuildingsIds![reportSurroundingBuildingsDistance].distance}";
@@ -939,6 +1005,91 @@ class AddReportService {
         response.statusCode == 504) {
       print(response.statusCode);
       return 500;
+    }
+  }
+
+  newAdd() async {
+    var headers = {
+      'Authorization':
+          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXBvcnRAcG9sbHV0ZWRzcG90cy5jb20iLCJqdGkiOiI3NTMxMzQzMy03N2RlLTQ1OTQtOGU3Zi1hYjQ4ZDRmMDQzZWEiLCJlbWFpbCI6InJlcG9ydEBwb2xsdXRlZHNwb3RzLmNvbSIsInVpZCI6ImM2Y2E4NGYzLTY1NzItNGVkNy05ZGQxLTA4ZDFhNTYxNDY0MCIsInJvbGVzIjoiRG9jdG9yIiwiZXhwIjoxNjczNDI4Njg5LCJpc3MiOiJTZWN1cmVBcGkiLCJhdWQiOiJTZWN1cmVBcGlVc2VyIn0.Wr73JkV6zZaAmS7ZEikx9_NfJXBh8iDrnq-creIZ3W8',
+      'Cookie':
+          '.AspNetCore.Identity.Application=CfDJ8Ib0eMiUryBIoeDqhv0ZpbBUm2P_KmZr83wjBpoLupQ7pn_DFXYLH7IyyvLOJIGOocgueFBF1I7_qRgCambY3cGu2-RixzZ1PD3DtxxF7PmGjScoWWY91L9fPBUPRN0l7LuoaGMdtZtV0ybaGy4gUpSDIQ6yO3c1KKJxVwSqzGoCIawXWHXhk1nVp95QDhOiQLiq1A5PpVrjyJomh9B6u3P13JB52wtwvW8Js9kXZG8G0M8FywdC0mHw2Yj68YSvCxyRlJIe7LvwTSH4u_6FcLmP9UKlaHwnq8CNRVEbIFii4SwkqZII0KruAWkExCKavzt5bgwVy7pCJNaAUt8GGPXhxnSxSne4ZvzhoAouKEecE1LizOtJinnNc7lHK9pY3_NXdHmViSzcpoGzOTXxVCGXsETni090-ckLTsvfjghVtZUQLEmKdGYbVa5p92r1We51KVLDYGF-67_neJ3qOf7Pz0-ndfoF3K6zMgP0JNX1zOYfcqZXOCmH86MdL0tzpjmuRxJ4AdpxxFyELlwsvF_Hf4OJKLJ_KVd2za37M0g3qbJA82wxkuVPYhcDOEcOqAy_-GkWorwnUxe-ot0jdj5wn63uVbVLp0AgT-JfnW57a9t1BxvUi_Q7GYlkeQKhoDT9YYGxpu7Gey7DCJpZPnzq_zyhc-YkX9iYPvROPtIxkorSx4HjSH0m9o0WkjYzmNZ2xxfHvn_DUPfTAxzBtS8-fL0QimBuOv0XugV5LOgsHAv9gXilH3HsxcJrRdcCXXnbnZDu8UWWmLDq7KFBGB6at1LBmp2K_d634HgJNWXbsWuftvsFrbRTeWElpyNaA94p53e9Ujzzao0NaoscI4LPIeNxGQya-a059PnxL49ndH_xclvV0pT1SrKLLcGKJA'
+    };
+    var request = http.MultipartRequest('POST',
+        Uri.parse('https://environmentApp.afaqci.com/api/Reports/AddReport'));
+    request.fields.addAll({
+      'EpicenterId': '217',
+      'ExtentOfPolluationDescription': 'test',
+      'Lat': '02',
+      'Long': '20.2',
+      'HasResidentialArea': 'true',
+      'HasVegetation': 'false',
+      'HasGroundWater': 'true',
+      'Temperature': '3',
+      'Salinity': '24',
+      'TotalDissolvedSolids': '4',
+      'TotalSuspendedSolids': '23',
+      'PH': '234',
+      'Turbidity': '234',
+      'ElectricalConnection': '123',
+      'DissolvedOxygen': '123',
+      'TotalOrganicCarbon': '123',
+      'VolatileOrganicMatter': '1',
+      'Ozone': '3',
+      'AllKindsOfCarbon': '1',
+      'NitrogenDioxide': '3',
+      'SulfurDioxide': '3',
+      'PM25': '3',
+      'PM10': '3',
+      'CityId': '1',
+      'LandFormId': '1',
+      'PollutantPlaceId': '1',
+      'SurfaceWaterId': '1',
+      'responsibleAuthorityId': '2',
+      'Hardness': '30',
+      'EpicenterLenght': '12',
+      'EpicenterWidth': '12',
+      'EpicenterDepth': '12',
+      'Humidity': '12',
+      'WindSpeed': '1',
+      'SunRise': 'true',
+      'NatureOfEpicenterId': '2',
+      'WindDirectionId': '1',
+      // 'ReportIndustrialActivitiesIds[0]': '2',
+      'ReportIndustrialActivitiesIds[0].IndustrialActivityId': '3',
+      'ReportIndustrialActivitiesIds[0].Discription': 'test',
+      'ReportIndustrialActivitiesIds[0].Distance': '12.2',
+      'ReportPotentialPollutantsIds[0]': '1',
+      'ReportPotentialPollutantsIds[1]': '2',
+      'ReportSurroundingBuildingsIds[0].SurroundingBuildingId': '2',
+      'ReportSurroundingBuildings[0].Distance': '12.3',
+      'VolatileOrganicMatter': '3',
+      'ReportSurroundingBuildings[0].SurroundingBuildingId': '2',
+      'ReportSemanticPollutionIds[0]': '2',
+      'ReportSurroundedMediumIds[0]': '2',
+      'ReportPlantIds[0]': '2',
+      'ReportUndergroundWaterIds[0]': '2',
+      'WaterTemperature': '12',
+      'FirstCarpone': '12',
+      'SecoundCarpone': '12',
+      'ReportPolluationSourcesIds[0]': '1'
+    });
+    request.files.add(await http.MultipartFile.fromPath('Photos',
+        '/C:/Users/afaq/Downloads/Image_created_with_a_mobile_phone.png'));
+    request.files.add(await http.MultipartFile.fromPath(
+        'ReportSurroundingBuildings[0].Attachment',
+        '/C:/Users/afaq/Downloads/Image_created_with_a_mobile_phone.png'));
+    request.files.add(await http.MultipartFile.fromPath(
+        'ReportIndustrialActivitiesIds[0].Attachment',
+        '/C:/Users/afaq/Downloads/Image_created_with_a_mobile_phone.png'));
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+    } else {
+      print(response.reasonPhrase);
     }
   }
 }

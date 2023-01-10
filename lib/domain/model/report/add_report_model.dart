@@ -4,6 +4,7 @@ import 'package:enivronment/domain/model/ReportModel.dart';
 import 'package:enivronment/domain/model/list_model.dart';
 
 import '../../../app/constants.dart';
+import '../../../data/controller/report/add_report_controller.dart';
 
 class Report {
   final String? extentOfPolluationDescription;
@@ -27,12 +28,12 @@ class Report {
 
   // final int weatherId;
   final List<File>? photos;
-  final List<int>? reportIndustrialActivitiesIds;
+  final List<ReportIndustrialActivitiesss>? reportIndustrialActivitiesIds;
 
   // final List<int> reportIndustrialPolluationSourcesIds;
   final List<int>? reportPolluationSourcesIds;
   final List<int>? reportPotentialPollutantsIds;
-  final List<ReportBuildings>? reportSurroundingBuildingsIds;
+  final List<ReportBuildingss>? reportSurroundingBuildingsIds;
   final List<int>? ReportSemanticPollutionIds;
   final List<int>? ReportSurroundedMediumIds;
   final List<int>? ReportPlantIds;
@@ -175,4 +176,68 @@ class Report {
         responsibleAuthorityId: jsonData['responsibleAuthorityId'],
         hardness: jsonData['hardness']);
   }
+}
+class ReportIndustrialActivitiess {
+  ReportIndustrialActivitiess({
+    // this.attachment,
+    this.description,
+    this.distance,
+    this.industrialActivityId,
+    this.industrialActivity,});
+
+  ReportIndustrialActivitiess.fromJson(dynamic json) {
+    // attachment = json['attachment'];
+    description = json['description'];
+    distance = json['distance'];
+    industrialActivityId = json['industrialActivityId'];
+    industrialActivity = json['industrialActivity'] != null ? IndustrialActivity.fromJson(json['industrialActivity']) : null;
+  }
+  // File? attachment;
+  String? description;
+  double? distance;
+  int? industrialActivityId;
+  IndustrialActivity? industrialActivity;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    // map['attachment'] = attachment;
+    map['description'] = description;
+    map['distance'] = distance;
+    map['industrialActivityId'] = industrialActivityId;
+    if (industrialActivity != null) {
+      map['industrialActivity'] = industrialActivity?.toJson();
+    }
+    return map;
+  }
+
+}
+class ReportIndustrialActivitiesUpdate {
+  ReportIndustrialActivitiesUpdate({
+    this.description,
+    this.distance,
+    this.industrialActivityId,
+    this.industrialActivity,});
+
+  ReportIndustrialActivitiesUpdate.fromJson(dynamic json) {
+    description = json['description'];
+    distance = json['distance'];
+    industrialActivityId = json['industrialActivityId'];
+    industrialActivity = json['industrialActivity'] != null ? IndustrialActivity.fromJson(json['industrialActivity']) : null;
+  }
+  String? description;
+  double? distance;
+  int? industrialActivityId;
+  IndustrialActivity? industrialActivity;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['description'] = description;
+    map['distance'] = distance;
+    map['industrialActivityId'] = industrialActivityId;
+    if (industrialActivity != null) {
+      map['industrialActivity'] = industrialActivity?.toJson();
+    }
+    return map;
+  }
+
 }
