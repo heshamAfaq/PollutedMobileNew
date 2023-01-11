@@ -644,20 +644,24 @@ class AddReportService {
       reportActivityIds++;
     }
     for (var i = 0; i < allData.reportIndustrialActivitiesIds!.length; i++) {
-      request.fields["ReportIndustrialActivitiesIds[$i].Discription"] =
-          "${allData.reportIndustrialActivitiesIds![reportDescriptionIds].description}";
-      reportDescriptionIds++;
+      if (allData.reportIndustrialActivitiesIds![i].description == null) {
+      } else {
+        request.fields["ReportIndustrialActivitiesIds[$i].Discription"] =
+            "${allData.reportIndustrialActivitiesIds![reportDescriptionIds].description}";
+        reportDescriptionIds++;
+      }
     }
     for (var i = 0; i < allData.reportIndustrialActivitiesIds!.length; i++) {
-      request.fields["ReportIndustrialActivitiesIds[$i].Distance"] =
-          "${allData.reportIndustrialActivitiesIds![reportDistanceIds].distance}";
-      reportDistanceIds++;
+      if (allData.reportIndustrialActivitiesIds![i].distance == null) {
+      } else {
+        request.fields["ReportIndustrialActivitiesIds[$i].Distance"] =
+            "${allData.reportIndustrialActivitiesIds![reportDistanceIds].distance}";
+        reportDistanceIds++;
+      }
     }
 
     for (var i = 0; i < allData.reportIndustrialActivitiesIds!.length; i++) {
-      if (allData.reportIndustrialActivitiesIds![i]
-          .attachment ==
-          null) {
+      if (allData.reportIndustrialActivitiesIds![i].attachment == null) {
       } else {
         request.files.add(await http.MultipartFile.fromPath(
             'ReportIndustrialActivitiesIds[$i].Attachment',
@@ -668,14 +672,15 @@ class AddReportService {
     }
 
     for (var i = 0; i < allData.reportSurroundingBuildingsIds!.length; i++) {
-      if( allData.reportSurroundingBuildingsIds![i]
-          .attachment==null){}else{
+      if (allData.reportSurroundingBuildingsIds![i].attachment == null) {
+      } else {
         request.files.add(await http.MultipartFile.fromPath(
             'ReportSurroundingBuildings[$i].Attachment',
             allData.reportSurroundingBuildingsIds![reportSurrouningAttachments]
                 .attachment!.path));
         reportSurrouningAttachments++;
-      }}
+      }
+    }
     print(
         allData.reportSurroundingBuildingsIds?.map((v) => v.toJson()).toList());
 
@@ -685,11 +690,13 @@ class AddReportService {
       reportSurroundingBuildingsIds++;
     }
 
-
     for (var i = 0; i < allData.reportSurroundingBuildingsIds!.length; i++) {
-      request.fields["ReportSurroundingBuildings[$i].Distance"] =
-          "${allData.reportSurroundingBuildingsIds![reportSurroundingBuildingsDistance].distance}";
-      reportSurroundingBuildingsDistance++;
+      if (allData.reportSurroundingBuildingsIds![i].distance == null) {
+      } else {
+        request.fields["ReportSurroundingBuildings[$i].Distance"] =
+            "${allData.reportSurroundingBuildingsIds![reportSurroundingBuildingsDistance].distance}";
+        reportSurroundingBuildingsDistance++;
+      }
     }
 
     for (var i = 0; i < allData.reportPolluationSourcesIds!.length; i++) {
@@ -867,19 +874,23 @@ class AddReportService {
       reportActivityIds++;
     }
     for (var i = 0; i < allData.reportIndustrialActivitiesIds!.length; i++) {
-      request.fields["ReportIndustrialActivitiesIds[$i].Discription"] =
-          "${allData.reportIndustrialActivitiesIds![reportDescriptionIds].description}";
-      reportDescriptionIds++;
+      if (allData.reportIndustrialActivitiesIds![i].description == null) {
+      } else {
+        request.fields["ReportIndustrialActivitiesIds[$i].Discription"] =
+            "${allData.reportIndustrialActivitiesIds![reportDescriptionIds].description}";
+        reportDescriptionIds++;
+      }
     }
     for (var i = 0; i < allData.reportIndustrialActivitiesIds!.length; i++) {
-      request.fields["ReportIndustrialActivitiesIds[$i].Distance"] =
-          "${allData.reportIndustrialActivitiesIds![reportDistanceIds].distance}";
-      reportDistanceIds++;
+      if (allData.reportIndustrialActivitiesIds![i].distance == null) {
+      } else {
+        request.fields["ReportIndustrialActivitiesIds[$i].Distance"] =
+            "${allData.reportIndustrialActivitiesIds![reportDistanceIds].distance}";
+        reportDistanceIds++;
+      }
     }
     for (var i = 0; i < allData.reportIndustrialActivitiesIds!.length; i++) {
-      if (allData.reportIndustrialActivitiesIds![i]
-              .attachment ==
-          null) {
+      if (allData.reportIndustrialActivitiesIds![i].attachment?.path == null) {
       } else {
         request.files.add(await http.MultipartFile.fromPath(
             'ReportIndustrialActivitiesIds[$i].Attachment',
@@ -890,14 +901,15 @@ class AddReportService {
     }
 
     for (var i = 0; i < allData.reportSurroundingBuildingsIds!.length; i++) {
-      if( allData.reportSurroundingBuildingsIds![i]
-          .attachment==null){}else{
-      request.files.add(await http.MultipartFile.fromPath(
-          'ReportSurroundingBuildings[$i].Attachment',
-          allData.reportSurroundingBuildingsIds![reportSurrouningAttachments]
-              .attachment!.path));
-      reportSurrouningAttachments++;
-    }}
+      if (allData.reportSurroundingBuildingsIds![i].attachment == null) {
+      } else {
+        request.files.add(await http.MultipartFile.fromPath(
+            'ReportSurroundingBuildings[$i].Attachment',
+            allData.reportSurroundingBuildingsIds![reportSurrouningAttachments]
+                .attachment!.path));
+        reportSurrouningAttachments++;
+      }
+    }
     for (var i = 0; i < allData.reportSurroundingBuildingsIds!.length; i++) {
       request.fields["ReportSurroundingBuildings[$i].SurroundingBuildingId"] =
           "${allData.reportSurroundingBuildingsIds![reportSurroundingBuildingsIds].surroundingBuildingId}";
@@ -905,9 +917,12 @@ class AddReportService {
     }
 
     for (var i = 0; i < allData.reportSurroundingBuildingsIds!.length; i++) {
-      request.fields["ReportSurroundingBuildings[$i].Distance"] =
-          "${allData.reportSurroundingBuildingsIds![reportSurroundingBuildingsDistance].distance}";
-      reportSurroundingBuildingsDistance++;
+      if (allData.reportSurroundingBuildingsIds![i].distance == null) {
+      } else {
+        request.fields["ReportSurroundingBuildings[$i].Distance"] =
+            "${allData.reportSurroundingBuildingsIds![reportSurroundingBuildingsDistance].distance}";
+        reportSurroundingBuildingsDistance++;
+      }
     }
 
     for (var i = 0; i < allData.reportPolluationSourcesIds!.length; i++) {

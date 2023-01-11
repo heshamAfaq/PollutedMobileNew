@@ -60,10 +60,10 @@ class AllEpicenterServices {
     return 400;
   }
 
-  getEpicenters({int? pageNum, int? regionId, int? status}) async {
+  getEpicenters({int? pageNum, int? regionId, int? status, int? cityId}) async {
     http.Response res = await http.get(
       Uri.parse(
-        '${Constants.baseUrl}/Epicenters/GetAllEpicenters?page=$pageNum&pageSize=10&regionId=$regionId&status=$status',
+        '${Constants.baseUrl}/Epicenters/GetAllEpicenters?page=$pageNum&pageSize=10&regionId=$regionId&status=$status&cityId=$cityId',
       ),
       headers: <String, String>{
         "Content-type": "application/json",

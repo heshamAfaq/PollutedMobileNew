@@ -201,6 +201,7 @@ class AddReportController extends GetxController {
   final getAllWindDirection = <CitiesModel>[].obs;
   final getAllWindDirectionText = 'choose wind direction'.tr.obs;
   final getAllWindDirectionId = 0.obs;
+
   // final listDistance = <ReportBuildingss>[].obs;
   final distanceOfList = <ReportBuildingss>[].obs;
   final ActvitesList = <ReportIndustrialActivitiesss>[].obs;
@@ -280,6 +281,7 @@ class AddReportController extends GetxController {
     String name,
     File file,
   ) {
+    distanceOfList.clear();
     print("Added");
     print(file.path);
     // listDistance.add(ReportBuildingss(
@@ -298,6 +300,7 @@ class AddReportController extends GetxController {
     File file,
     String description,
   ) {
+    ActvitesList.clear();
     print("Added");
     print(file.path);
     print(description);
@@ -306,9 +309,7 @@ class AddReportController extends GetxController {
         distance: distance,
         attachment: file,
         description: description,
-    industrialActivity:IndustrialActivity(
-      name: name
-    ) ));
+        industrialActivity: IndustrialActivity(name: name)));
   }
 
   removeDiatance(int id) {
@@ -1068,72 +1069,79 @@ class AddReportController extends GetxController {
       } else if (epicenterDepth.value == 0.0) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('you must enter depth'.tr)));
-      } else if (temperature.value == '') {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("You must enter the temperature".tr)));
-      } else if (relativehumidity.value == '') {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("you must relative humidity".tr)));
-      } else if (Windspeed.value == "") {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("you must add Wind speed".tr)));
-      } else if (salinity.value == "") {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Salinity must be entered".tr)));
-      } else if (totalDissolvedSolids.value == "") {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("TDS should be included".tr)));
-      } else if (totalSuspendedSolids.value == "") {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("Total suspended solids must be entered".tr)));
-      } else if (pH.value == "") {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("pH is required".tr)));
-      } else if (turbidity.value == "") {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Turbidity must be introduced".tr)));
-      } else if (electricalConnection.value == "") {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("Electrical connection must be entered".tr)));
-      } else if (dissolvedOxygen.value == "") {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Dissolved oxygen must be introduced".tr)));
-      } else if (volatileOrganicMatter.value == "") {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("Volatile organic matter should be included".tr)));
-      } else if (ozone.value == "") {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Ozone must be included".tr)));
       }
+      // else if (temperature.value == '') {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //       SnackBar(content: Text("You must enter the temperature".tr)));
+      // }
+      // else if (relativehumidity.value == '') {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //       SnackBar(content: Text("you must relative humidity".tr)));
+      // }
+      // else if (Windspeed.value == "") {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //       SnackBar(content: Text("you must add Wind speed".tr)));
+      // }
+      // else if (salinity.value == "") {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //       SnackBar(content: Text("Salinity must be entered".tr)));
+      // } else if (totalDissolvedSolids.value == "") {
+      //   ScaffoldMessenger.of(context)
+      //       .showSnackBar(SnackBar(content: Text("TDS should be included".tr)));
+      // } else if (totalSuspendedSolids.value == "") {
+      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //       content: Text("Total suspended solids must be entered".tr)));
+      // } else if (pH.value == "") {
+      //   ScaffoldMessenger.of(context)
+      //       .showSnackBar(SnackBar(content: Text("pH is required".tr)));
+      // } else if (turbidity.value == "") {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //       SnackBar(content: Text("Turbidity must be introduced".tr)));
+      // } else if (electricalConnection.value == "") {
+      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //       content: Text("Electrical connection must be entered".tr)));
+      // } else if (dissolvedOxygen.value == "") {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //       SnackBar(content: Text("Dissolved oxygen must be introduced".tr)));
+      // } else if (volatileOrganicMatter.value == "") {
+      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //       content: Text("Volatile organic matter should be included".tr)));
+      // } else if (ozone.value == "") {
+      //   ScaffoldMessenger.of(context)
+      //       .showSnackBar(SnackBar(content: Text("Ozone must be included".tr)));
+      // }
       // else if (allKindsOfCarbon.value == "") {
       //   ScaffoldMessenger.of(context).showSnackBar(
       //       SnackBar(content: Text("All types of carbon must be entered".tr)));
       // }
-      else if (nitrogenDioxide.value == "") {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Nitrogen dioxide must be included".tr)));
-      } else if (sulfurDioxide.value == "") {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Sulfur dioxide should be included".tr)));
-      } else if (pM25.value == "") {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("PM25 is required".tr)));
-      } else if (pM10.value == "") {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("PM10 is required".tr)));
-      } else if (FirstCarpone.value == "") {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("FirstCarpone Required".tr)));
-      } else if (SecoundCarpone.value == "") {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("SecoundCarpone Required".tr)));
-      } else if (WaterTemperature.value == "") {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("WaterTemperature Required".tr)));
-      } else if (hardness.value.isEmpty) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("hardness".tr)));
-      }
+      // else if (nitrogenDioxide.value == "") {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //       SnackBar(content: Text("Nitrogen dioxide must be included".tr)));
+      // } else if (sulfurDioxide.value == "") {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //       SnackBar(content: Text("Sulfur dioxide should be included".tr)));
+      // }
+      // else if (pM25.value == "") {
+      //   ScaffoldMessenger.of(context)
+      //       .showSnackBar(SnackBar(content: Text("PM25 is required".tr)));
+      // } else if (pM10.value == "") {
+      //   ScaffoldMessenger.of(context)
+      //       .showSnackBar(SnackBar(content: Text("PM10 is required".tr)));
+      // } else if (FirstCarpone.value == "") {
+      //   ScaffoldMessenger.of(context)
+      //       .showSnackBar(SnackBar(content: Text("FirstCarpone Required".tr)));
+      // } else if (SecoundCarpone.value == "") {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //       SnackBar(content: Text("SecoundCarpone Required".tr)));
+      // }
+      // else if (WaterTemperature.value == "") {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //       SnackBar(content: Text("WaterTemperature Required".tr)));
+      // }
+      // else if (hardness.value.isEmpty) {
+      //   ScaffoldMessenger.of(context)
+      //       .showSnackBar(SnackBar(content: Text("hardness".tr)));
+      // }
       // else if (acidity.value.isEqual(0.0)) {
       //   ScaffoldMessenger.of(context)
       //       .showSnackBar(SnackBar(content: Text("acidity".tr)));
@@ -1556,7 +1564,7 @@ class AddReportController extends GetxController {
 
   selectImage() async {
     try {
-      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      final XFile? image = await _picker.pickImage(source: ImageSource.gallery,imageQuality: 50);
 
       if (image != null) _image.value = image.path;
     } catch (e) {
@@ -1566,7 +1574,7 @@ class AddReportController extends GetxController {
 
   selectImageIndustrail() async {
     try {
-      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      final XFile? image = await _picker.pickImage(source: ImageSource.gallery,imageQuality: 50);
 
       if (image != null) _imageIndustrail.value = image.path;
     } catch (e) {
@@ -1574,19 +1582,24 @@ class AddReportController extends GetxController {
     }
   }
 }
+
 class ReportBuildingss {
   ReportBuildingss({
     this.surroundingBuildingId,
     this.surroundingBuilding,
     this.distance,
-    this.attachment,});
+    this.attachment,
+  });
 
   ReportBuildingss.fromJson(dynamic json) {
     surroundingBuildingId = json['surroundingBuildingId'];
-    surroundingBuilding = json['surroundingBuilding'] != null ? SurroundingBuilding.fromJson(json['surroundingBuilding']) : null;
+    surroundingBuilding = json['surroundingBuilding'] != null
+        ? SurroundingBuilding.fromJson(json['surroundingBuilding'])
+        : null;
     distance = json['distance'];
     attachment = json['attachment'];
   }
+
   int? surroundingBuildingId;
   SurroundingBuilding? surroundingBuilding;
   double? distance;
@@ -1602,23 +1615,27 @@ class ReportBuildingss {
     map['attachment'] = attachment;
     return map;
   }
-
 }
+
 class ReportIndustrialActivitiesss {
   ReportIndustrialActivitiesss({
     this.attachment,
     this.description,
     this.distance,
     this.industrialActivityId,
-    this.industrialActivity,});
+    this.industrialActivity,
+  });
 
   ReportIndustrialActivitiesss.fromJson(dynamic json) {
     attachment = json['attachment'];
     description = json['description'];
     distance = json['distance'];
     industrialActivityId = json['industrialActivityId'];
-    industrialActivity = json['industrialActivity'] != null ? IndustrialActivity.fromJson(json['industrialActivity']) : null;
+    industrialActivity = json['industrialActivity'] != null
+        ? IndustrialActivity.fromJson(json['industrialActivity'])
+        : null;
   }
+
   File? attachment;
   String? description;
   double? distance;
@@ -1636,5 +1653,4 @@ class ReportIndustrialActivitiesss {
     }
     return map;
   }
-
 }

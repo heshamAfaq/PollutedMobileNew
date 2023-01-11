@@ -371,13 +371,14 @@ class HomeScreen extends StatelessWidget {
                                             itemBuilder: (context, index) {
                                               return InkWell(
                                                 onTap: () {
-                                                  epicenterCtrl.onTapSelected(
-                                                      ctx,
+                                                  epicenterCtrl.regionId.value =
                                                       epicenterCtrl
-                                                          .allregion[index].id,
+                                                          .allregion[index].id;
+                                                  epicenterCtrl
+                                                          .regionText.value =
                                                       epicenterCtrl
                                                           .allregion[index]
-                                                          .name);
+                                                          .name;
                                                   epicenterCtrl.getAllCities(
                                                       epicenterCtrl
                                                           .allregion[index].id);
@@ -480,6 +481,8 @@ class HomeScreen extends StatelessWidget {
                                                           epicenterCtrl
                                                               .allCities[index]
                                                               .name;
+                                                      epicenterCtrl
+                                                          .onTapSelected();
                                                       Navigator.pop(context);
                                                     },
                                                     child: Padding(
@@ -886,7 +889,7 @@ class HomeScreen extends StatelessWidget {
                                                       epicenterCtrl
                                                           .allregion[index]
                                                           .name;
-                                                  epicenterCtrl.getReports();
+                                                  // epicenterCtrl.getReports();
                                                   epicenterCtrl.getAllCities2(
                                                       epicenterCtrl
                                                           .regionId2.value);
@@ -990,6 +993,8 @@ class HomeScreen extends StatelessWidget {
                                                           epicenterCtrl
                                                               .allCities2[index]
                                                               .name;
+                                                      epicenterCtrl
+                                                          .onTapSelected2();
                                                       Navigator.pop(context);
                                                     },
                                                     child: Padding(

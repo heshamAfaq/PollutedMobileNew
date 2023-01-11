@@ -238,15 +238,17 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
     if (widget.report!.report == null) {
       reportCtrl.ActvitesList.value = [];
     } else {
-      reportCtrl.ActvitesList.clear();
       for (int i = 0;
           i < widget.report!.report!.reportIndustrialActivities!.length;
           i++) {
         reportCtrl.ActvitesList.add(ReportIndustrialActivitiesss(
-          industrialActivityId:widget.report!.report!.reportIndustrialActivities![i].industrialActivityId,
-            description:widget.report!.report!.reportIndustrialActivities![i].description ,
+            industrialActivityId: widget.report!.report!
+                .reportIndustrialActivities![i].industrialActivityId,
+            description: widget
+                .report!.report!.reportIndustrialActivities![i].description,
             distance:
                 widget.report!.report!.reportIndustrialActivities![i].distance,
+            attachment: null,
             industrialActivity: IndustrialActivity(
               name: widget.report!.report!.reportIndustrialActivities![i]
                   .industrialActivity!.name,
@@ -481,11 +483,13 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
           i++) {
         print(widget.report!.report!.reportSurroundingBuildings!);
         reportCtrl.distanceOfList.add(ReportBuildingss(
-          surroundingBuildingId: widget.report!.report!.reportSurroundingBuildings![i].surroundingBuildingId ,
+            surroundingBuildingId: widget.report!.report!
+                .reportSurroundingBuildings![i].surroundingBuildingId,
             distance:
-            widget.report!.report!.reportSurroundingBuildings![i].distance,
-            surroundingBuilding: SurroundingBuilding(name:widget.report!.report!
-                .reportSurroundingBuildings![i].surroundingBuilding!.name!)));
+                widget.report!.report!.reportSurroundingBuildings![i].distance,
+            surroundingBuilding: SurroundingBuilding(
+                name: widget.report!.report!.reportSurroundingBuildings![i]
+                    .surroundingBuilding!.name!)));
         print(reportCtrl.distanceOfList.length);
       }
     }
@@ -3773,18 +3777,35 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      reportCtrl.addActivites(
-                                          reportCtrl
-                                              .allIndustrialActivitiesId.value,
-                                          reportCtrl
-                                              .allIndustrialActivitiesDistance
-                                              .value,
-                                          reportCtrl.allIndustrialActivitiesText
-                                              .value,
-                                          File(reportCtrl.imageIndustrail),
-                                          reportCtrl
-                                              .allIndustrialActivitiesDescription
-                                              .value);
+                                      if (reportCtrl.allIndustrialActivitiesId
+                                              .value ==
+                                          0) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                content: Text(
+                                                    'please enter Industrial Activites'
+                                                        .tr)));
+                                      } else if (reportCtrl.imageIndustrail ==
+                                          "") {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                content: Text(
+                                                    'يجب اختيار صوره'.tr)));
+                                      } else {
+                                        reportCtrl.addActivites(
+                                            reportCtrl.allIndustrialActivitiesId
+                                                .value,
+                                            reportCtrl
+                                                .allIndustrialActivitiesDistance
+                                                .value,
+                                            reportCtrl
+                                                .allIndustrialActivitiesText
+                                                .value,
+                                            File(reportCtrl.imageIndustrail),
+                                            reportCtrl
+                                                .allIndustrialActivitiesDescription
+                                                .value);
+                                      }
                                     },
                                     child: Container(
                                       width: 40,
@@ -4425,15 +4446,30 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                       Spacer(),
                                       GestureDetector(
                                         onTap: () {
-                                          reportCtrl.addBuildingsList(
-                                              reportCtrl
-                                                  .surroundingBuildingId.value,
-                                              reportCtrl
-                                                  .surroundingDistance.value,
-                                              reportCtrl
-                                                  .surroundingBuildingsText
-                                                  .value,
-                                              File(reportCtrl.images));
+                                          if (reportCtrl.surroundingBuildingId
+                                                  .value ==
+                                              0) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(SnackBar(
+                                                    content: Text(
+                                                        'Please Enter Surrounding Buildings '
+                                                            .tr)));
+                                          } else if (reportCtrl.images == "") {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(SnackBar(
+                                                    content: Text(
+                                                        'يجب اختيار صوره'.tr)));
+                                          } else {
+                                            reportCtrl.addBuildingsList(
+                                                reportCtrl.surroundingBuildingId
+                                                    .value,
+                                                reportCtrl
+                                                    .surroundingDistance.value,
+                                                reportCtrl
+                                                    .surroundingBuildingsText
+                                                    .value,
+                                                File(reportCtrl.images));
+                                          }
                                         },
                                         child: Container(
                                           width: 30,

@@ -126,7 +126,8 @@ class AllEpicenterController extends GetxController {
     await getLocation();
     loading.value = true;
     print("success");
-    epicintersModel = await services.getEpicenters(status: 0,pageNum: 1);
+    epicintersModel =
+        await services.getEpicenters(status: 0, pageNum: pageNumber.value);
     listEpicenters.assignAll(epicintersModel!.epicenters!);
     allregion.value = (await servicess.getRegion())!;
     // regionText.value = allregion.first.name;
@@ -145,6 +146,7 @@ class AllEpicenterController extends GetxController {
   getAllCities(int id) async {
     loadCity.value = true;
     allCities.value = (await servicess.geCities(id))!;
+
     loading.value = false;
   }
 
@@ -261,14 +263,15 @@ class AllEpicenterController extends GetxController {
   final regionId = 1.obs;
   final regionId2 = 1.obs;
 
-  Future<void> onTapSelected(BuildContext con, int id, String name) async {
+  Future<void> onTapSelected() async {
     loading.value = true;
-    regionId.value = id;
-    regionText.value = name;
+    pageNumber.value = 1;
     epicintersModel = await services.getEpicenters(
-        pageNum: pageNumber.value, regionId: regionId.value, status: 0);
+        pageNum: pageNumber.value,
+        regionId: regionId.value,
+        status: 0,
+        cityId: cityId.value);
     listEpicenters.assignAll(epicintersModel!.epicenters!);
-
     update();
 
     loading.value = false;
@@ -277,12 +280,14 @@ class AllEpicenterController extends GetxController {
   final RefreshController refreshController = RefreshController();
   final RefreshController refreshController2 = RefreshController();
 
-  Future<void> onTapSelected2(BuildContext con, int id, String name) async {
+  Future<void> onTapSelected2() async {
+    pageNumber2.value = 1;
     loadReports.value = true;
-    regionId2.value = id;
-    regionText2.value = name;
     epicintersModelReport = await services.getEpicenters(
-        status: 4, regionId: regionId2.value, pageNum: pageNumber2.value);
+        status: 4,
+        regionId: regionId2.value,
+        pageNum: pageNumber2.value,
+        cityId: cityId2.value);
     listReports.assignAll(epicintersModelReport!.epicenters!);
     update();
 
@@ -293,9 +298,10 @@ class AllEpicenterController extends GetxController {
     if (listEpicenters.isNotEmpty) {
       pageNumber.value++;
       epicintersModel = await services.getEpicenters(
-        pageNum: pageNumber.value,
-        status: 0,
-      );
+          pageNum: pageNumber.value,
+          status: 0,
+          regionId: regionId.value,
+          cityId: cityId.value);
       listEpicenters.addAll(epicintersModel!.epicenters!);
       print("loading");
       print(pageNumber.value);
@@ -308,9 +314,10 @@ class AllEpicenterController extends GetxController {
     if (listEpicenters.isNotEmpty) {
       pageNumber2.value++;
       epicintersModelReport = await services.getEpicenters(
-        pageNum: pageNumber2.value,
-        status: 4,
-      );
+          pageNum: pageNumber2.value,
+          status: 4,
+          cityId: cityId2.value,
+          regionId: regionId2.value);
       listReports.addAll(epicintersModelReport!.epicenters!);
       print("loading");
       print(pageNumber2.value);
