@@ -273,12 +273,17 @@ class HomeScreen extends StatelessWidget {
         length: tabs.length,
         child: Scaffold(
             appBar: AppBar(
-              leading: Container(
-                margin: const EdgeInsets.all(AppMargin.m8),
-                decoration: const BoxDecoration(
-                    image: DecorationImage(
-                  image: AssetImage(ImageAssets.splashLogo),
-                )),
+              // leading: Container(
+              //   margin: const EdgeInsets.all(AppMargin.m8),
+              //   decoration: const BoxDecoration(
+              //       image: DecorationImage(
+              //     image: AssetImage(ImageAssets.splashLogo),
+              //   )),
+              // ),
+              title: Image.asset(
+                ImageAssets.splashLogo,
+                width: 50,
+                height: 50,
               ),
               actions: [
                 //! change Language
@@ -302,16 +307,53 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                //! Add Epicenter
-                IconButton(
-                  icon: Icon(
-                    Icons.add_circle_outline,
-                    color: ColorManager.secondary,
-                  ),
-                  onPressed: () {
+                InkWell(
+                  onTap: () {
                     Get.to(() => AddEpicenterScreen());
                   },
+                  child: Container(
+                      margin: const EdgeInsets.symmetric(
+                          vertical: AppMargin.m16, horizontal: AppMargin.m8),
+                      width: SizeConfig.screenWidth! / MediaSize.m6,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.circular(BorderRadiusValues.br5),
+                          border: Border.all(
+                              width: AppSize.s1,
+                              color: ColorManager.secondary)),
+                      child: Icon(
+                        Icons.add,
+                        color: ColorManager.secondary,
+                      )),
                 ),
+                // SizedBox(
+                //   height: 5,
+                //   child: TextButton(
+                //     onPressed: () {
+                //       Get.to(() => AddEpicenterScreen());
+                //     },
+                //     style: TextButton.styleFrom(
+                //         shape: RoundedRectangleBorder(
+                //             borderRadius: BorderRadius.circular(4),
+                //             side: BorderSide(color: ColorManager.secondary))),
+                //     child: Icon(
+                //       Icons.add,
+                //       color: ColorManager.secondary,
+                //     ),
+                //   ),
+                // ),
+                //!
+                // Add Epicenter
+                // IconButton(
+                //   icon: Icon(
+                //     Icons.add_circle_outline,
+                //     color: ColorManager.secondary,
+                //   ),
+                //   onPressed: () {
+                //     Get.to(() => AddEpicenterScreen());
+                //   },
+                // ),
 
                 //!logout
                 IconButton(
@@ -353,94 +395,6 @@ class HomeScreen extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 30, vertical: 10),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 3,
-                            child: TextField(
-                              onChanged: (v) {
-                                print(v);
-                                epicenterCtrl.searchEpcinters(name: v);
-                              },
-                              decoration: InputDecoration(
-                                  hintText: "Search by name or id".tr,
-                                  focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(4),
-                                      borderSide:
-                                      const BorderSide(color: Colors.grey)),
-                                  enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(4),
-                                      borderSide: const BorderSide(
-                                          color: Colors.grey))),
-                            ),
-                          ),
-                          SizedBox(width: 5),
-                          Expanded(
-                            flex: 1,
-                            child: TextField(
-                              onChanged: (v) {
-                                epicenterCtrl.searchEpcintersById(
-
-                                    id: int.tryParse(v));
-                              },
-                              decoration: InputDecoration(
-                                  hintText: "Search id".tr,
-                                  focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(4),
-                                      borderSide:
-                                      const BorderSide(color: Colors.grey)),
-                                  enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(4),
-                                      borderSide: const BorderSide(
-                                          color: Colors.grey))),
-                            ),
-                          ),
-                          // Expanded(
-                          //   flex: 1,
-                          //   child: Column(
-                          //     children: [
-                          //       GestureDetector(
-                          //         onTap: () async {
-                          //           final date = await epicenterCtrl
-                          //               .showCalender(context: context);
-                          //           print(date!.toIso8601String());
-                          //           epicenterCtrl.searchEpcintersReports(
-                          //               startDate: date.toIso8601String());
-                          //         },
-                          //         child: Icon(
-                          //           Icons.calendar_month,
-                          //           size: 30,
-                          //           color: ColorManager.primary,
-                          //         ),
-                          //       ),
-                          //       Container(
-                          //         height: 20,
-                          //         width: 1,
-                          //         color: ColorManager.primary,
-                          //       ),
-                          //       GestureDetector(
-                          //         onTap: () async {
-                          //           final date = await epicenterCtrl
-                          //               .showCalender(context: context);
-                          //           print(date!.toIso8601String());
-                          //           epicenterCtrl.searchEpcintersReports(
-                          //               endDate: date.toIso8601String());
-                          //         },
-                          //         child: Icon(
-                          //           Icons.calendar_month,
-                          //           size: 30,
-                          //           color: ColorManager.primary,
-                          //         ),
-                          //       ),
-                          //     ],
-                          //   ),
-                          // )
-                        ],
-                      ),
-                    ),
                     Column(
                       children: [
                         Obx(
@@ -643,6 +597,77 @@ class HomeScreen extends StatelessWidget {
                                   )),
                         )
                       ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 10),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: TextField(
+                              onChanged: (v) {
+                                if (v.isNotEmpty) {
+                                  epicenterCtrl.searchName.value = v;
+                                } else {
+                                  epicenterCtrl.defaultSearch();
+                                }
+                              },
+                              decoration: InputDecoration(
+                                  hintText: "Search by name or id".tr,
+                                  focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(4),
+                                      borderSide:
+                                          const BorderSide(color: Colors.grey)),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(4),
+                                      borderSide: const BorderSide(
+                                          color: Colors.grey))),
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          Expanded(
+                            flex: 1,
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                              onChanged: (v) {
+                                if (v.isNotEmpty) {
+                                  epicenterCtrl.idSearch.value = v;
+                                } else {
+                                  epicenterCtrl.defaultSearch();
+                                }
+                              },
+                              decoration: InputDecoration(
+                                  hintText: "Search id".tr,
+                                  focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(4),
+                                      borderSide:
+                                          const BorderSide(color: Colors.grey)),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(4),
+                                      borderSide: const BorderSide(
+                                          color: Colors.grey))),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: 150,
+                      child: TextButton(
+                        onPressed: () {
+                          if (epicenterCtrl.idSearch.value == "" &&
+                              epicenterCtrl.searchName.value == "") {
+                            epicenterCtrl.defaultSearch();
+                          } else {
+                            epicenterCtrl.search();
+                          }
+                        },
+                        style: TextButton.styleFrom(
+                            backgroundColor: ColorManager.lightPrimary),
+                        child: Text("search".tr,
+                            style: const TextStyle(color: Colors.white)),
+                      ),
                     ),
                     Expanded(
                         child: Obx(() => Container(
@@ -944,94 +969,93 @@ class HomeScreen extends StatelessWidget {
                 //             }))
                 Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 30, vertical: 10),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 3,
-                            child: TextField(
-                              onChanged: (v) {
-                                print(v);
-                                epicenterCtrl.searchEpcintersReports(name: v);
-                              },
-                              decoration: InputDecoration(
-                                  hintText: "Search by name or id".tr,
-                                  focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(4),
-                                      borderSide:
-                                          const BorderSide(color: Colors.grey)),
-                                  enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(4),
-                                      borderSide: const BorderSide(
-                                          color: Colors.grey))),
-                            ),
-                          ),
-                          SizedBox(width: 5),
-                          Expanded(
-                            flex: 1,
-                            child: TextField(
-                              onChanged: (v) {
-                                epicenterCtrl.searchEpcintersReportsById(
-
-                                    id: int.tryParse(v));
-                              },
-                              decoration: InputDecoration(
-                                  hintText: "Search id".tr,
-                                  focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(4),
-                                      borderSide:
-                                          const BorderSide(color: Colors.grey)),
-                                  enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(4),
-                                      borderSide: const BorderSide(
-                                          color: Colors.grey))),
-                            ),
-                          ),
-                          // Expanded(
-                          //   flex: 1,
-                          //   child: Column(
-                          //     children: [
-                          //       GestureDetector(
-                          //         onTap: () async {
-                          //           final date = await epicenterCtrl
-                          //               .showCalender(context: context);
-                          //           print(date!.toIso8601String());
-                          //           epicenterCtrl.searchEpcintersReports(
-                          //               startDate: date.toIso8601String());
-                          //         },
-                          //         child: Icon(
-                          //           Icons.calendar_month,
-                          //           size: 30,
-                          //           color: ColorManager.primary,
-                          //         ),
-                          //       ),
-                          //       Container(
-                          //         height: 20,
-                          //         width: 1,
-                          //         color: ColorManager.primary,
-                          //       ),
-                          //       GestureDetector(
-                          //         onTap: () async {
-                          //           final date = await epicenterCtrl
-                          //               .showCalender(context: context);
-                          //           print(date!.toIso8601String());
-                          //           epicenterCtrl.searchEpcintersReports(
-                          //               endDate: date.toIso8601String());
-                          //         },
-                          //         child: Icon(
-                          //           Icons.calendar_month,
-                          //           size: 30,
-                          //           color: ColorManager.primary,
-                          //         ),
-                          //       ),
-                          //     ],
-                          //   ),
-                          // )
-                        ],
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(
+                    //       horizontal: 30, vertical: 10),
+                    //   child: Row(
+                    //     children: [
+                    //       Expanded(
+                    //         flex: 3,
+                    //         child: TextField(
+                    //           onChanged: (v) {
+                    //             print(v);
+                    //             epicenterCtrl.searchEpcintersReports(name: v);
+                    //           },
+                    //           decoration: InputDecoration(
+                    //               hintText: "Search by name or id".tr,
+                    //               focusedBorder: OutlineInputBorder(
+                    //                   borderRadius: BorderRadius.circular(4),
+                    //                   borderSide:
+                    //                       const BorderSide(color: Colors.grey)),
+                    //               enabledBorder: OutlineInputBorder(
+                    //                   borderRadius: BorderRadius.circular(4),
+                    //                   borderSide: const BorderSide(
+                    //                       color: Colors.grey))),
+                    //         ),
+                    //       ),
+                    //       SizedBox(width: 5),
+                    //       Expanded(
+                    //         flex: 1,
+                    //         child: TextField(
+                    //           onChanged: (v) {
+                    //             epicenterCtrl.searchEpcintersReportsById(
+                    //                 id: int.tryParse(v));
+                    //           },
+                    //           decoration: InputDecoration(
+                    //               hintText: "Search id".tr,
+                    //               focusedBorder: OutlineInputBorder(
+                    //                   borderRadius: BorderRadius.circular(4),
+                    //                   borderSide:
+                    //                       const BorderSide(color: Colors.grey)),
+                    //               enabledBorder: OutlineInputBorder(
+                    //                   borderRadius: BorderRadius.circular(4),
+                    //                   borderSide: const BorderSide(
+                    //                       color: Colors.grey))),
+                    //         ),
+                    //       ),
+                    //       // Expanded(
+                    //       //   flex: 1,
+                    //       //   child: Column(
+                    //       //     children: [
+                    //       //       GestureDetector(
+                    //       //         onTap: () async {
+                    //       //           final date = await epicenterCtrl
+                    //       //               .showCalender(context: context);
+                    //       //           print(date!.toIso8601String());
+                    //       //           epicenterCtrl.searchEpcintersReports(
+                    //       //               startDate: date.toIso8601String());
+                    //       //         },
+                    //       //         child: Icon(
+                    //       //           Icons.calendar_month,
+                    //       //           size: 30,
+                    //       //           color: ColorManager.primary,
+                    //       //         ),
+                    //       //       ),
+                    //       //       Container(
+                    //       //         height: 20,
+                    //       //         width: 1,
+                    //       //         color: ColorManager.primary,
+                    //       //       ),
+                    //       //       GestureDetector(
+                    //       //         onTap: () async {
+                    //       //           final date = await epicenterCtrl
+                    //       //               .showCalender(context: context);
+                    //       //           print(date!.toIso8601String());
+                    //       //           epicenterCtrl.searchEpcintersReports(
+                    //       //               endDate: date.toIso8601String());
+                    //       //         },
+                    //       //         child: Icon(
+                    //       //           Icons.calendar_month,
+                    //       //           size: 30,
+                    //       //           color: ColorManager.primary,
+                    //       //         ),
+                    //       //       ),
+                    //       //     ],
+                    //       //   ),
+                    //       // )
+                    //     ],
+                    //   ),
+                    // ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 20),
                       child: Column(
@@ -1243,6 +1267,77 @@ class HomeScreen extends StatelessWidget {
                                     )),
                           )
                         ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 10),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: TextField(
+                              onChanged: (v) {
+                                if (v.isNotEmpty) {
+                                  epicenterCtrl.searchNameReport.value = v;
+                                } else {
+                                  epicenterCtrl.defaultSearch();
+                                }
+                              },
+                              decoration: InputDecoration(
+                                  hintText: "Search by name or id".tr,
+                                  focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(4),
+                                      borderSide:
+                                      const BorderSide(color: Colors.grey)),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(4),
+                                      borderSide: const BorderSide(
+                                          color: Colors.grey))),
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          Expanded(
+                            flex: 1,
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                              onChanged: (v) {
+                                if (v.isNotEmpty) {
+                                  epicenterCtrl.idSearchReport.value = v;
+                                } else {
+                                  epicenterCtrl.defaultSearchReport();
+                                }
+                              },
+                              decoration: InputDecoration(
+                                  hintText: "Search id".tr,
+                                  focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(4),
+                                      borderSide:
+                                      const BorderSide(color: Colors.grey)),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(4),
+                                      borderSide: const BorderSide(
+                                          color: Colors.grey))),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: 150,
+                      child: TextButton(
+                        onPressed: () {
+                          if (epicenterCtrl.idSearchReport.value == "" &&
+                              epicenterCtrl.searchNameReport.value == "") {
+                            epicenterCtrl.defaultSearchReport();
+                          } else {
+                            epicenterCtrl.searchReport();
+                          }
+                        },
+                        style: TextButton.styleFrom(
+                            backgroundColor: ColorManager.lightPrimary),
+                        child: Text("search".tr,
+                            style: const TextStyle(color: Colors.white)),
                       ),
                     ),
                     Expanded(

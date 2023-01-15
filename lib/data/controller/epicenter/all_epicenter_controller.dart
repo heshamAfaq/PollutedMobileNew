@@ -137,7 +137,7 @@ class AllEpicenterController extends GetxController {
     loading.value = true;
     print("success");
     epicintersModel = await services.getEpicenters(
-        status: 0, pageNum: pageNumber.value, pageSize: 10);
+        name: "", status: 0, pageNum: pageNumber.value, pageSize: 10);
     listEpicenters.assignAll(epicintersModel!.epicenters!);
     allregion.value = (await servicess.getRegion())!;
     // regionText.value = allregion.first.name;
@@ -145,6 +145,54 @@ class AllEpicenterController extends GetxController {
     loading.value = false;
 
     // getNearest();
+  }
+
+  final searchName = ''.obs;
+  final idSearch = "".obs;
+  final searchNameReport = ''.obs;
+  final idSearchReport = "".obs;
+
+  defaultSearch() async {
+    loading.value = true;
+
+    epicintersModel = await services.getEpicenters(
+        name: "", status: 0, pageNum: pageNumber.value, pageSize: 10);
+    listEpicenters.assignAll(epicintersModel!.epicenters!);
+    loading.value = false;
+  }
+
+  search() async {
+    loading.value = true;
+
+    epicintersModel = await services.getEpicenters(
+        name: searchName.value,
+        id: int.parse(idSearch.value),
+        status: 0,
+        pageSize: 10);
+    listEpicenters.assignAll(epicintersModel!.epicenters!);
+    print(listEpicenters.length);
+    loading.value = false;
+  }
+
+  defaultSearchReport() async {
+    loadReports.value = true;
+    epicintersModelReport = await services.getEpicenters(
+        name: "", status: 4, pageNum: pageNumber.value, pageSize: 10);
+    listReports.assignAll(epicintersModelReport!.epicenters!);
+    loadReports.value = false;
+  }
+
+  searchReport() async {
+    loadReports.value = true;
+
+    epicintersModelReport = await services.getEpicenters(
+        name: searchNameReport.value,
+        id: int.parse(idSearchReport.value),
+        status: 4,
+        pageSize: 10);
+    listReports.assignAll(epicintersModelReport!.epicenters!);
+    print(listEpicenters.length);
+    loadReports.value = false;
   }
 
   ReportModel? reportModel;
@@ -172,6 +220,7 @@ class AllEpicenterController extends GetxController {
     loadReports.value = true;
     pageNumber2.value = 1;
     epicintersModelReport = await services.getEpicenters(
+      name: "",
         pageNum: pageNumber2.value, status: 4, pageSize: 10);
     listReports.assignAll(epicintersModelReport!.epicenters!);
     loadReports.value = false;
