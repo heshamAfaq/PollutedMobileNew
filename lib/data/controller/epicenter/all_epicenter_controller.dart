@@ -106,6 +106,8 @@ class AllEpicenterController extends GetxController {
   final cityName2 = "City".tr.obs;
   final loadCity = false.obs;
   final loadCity2 = false.obs;
+  final time = TimeOfDay.now().obs;
+  final dateTime = DateTime.now().obs;
 
   // final AllEpicenterModel allEpicenterModel = AllEpicenterModel(epicenterModel: [], totalItems: '');
   openMapDirection(double lat, double long) async {
@@ -119,6 +121,14 @@ class AllEpicenterController extends GetxController {
     }
   }
 
+  Future<DateTime?> showCalender({required BuildContext context}) async =>
+      await showDatePicker(
+        context: context,
+        lastDate: DateTime(2100),
+        firstDate: DateTime(2000),
+        initialDate: dateTime.value,
+      );
+
   @override
   Future<void> onInit() async {
     super.onInit();
@@ -126,8 +136,8 @@ class AllEpicenterController extends GetxController {
     await getLocation();
     loading.value = true;
     print("success");
-    epicintersModel =
-        await services.getEpicenters(status: 0, pageNum: pageNumber.value);
+    epicintersModel = await services.getEpicenters(
+        status: 0, pageNum: pageNumber.value, pageSize: 10);
     listEpicenters.assignAll(epicintersModel!.epicenters!);
     allregion.value = (await servicess.getRegion())!;
     // regionText.value = allregion.first.name;
@@ -161,10 +171,46 @@ class AllEpicenterController extends GetxController {
   getReports() async {
     loadReports.value = true;
     pageNumber2.value = 1;
-    epicintersModelReport =
-        await services.getEpicenters(pageNum: pageNumber2.value, status: 4);
+    epicintersModelReport = await services.getEpicenters(
+        pageNum: pageNumber2.value, status: 4, pageSize: 10);
     listReports.assignAll(epicintersModelReport!.epicenters!);
     loadReports.value = false;
+  }
+
+  searchEpcintersReports(
+      {String? startDate, String? endDate, String? name, int? id}) async {
+    epicintersModelReport = await services.searchEpcinters(
+        status: 4, startDate: startDate, endDate: endDate, id: id, name: name);
+    listReports.assignAll(epicintersModelReport!.epicenters!);
+  }
+
+  searchEpcintersReportsById(
+      {String? startDate, String? endDate, String? name, int? id}) async {
+    epicintersModelReport = await services.searchEpcintersById(
+      status: 4,
+      startDate: startDate,
+      endDate: endDate,
+      id: id,
+    );
+    listReports.assignAll(epicintersModelReport!.epicenters!);
+  }
+
+  searchEpcinters(
+      {String? startDate, String? endDate, String? name, int? id}) async {
+    epicintersModel = await services.searchEpcinters(
+        status: 0, startDate: startDate, endDate: endDate, id: id, name: name);
+    listEpicenters.assignAll(epicintersModel!.epicenters!);
+  }
+
+  searchEpcintersById(
+      {String? startDate, String? endDate, String? name, int? id}) async {
+    epicintersModel = await services.searchEpcintersById(
+      status: 0,
+      startDate: startDate,
+      endDate: endDate,
+      id: id,
+    );
+    listEpicenters.assignAll(epicintersModel!.epicenters!);
   }
 
   getNearest() async {
@@ -260,17 +306,32 @@ class AllEpicenterController extends GetxController {
 
   final regionText = 'Region'.tr.obs;
   final regionText2 = 'Region'.tr.obs;
-  final regionId = 1.obs;
-  final regionId2 = 1.obs;
+  final regionId = 0.obs;
+  final regionId2 = 0.obs;
+
+  Future<void> onTapSelectedRegion() async {
+    loading.value = true;
+    listEpicenters.clear();
+    pageNumber.value = 1;
+    epicintersModel = await services.getEpicenters(
+      pageNum: pageNumber.value,
+      regionId: regionId.value,
+      status: 0,
+    );
+    listEpicenters.assignAll(epicintersModel!.epicenters!);
+    update();
+
+    loading.value = false;
+  }
 
   Future<void> onTapSelected() async {
     loading.value = true;
     pageNumber.value = 1;
     epicintersModel = await services.getEpicenters(
-        pageNum: pageNumber.value,
-        regionId: regionId.value,
-        status: 0,
-        cityId: cityId.value);
+      pageNum: pageNumber.value,
+      regionId: regionId.value,
+      status: 0,
+    );
     listEpicenters.assignAll(epicintersModel!.epicenters!);
     update();
 
@@ -284,10 +345,25 @@ class AllEpicenterController extends GetxController {
     pageNumber2.value = 1;
     loadReports.value = true;
     epicintersModelReport = await services.getEpicenters(
-        status: 4,
-        regionId: regionId2.value,
-        pageNum: pageNumber2.value,
-        cityId: cityId2.value);
+      status: 4,
+      regionId: regionId2.value,
+      pageNum: pageNumber2.value,
+    );
+    listReports.assignAll(epicintersModelReport!.epicenters!);
+    update();
+
+    loadReports.value = false;
+  }
+
+  Future<void> onTapSelectedRegion2() async {
+    pageNumber2.value = 1;
+    loadReports.value = true;
+    listEpicenters.clear();
+    epicintersModelReport = await services.getEpicenters(
+      status: 4,
+      regionId: regionId2.value,
+      pageNum: pageNumber2.value,
+    );
     listReports.assignAll(epicintersModelReport!.epicenters!);
     update();
 
@@ -297,14 +373,25 @@ class AllEpicenterController extends GetxController {
   loadMore() async {
     if (listEpicenters.isNotEmpty) {
       pageNumber.value++;
-      epicintersModel = await services.getEpicenters(
+      if (regionId.value == 0) {
+        epicintersModel = await services.getEpicenters(
           pageNum: pageNumber.value,
           status: 0,
-          regionId: regionId.value,
-          cityId: cityId.value);
-      listEpicenters.addAll(epicintersModel!.epicenters!);
-      print("loading");
-      print(pageNumber.value);
+          pageSize: 10,
+        );
+        listEpicenters.addAll(epicintersModel!.epicenters!);
+        print("loading");
+        print(pageNumber.value);
+      } else {
+        epicintersModel = await services.getEpicenters(
+            pageNum: pageNumber.value,
+            status: 0,
+            pageSize: 10,
+            regionId: regionId.value);
+        listEpicenters.addAll(epicintersModel!.epicenters!);
+        print("loading");
+        print(pageNumber.value);
+      }
     } else {
       print("no subcategories");
     }
@@ -313,14 +400,25 @@ class AllEpicenterController extends GetxController {
   loadMore2() async {
     if (listEpicenters.isNotEmpty) {
       pageNumber2.value++;
-      epicintersModelReport = await services.getEpicenters(
+      if (regionId2.value == 0) {
+        epicintersModelReport = await services.getEpicenters(
           pageNum: pageNumber2.value,
           status: 4,
-          cityId: cityId2.value,
-          regionId: regionId2.value);
-      listReports.addAll(epicintersModelReport!.epicenters!);
-      print("loading");
-      print(pageNumber2.value);
+          pageSize: 10,
+        );
+        listReports.addAll(epicintersModelReport!.epicenters!);
+        print("loading");
+        print(pageNumber2.value);
+      } else {
+        epicintersModelReport = await services.getEpicenters(
+            pageNum: pageNumber2.value,
+            status: 4,
+            pageSize: 10,
+            regionId: regionId2.value);
+        listReports.addAll(epicintersModelReport!.epicenters!);
+        print("loading");
+        print(pageNumber2.value);
+      }
     } else {
       print("no subcategories");
     }

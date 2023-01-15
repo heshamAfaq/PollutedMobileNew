@@ -217,5 +217,7 @@ const Map<String, String> en = {
       "Choose the type of  activity",
   "description":"description",
   "Industrial activity": "Industrial activity",
-  "choose image":"choose image"
+  "choose image":"choose image",
+  "Search by name or id":"search by name or id",
+  "Search id":"search id"
 };

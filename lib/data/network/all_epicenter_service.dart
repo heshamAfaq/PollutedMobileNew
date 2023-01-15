@@ -60,10 +60,18 @@ class AllEpicenterServices {
     return 400;
   }
 
-  getEpicenters({int? pageNum, int? regionId, int? status, int? cityId}) async {
+  getEpicenters(
+      {int? pageNum,
+      int? regionId,
+      int? status,
+      String? startDate,
+      String? endDate,
+      String? name,
+      int? id,
+      int? pageSize}) async {
     http.Response res = await http.get(
       Uri.parse(
-        '${Constants.baseUrl}/Epicenters/GetAllEpicenters?page=$pageNum&pageSize=10&regionId=$regionId&status=$status&cityId=$cityId',
+        '${Constants.baseUrl}/Epicenters/GetAllEpicenters?page=$pageNum&pageSize=$pageSize&regionId=$regionId&status=$status&id=$id&startDate=$startDate&endDate=$endDate',
       ),
       headers: <String, String>{
         "Content-type": "application/json",
@@ -83,6 +91,77 @@ class AllEpicenterServices {
       String encodedMap = json.encode(model);
       prefs.setString(Constants.epcinters, encodedMap);
 
+      return model;
+    } else if (res.statusCode == 401 || res.statusCode == 403) {
+      Get.offAll(() => const LoginScreen());
+    } else if (res.statusCode == 500 ||
+        res.statusCode == 501 ||
+        res.statusCode == 504 ||
+        res.statusCode == 502) {
+      return 500;
+    }
+    return 400;
+  }
+
+  searchEpcinters(
+      {String? startDate,
+      String? endDate,
+      String? name = '',
+      int? status,
+      int? id}) async {
+    print(name);
+    print(id);
+    http.Response res = await http.get(
+      Uri.parse(
+        '${Constants.baseUrl}/Epicenters/GetAllEpicenters?id=$id&descripton=$name&page=1&pageSize=40&startDate=$startDate&endDate=$endDate&status=$status',
+      ),
+      headers: <String, String>{
+        "Content-type": "application/json",
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${SharedPreferencesHelper.getTokenValue()}',
+        'lang': Get.locale!.languageCode
+      },
+    );
+    print(res.statusCode);
+
+    print("Epicent");
+    print(res.body);
+    if (res.statusCode == 200) {
+      EpicintersModel model = EpicintersModel.fromJson(jsonDecode(res.body));
+      print(model.toJson());
+      return model;
+    } else if (res.statusCode == 401 || res.statusCode == 403) {
+      Get.offAll(() => const LoginScreen());
+    } else if (res.statusCode == 500 ||
+        res.statusCode == 501 ||
+        res.statusCode == 504 ||
+        res.statusCode == 502) {
+      return 500;
+    }
+    return 400;
+  }
+
+  searchEpcintersById(
+      {String? startDate, String? endDate, int? status, int? id}) async {
+    print(id);
+    http.Response res = await http.get(
+      Uri.parse(
+        '${Constants.baseUrl}/Epicenters/GetAllEpicenters?id=$id&page=1&pageSize=40&startDate=$startDate&endDate=$endDate&status=$status',
+      ),
+      headers: <String, String>{
+        "Content-type": "application/json",
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${SharedPreferencesHelper.getTokenValue()}',
+        'lang': Get.locale!.languageCode
+      },
+    );
+    print(res.statusCode);
+
+    print("Epicent");
+    print(res.body);
+    if (res.statusCode == 200) {
+      EpicintersModel model = EpicintersModel.fromJson(jsonDecode(res.body));
+      print(model.toJson());
       return model;
     } else if (res.statusCode == 401 || res.statusCode == 403) {
       Get.offAll(() => const LoginScreen());

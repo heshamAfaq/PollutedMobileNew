@@ -211,5 +211,7 @@ const Map<String, String> ar = {
   "Choose the type of industrial activity": "اختار نوع النشاط ",
   "description": "الوصف",
   "Industrial activity": "الانشطه الصناعيه",
-  "choose image":"اختيار صوره"
+  "choose image": "اختيار صوره",
+  "Search by name or id": "ابحث بالاسم ",
+  "Search id": "ابحث بالرقم "
 };
