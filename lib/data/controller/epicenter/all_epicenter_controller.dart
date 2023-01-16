@@ -185,10 +185,10 @@ class AllEpicenterController extends GetxController {
     loadReports.value = false;
   }
 
-  searchReport({int? id = 0, String? name = ''}) async {
+  searchReport({int? id=0 , String? name="" , int? regionId}) async {
     loadReports.value = true;
-
     epicintersModelReport = await services.searchEpcinters(
+      regionId: regionId,
       name: name,
       id: id,
       status: 4,

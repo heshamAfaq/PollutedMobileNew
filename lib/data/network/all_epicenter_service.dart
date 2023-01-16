@@ -96,12 +96,12 @@ class AllEpicenterServices {
     return 400;
   }
 
-  searchEpcinters({String? name, int? status, int? id}) async {
+  searchEpcinters({String? name, int? status, int? id, int? regionId}) async {
     print(name);
     print(id);
     http.Response res = await http.get(
       Uri.parse(
-        '${Constants.baseUrl}/Epicenters/GetAllEpicenters?id=$id&descripton=$name&page=1&pageSize=40&status=$status',
+        '${Constants.baseUrl}/Epicenters/GetAllEpicenters?id=$id&descripton=$name&regionId=$regionId&status=$status&page=1&pageSize=40',
       ),
       headers: <String, String>{
         "Content-type": "application/json",

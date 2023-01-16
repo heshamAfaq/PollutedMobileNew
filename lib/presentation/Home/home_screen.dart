@@ -1090,6 +1090,7 @@ class HomeScreen extends StatelessWidget {
                                                       epicenterCtrl
                                                           .allregion[index]
                                                           .name;
+                                                  print(epicenterCtrl.regionId2.value);
                                                   epicenterCtrl
                                                       .onTapSelectedRegion2();
                                                   epicenterCtrl.getAllCities2(
@@ -1316,7 +1317,8 @@ class HomeScreen extends StatelessWidget {
                                   epicenterCtrl.idSearchReport.value =
                                   v.isEmpty ? 0 : int.parse(v);
                                 } else {
-                                  epicenterCtrl.defaultSearchReport();
+                                  epicenterCtrl
+                                      .onTapSelectedRegion2();
                                 }
                               },
                               decoration: InputDecoration(
@@ -1340,11 +1342,15 @@ class HomeScreen extends StatelessWidget {
                         onPressed: () {
                           if (epicenterCtrl.idSearchReport.value == 0 &&
                               epicenterCtrl.searchNameReport.value == "") {
-                            epicenterCtrl.defaultSearchReport();
+                            epicenterCtrl
+                                .onTapSelectedRegion2();
                           } else {
+                            print(epicenterCtrl.regionId2.value);
                             epicenterCtrl.searchReport(
+                              regionId:epicenterCtrl.regionId2.value ,
                                 id: epicenterCtrl.idSearchReport.value,
-                                name: epicenterCtrl.searchNameReport.value);
+                                name: epicenterCtrl.searchNameReport.value
+                            );
                             // epicenterCtrl.search();
                           }
                         },
