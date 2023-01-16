@@ -137,7 +137,7 @@ class AllEpicenterController extends GetxController {
     loading.value = true;
     print("success");
     epicintersModel = await services.getEpicenters(
-        name: "", status: 0, pageNum: pageNumber.value, pageSize: 10);
+        status: 0, pageNum: pageNumber.value, pageSize: 10);
     listEpicenters.assignAll(epicintersModel!.epicenters!);
     allregion.value = (await servicess.getRegion())!;
     // regionText.value = allregion.first.name;
@@ -148,27 +148,28 @@ class AllEpicenterController extends GetxController {
   }
 
   final searchName = ''.obs;
-  final idSearch = "".obs;
+  final idSearch = 0.obs;
   final searchNameReport = ''.obs;
-  final idSearchReport = "".obs;
+  final idSearchReport = 0.obs;
 
   defaultSearch() async {
     loading.value = true;
 
-    epicintersModel = await services.getEpicenters(
-        name: "", status: 0, pageNum: pageNumber.value, pageSize: 10);
+    epicintersModel = await services.searchEpcinters(
+      status: 0,
+      name: "",
+    );
     listEpicenters.assignAll(epicintersModel!.epicenters!);
     loading.value = false;
   }
 
-  search() async {
+  search({int? id = 0, String? name = ''}) async {
     loading.value = true;
-
-    epicintersModel = await services.getEpicenters(
-        name: searchName.value,
-        id: int.parse(idSearch.value),
-        status: 0,
-        pageSize: 10);
+    epicintersModel = await services.searchEpcinters(
+      name: name,
+      id: id,
+      status: 0,
+    );
     listEpicenters.assignAll(epicintersModel!.epicenters!);
     print(listEpicenters.length);
     loading.value = false;
@@ -176,20 +177,22 @@ class AllEpicenterController extends GetxController {
 
   defaultSearchReport() async {
     loadReports.value = true;
-    epicintersModelReport = await services.getEpicenters(
-        name: "", status: 4, pageNum: pageNumber.value, pageSize: 10);
+    epicintersModelReport = await services.searchEpcinters(
+      name: "",
+      status: 4,
+    );
     listReports.assignAll(epicintersModelReport!.epicenters!);
     loadReports.value = false;
   }
 
-  searchReport() async {
+  searchReport({int? id = 0, String? name = ''}) async {
     loadReports.value = true;
 
-    epicintersModelReport = await services.getEpicenters(
-        name: searchNameReport.value,
-        id: int.parse(idSearchReport.value),
-        status: 4,
-        pageSize: 10);
+    epicintersModelReport = await services.searchEpcinters(
+      name: name,
+      id: id,
+      status: 4,
+    );
     listReports.assignAll(epicintersModelReport!.epicenters!);
     print(listEpicenters.length);
     loadReports.value = false;
@@ -220,46 +223,9 @@ class AllEpicenterController extends GetxController {
     loadReports.value = true;
     pageNumber2.value = 1;
     epicintersModelReport = await services.getEpicenters(
-      name: "",
         pageNum: pageNumber2.value, status: 4, pageSize: 10);
     listReports.assignAll(epicintersModelReport!.epicenters!);
     loadReports.value = false;
-  }
-
-  searchEpcintersReports(
-      {String? startDate, String? endDate, String? name, int? id}) async {
-    epicintersModelReport = await services.searchEpcinters(
-        status: 4, startDate: startDate, endDate: endDate, id: id, name: name);
-    listReports.assignAll(epicintersModelReport!.epicenters!);
-  }
-
-  searchEpcintersReportsById(
-      {String? startDate, String? endDate, String? name, int? id}) async {
-    epicintersModelReport = await services.searchEpcintersById(
-      status: 4,
-      startDate: startDate,
-      endDate: endDate,
-      id: id,
-    );
-    listReports.assignAll(epicintersModelReport!.epicenters!);
-  }
-
-  searchEpcinters(
-      {String? startDate, String? endDate, String? name, int? id}) async {
-    epicintersModel = await services.searchEpcinters(
-        status: 0, startDate: startDate, endDate: endDate, id: id, name: name);
-    listEpicenters.assignAll(epicintersModel!.epicenters!);
-  }
-
-  searchEpcintersById(
-      {String? startDate, String? endDate, String? name, int? id}) async {
-    epicintersModel = await services.searchEpcintersById(
-      status: 0,
-      startDate: startDate,
-      endDate: endDate,
-      id: id,
-    );
-    listEpicenters.assignAll(epicintersModel!.epicenters!);
   }
 
   getNearest() async {
@@ -360,7 +326,6 @@ class AllEpicenterController extends GetxController {
 
   Future<void> onTapSelectedRegion() async {
     loading.value = true;
-    listEpicenters.clear();
     pageNumber.value = 1;
     epicintersModel = await services.getEpicenters(
       pageNum: pageNumber.value,
@@ -407,7 +372,6 @@ class AllEpicenterController extends GetxController {
   Future<void> onTapSelectedRegion2() async {
     pageNumber2.value = 1;
     loadReports.value = true;
-    listEpicenters.clear();
     epicintersModelReport = await services.getEpicenters(
       status: 4,
       regionId: regionId2.value,

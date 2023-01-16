@@ -608,7 +608,9 @@ class HomeScreen extends StatelessWidget {
                             child: TextField(
                               onChanged: (v) {
                                 if (v.isNotEmpty) {
-                                  epicenterCtrl.searchName.value = v;
+                                  epicenterCtrl.idSearch.value = 0;
+                                  epicenterCtrl.searchName.value =
+                                      v.isEmpty ? "" : v;
                                 } else {
                                   epicenterCtrl.defaultSearch();
                                 }
@@ -632,7 +634,9 @@ class HomeScreen extends StatelessWidget {
                               keyboardType: TextInputType.number,
                               onChanged: (v) {
                                 if (v.isNotEmpty) {
-                                  epicenterCtrl.idSearch.value = v;
+                                  epicenterCtrl.searchName.value = "";
+                                  epicenterCtrl.idSearch.value =
+                                      v.isEmpty ? 0 : int.parse(v);
                                 } else {
                                   epicenterCtrl.defaultSearch();
                                 }
@@ -656,11 +660,14 @@ class HomeScreen extends StatelessWidget {
                       width: 150,
                       child: TextButton(
                         onPressed: () {
-                          if (epicenterCtrl.idSearch.value == "" &&
+                          if (epicenterCtrl.idSearch.value == 0 &&
                               epicenterCtrl.searchName.value == "") {
                             epicenterCtrl.defaultSearch();
                           } else {
-                            epicenterCtrl.search();
+                            epicenterCtrl.search(
+                                id: epicenterCtrl.idSearch.value,
+                                name: epicenterCtrl.searchName.value);
+                            // epicenterCtrl.search();
                           }
                         },
                         style: TextButton.styleFrom(
@@ -1279,9 +1286,11 @@ class HomeScreen extends StatelessWidget {
                             child: TextField(
                               onChanged: (v) {
                                 if (v.isNotEmpty) {
-                                  epicenterCtrl.searchNameReport.value = v;
+                                  epicenterCtrl.idSearchReport.value = 0;
+                                  epicenterCtrl.searchNameReport.value =
+                                  v.isEmpty ? "" : v;
                                 } else {
-                                  epicenterCtrl.defaultSearch();
+                                  epicenterCtrl.defaultSearchReport();
                                 }
                               },
                               decoration: InputDecoration(
@@ -1303,7 +1312,9 @@ class HomeScreen extends StatelessWidget {
                               keyboardType: TextInputType.number,
                               onChanged: (v) {
                                 if (v.isNotEmpty) {
-                                  epicenterCtrl.idSearchReport.value = v;
+                                  epicenterCtrl.searchNameReport.value = "";
+                                  epicenterCtrl.idSearchReport.value =
+                                  v.isEmpty ? 0 : int.parse(v);
                                 } else {
                                   epicenterCtrl.defaultSearchReport();
                                 }
@@ -1327,11 +1338,14 @@ class HomeScreen extends StatelessWidget {
                       width: 150,
                       child: TextButton(
                         onPressed: () {
-                          if (epicenterCtrl.idSearchReport.value == "" &&
+                          if (epicenterCtrl.idSearchReport.value == 0 &&
                               epicenterCtrl.searchNameReport.value == "") {
                             epicenterCtrl.defaultSearchReport();
                           } else {
-                            epicenterCtrl.searchReport();
+                            epicenterCtrl.searchReport(
+                                id: epicenterCtrl.idSearchReport.value,
+                                name: epicenterCtrl.searchNameReport.value);
+                            // epicenterCtrl.search();
                           }
                         },
                         style: TextButton.styleFrom(

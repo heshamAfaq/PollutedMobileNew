@@ -103,6 +103,7 @@ class AddReportController extends GetxController {
   final sunRise = false.obs;
   final plants = false.obs;
   final underGround = false.obs;
+  final borderWind = false.obs;
 
   addPlaces(bool v) {
     residentialArea.value = v;
@@ -998,6 +999,15 @@ class AddReportController extends GetxController {
     }
   }
 
+  final naturalLand = false.obs;
+  final rensopleBorder = false.obs;
+  final typeWater = false.obs;
+  final pollutionBorder=false.obs;
+  final description = false.obs;
+  final descrptionBorder = false.obs;
+  final descripePlace = false.obs;
+  final place = false.obs;
+
   sendReport(int epicenterId, BuildContext context) async {
     try {
       // if (residentialArea.isTrue) {
@@ -1018,18 +1028,23 @@ class AddReportController extends GetxController {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("must add under ground water".tr)));
       } else if (landFormId.value.isEqual(0)) {
+        naturalLand.value = true;
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('please enter Land Form'.tr)));
       } else if (getAllWindDirectionId.value.isEqual(0)) {
+        borderWind.value = true;
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("you must add Wind direction".tr)));
       } else if (responsibleId.value == 0) {
+        rensopleBorder.value = true;
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text("ResponsibleAuthorities".tr)));
       } else if (surfaceWaterId.value.isEqual(0)) {
+        typeWater.value = true;
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("please select Surface Water".tr)));
       } else if (pollutantPlaceId.value.isEqual(0)) {
+        pollutionBorder.value = true;
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("please Enter Pollutant Places".tr)));
       } else if (listOfsemanticPollution.isEmpty) {
@@ -1564,7 +1579,8 @@ class AddReportController extends GetxController {
 
   selectImage() async {
     try {
-      final XFile? image = await _picker.pickImage(source: ImageSource.gallery,imageQuality: 50);
+      final XFile? image = await _picker.pickImage(
+          source: ImageSource.gallery, imageQuality: 50);
 
       if (image != null) _image.value = image.path;
     } catch (e) {
@@ -1574,7 +1590,8 @@ class AddReportController extends GetxController {
 
   selectImageIndustrail() async {
     try {
-      final XFile? image = await _picker.pickImage(source: ImageSource.gallery,imageQuality: 50);
+      final XFile? image = await _picker.pickImage(
+          source: ImageSource.gallery, imageQuality: 50);
 
       if (image != null) _imageIndustrail.value = image.path;
     } catch (e) {
