@@ -3795,6 +3795,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
                             ))),
                         const ReportDividerWidget(),
                         ReportTextFieldWidget(
+
                             symbol: "d".tr,
                             title: "WaterTemperature".tr,
                             type: TextInputType.number,

@@ -395,208 +395,219 @@ class HomeScreen extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    Column(
-                      children: [
-                        Obx(
-                          () => GestureDetector(
-                              onTap: () {
-                                showModalBottomSheet(
-                                  context: context,
-                                  builder: (ctx) => SizedBox(
-                                      height: SizeConfig.screenHeight! /
-                                          MediaSize.m2_5,
-                                      child: ListView.builder(
-                                          itemCount:
-                                              epicenterCtrl.allregion.length,
-                                          itemBuilder: (context, index) {
-                                            return InkWell(
-                                              onTap: () {
-                                                epicenterCtrl.regionId.value =
-                                                    epicenterCtrl
-                                                        .allregion[index].id;
-                                                epicenterCtrl.regionText.value =
-                                                    epicenterCtrl
-                                                        .allregion[index].name;
-                                                epicenterCtrl
-                                                    .onTapSelectedRegion();
-                                                epicenterCtrl.getAllCities(
-                                                    epicenterCtrl
-                                                        .allregion[index].id);
-                                                Navigator.pop(context);
-                                              },
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal:
-                                                            AppPadding.p60,
-                                                        vertical:
-                                                            AppPadding.p16),
-                                                child: Container(
-                                                  alignment: Alignment.center,
-                                                  height:
-                                                      SizeConfig.screenHeight! /
-                                                          MediaSize.m12,
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              BorderRadiusValues
-                                                                  .br10),
-                                                      border: Border.all(
-                                                          width: AppSize.s1,
-                                                          color: ColorManager
-                                                              .grey)),
-                                                  child: Text(
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: Column(
+                        children: [
+                          Obx(
+                                () => GestureDetector(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (ctx) => SizedBox(
+                                        height: SizeConfig.screenHeight! /
+                                            MediaSize.m2_5,
+                                        child: ListView.builder(
+                                            itemCount:
+                                            epicenterCtrl.allregion.length,
+                                            itemBuilder: (context, index) {
+                                              return InkWell(
+                                                onTap: () {
+                                                  epicenterCtrl.cityId.value =
+                                                      epicenterCtrl
+                                                          .allregion[index].id;
+                                                  epicenterCtrl
+                                                      .regionText.value =
                                                       epicenterCtrl
                                                           .allregion[index]
-                                                          .name,
-                                                      style: getSemiBoldStyle(
-                                                          color: ColorManager
-                                                              .secondary)),
-                                                ),
-                                              ),
-                                            );
-                                          })),
-                                );
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: AppPadding.p10),
-                                margin: const EdgeInsets.only(
-                                    right: AppMargin.m30,
-                                    left: AppMargin.m30,
-                                    top: AppMargin.m20),
-                                alignment: Alignment.centerRight,
-                                height:
-                                    SizeConfig.screenHeight! / MediaSize.m16,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      width: AppSize.s1,
-                                      color: ColorManager.grey),
-                                  borderRadius: BorderRadius.circular(
-                                      BorderRadiusValues.br5),
-                                ),
-                                child: epicenterCtrl.loading.value == true
-                                    ? const BubbleLoader()
-                                    : Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          Text(epicenterCtrl.regionText.value,
-                                              textAlign: TextAlign.center,
-                                              style: getSemiBoldStyle(
-                                                  color:
-                                                      ColorManager.secondary)),
-                                          const Spacer(),
-                                          Icon(
-                                            Icons.arrow_drop_down,
-                                            color: ColorManager.secondary,
-                                            size: AppSize.s30,
-                                          ),
-                                        ],
-                                      ),
-                              )),
-                        ),
-                        Obx(
-                          () => epicenterCtrl.allCities.isEmpty
-                              ? const SizedBox()
-                              : GestureDetector(
-                                  onTap: () {
-                                    showModalBottomSheet(
-                                      context: context,
-                                      builder: (ctx) => SizedBox(
-                                          height: SizeConfig.screenHeight! /
-                                              MediaSize.m2_5,
-                                          child: ListView.builder(
-                                              itemCount: epicenterCtrl
-                                                  .allCities.length,
-                                              itemBuilder: (context, index) {
-                                                return InkWell(
-                                                  onTap: () {
-                                                    epicenterCtrl.cityId.value =
+                                                          .name;
+                                                  print(epicenterCtrl
+                                                      .cityId.value);
+                                                  // epicenterCtrl
+                                                  //     .onTapSelectedRegion2();
+                                                  epicenterCtrl.getAllCities(
+                                                      epicenterCtrl
+                                                          .cityId.value);
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal:
+                                                      AppPadding.p60,
+                                                      vertical: AppPadding.p16),
+                                                  child: Container(
+                                                    alignment: Alignment.center,
+                                                    height: SizeConfig
+                                                        .screenHeight! /
+                                                        MediaSize.m12,
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                        BorderRadius.circular(
+                                                            BorderRadiusValues
+                                                                .br10),
+                                                        border: Border.all(
+                                                            width: AppSize.s1,
+                                                            color: ColorManager
+                                                                .grey)),
+                                                    child: Text(
                                                         epicenterCtrl
-                                                            .allCities[index]
-                                                            .id;
-                                                    epicenterCtrl
-                                                            .cityName.value =
-                                                        epicenterCtrl
-                                                            .allCities[index]
-                                                            .name;
-                                                    // epicenterCtrl
-                                                    //     .onTapSelected();
-                                                    Navigator.pop(context);
-                                                  },
-                                                  child: Padding(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal:
-                                                            AppPadding.p60,
-                                                        vertical:
-                                                            AppPadding.p16),
-                                                    child: Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      height: SizeConfig
-                                                              .screenHeight! /
-                                                          MediaSize.m12,
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                  BorderRadiusValues
-                                                                      .br10),
-                                                          border: Border.all(
-                                                              width: AppSize.s1,
-                                                              color:
-                                                                  ColorManager
-                                                                      .grey)),
-                                                      child: Text(
-                                                          epicenterCtrl
-                                                              .allCities[index]
-                                                              .name,
-                                                          style: getSemiBoldStyle(
-                                                              color: ColorManager
-                                                                  .secondary)),
-                                                    ),
+                                                            .allregion[index]
+                                                            .name,
+                                                        style: getSemiBoldStyle(
+                                                            color: ColorManager
+                                                                .secondary)),
                                                   ),
-                                                );
-                                              })),
-                                    );
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: AppPadding.p10),
-                                    margin: const EdgeInsets.only(
-                                        right: AppMargin.m30,
-                                        left: AppMargin.m30,
-                                        top: AppMargin.m20),
-                                    alignment: Alignment.centerRight,
-                                    height: SizeConfig.screenHeight! /
-                                        MediaSize.m16,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                          width: AppSize.s1,
-                                          color: ColorManager.grey),
-                                      borderRadius: BorderRadius.circular(
-                                          BorderRadiusValues.br5),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        Text(epicenterCtrl.cityName.value,
-                                            textAlign: TextAlign.center,
-                                            style: getSemiBoldStyle(
-                                                color: ColorManager.secondary)),
-                                        const Spacer(),
-                                        Icon(
-                                          Icons.arrow_drop_down,
-                                          color: ColorManager.secondary,
-                                          size: AppSize.s30,
-                                        ),
-                                      ],
-                                    ),
-                                  )),
-                        )
-                      ],
+                                                ),
+                                              );
+                                            })),
+                                  );
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: AppPadding.p10),
+                                  margin: const EdgeInsets.only(
+                                      right: AppMargin.m30,
+                                      left: AppMargin.m30,
+                                      top: AppMargin.m20),
+                                  alignment: Alignment.centerRight,
+                                  height:
+                                  SizeConfig.screenHeight! / MediaSize.m16,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: AppSize.s1,
+                                        color: ColorManager.grey),
+                                    borderRadius: BorderRadius.circular(
+                                        BorderRadiusValues.br5),
+                                  ),
+                                  child:  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Text(
+                                          epicenterCtrl.regionText.value,
+                                          textAlign: TextAlign.center,
+                                          style: getSemiBoldStyle(
+                                              color: ColorManager
+                                                  .secondary)),
+                                      const Spacer(),
+                                      Icon(
+                                        Icons.arrow_drop_down,
+                                        color: ColorManager.secondary,
+                                        size: AppSize.s30,
+                                      ),
+                                    ],
+                                  ),
+                                )),
+                          ),
+                          Obx(
+                                () => epicenterCtrl.allCities.isEmpty
+                                ? const SizedBox()
+                                : GestureDetector(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (ctx) => SizedBox(
+                                        height: SizeConfig.screenHeight! /
+                                            MediaSize.m2_5,
+                                        child: ListView.builder(
+                                            itemCount: epicenterCtrl
+                                                .allCities.length,
+                                            itemBuilder: (context, index) {
+                                              return InkWell(
+                                                onTap: () {
+                                                  epicenterCtrl
+                                                      .regionId.value =
+                                                      epicenterCtrl
+                                                          .allCities[index]
+                                                          .id;
+                                                  epicenterCtrl
+                                                      .cityName.value =
+                                                      epicenterCtrl
+                                                          .allCities[index]
+                                                          .name;
+                                                  print(epicenterCtrl
+                                                      .regionId.value);
+                                                  // epicenterCtrl
+                                                  //     .onTapSelected2();
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal:
+                                                      AppPadding.p60,
+                                                      vertical:
+                                                      AppPadding.p16),
+                                                  child: Container(
+                                                    alignment:
+                                                    Alignment.center,
+                                                    height: SizeConfig
+                                                        .screenHeight! /
+                                                        MediaSize.m12,
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                        BorderRadius.circular(
+                                                            BorderRadiusValues
+                                                                .br10),
+                                                        border: Border.all(
+                                                            width:
+                                                            AppSize.s1,
+                                                            color:
+                                                            ColorManager
+                                                                .grey)),
+                                                    child: Text(
+                                                        epicenterCtrl
+                                                            .allCities[
+                                                        index]
+                                                            .name,
+                                                        style: getSemiBoldStyle(
+                                                            color: ColorManager
+                                                                .secondary)),
+                                                  ),
+                                                ),
+                                              );
+                                            })),
+                                  );
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: AppPadding.p10),
+                                  margin: const EdgeInsets.only(
+                                      right: AppMargin.m30,
+                                      left: AppMargin.m30,
+                                      top: AppMargin.m20),
+                                  alignment: Alignment.centerRight,
+                                  height: SizeConfig.screenHeight! /
+                                      MediaSize.m16,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: AppSize.s1,
+                                        color: ColorManager.grey),
+                                    borderRadius: BorderRadius.circular(
+                                        BorderRadiusValues.br5),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Text(epicenterCtrl.cityName.value,
+                                          textAlign: TextAlign.center,
+                                          style: getSemiBoldStyle(
+                                              color:
+                                              ColorManager.secondary)),
+                                      const Spacer(),
+                                      Icon(
+                                        Icons.arrow_drop_down,
+                                        color: ColorManager.secondary,
+                                        size: AppSize.s30,
+                                      ),
+                                    ],
+                                  ),
+                                )),
+                          )
+                        ],
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
@@ -610,9 +621,10 @@ class HomeScreen extends StatelessWidget {
                                 if (v.isNotEmpty) {
                                   epicenterCtrl.idSearch.value = 0;
                                   epicenterCtrl.searchName.value =
-                                      v.isEmpty ? "" : v;
+                                  v.isEmpty ? "" : v;
                                 } else {
-                                  epicenterCtrl.defaultSearch();
+                                  epicenterCtrl.searchName.value = "";
+                                  epicenterCtrl.onTapSelectedRegion();
                                 }
                               },
                               decoration: InputDecoration(
@@ -620,7 +632,7 @@ class HomeScreen extends StatelessWidget {
                                   focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(4),
                                       borderSide:
-                                          const BorderSide(color: Colors.grey)),
+                                      const BorderSide(color: Colors.grey)),
                                   enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(4),
                                       borderSide: const BorderSide(
@@ -636,9 +648,10 @@ class HomeScreen extends StatelessWidget {
                                 if (v.isNotEmpty) {
                                   epicenterCtrl.searchName.value = "";
                                   epicenterCtrl.idSearch.value =
-                                      v.isEmpty ? 0 : int.parse(v);
+                                  v.isEmpty ? 0 : int.parse(v);
                                 } else {
-                                  epicenterCtrl.defaultSearch();
+                                  epicenterCtrl.idSearch.value = 0;
+                                  epicenterCtrl.onTapSelectedRegion();
                                 }
                               },
                               decoration: InputDecoration(
@@ -646,7 +659,7 @@ class HomeScreen extends StatelessWidget {
                                   focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(4),
                                       borderSide:
-                                          const BorderSide(color: Colors.grey)),
+                                      const BorderSide(color: Colors.grey)),
                                   enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(4),
                                       borderSide: const BorderSide(
@@ -662,9 +675,15 @@ class HomeScreen extends StatelessWidget {
                         onPressed: () {
                           if (epicenterCtrl.idSearch.value == 0 &&
                               epicenterCtrl.searchName.value == "") {
-                            epicenterCtrl.defaultSearch();
+                            print(epicenterCtrl.idSearch.value);
+                            epicenterCtrl.onTapSelectedRegion();
                           } else {
+                            print(epicenterCtrl.idSearch.value);
+                            print(epicenterCtrl.regionId.value);
+                            print(epicenterCtrl.cityId.value);
                             epicenterCtrl.search(
+                                cityId: epicenterCtrl.cityId.value,
+                                regionId: epicenterCtrl.regionId.value,
                                 id: epicenterCtrl.idSearch.value,
                                 name: epicenterCtrl.searchName.value);
                             // epicenterCtrl.search();
@@ -1081,8 +1100,7 @@ class HomeScreen extends StatelessWidget {
                                             itemBuilder: (context, index) {
                                               return InkWell(
                                                 onTap: () {
-                                                  epicenterCtrl
-                                                          .regionId2.value =
+                                                  epicenterCtrl.cityId2.value =
                                                       epicenterCtrl
                                                           .allregion[index].id;
                                                   epicenterCtrl
@@ -1090,12 +1108,13 @@ class HomeScreen extends StatelessWidget {
                                                       epicenterCtrl
                                                           .allregion[index]
                                                           .name;
-                                                  print(epicenterCtrl.regionId2.value);
-                                                  epicenterCtrl
-                                                      .onTapSelectedRegion2();
+                                                  print(epicenterCtrl
+                                                      .cityId2.value);
+                                                  // epicenterCtrl
+                                                  //     .onTapSelectedRegion2();
                                                   epicenterCtrl.getAllCities2(
                                                       epicenterCtrl
-                                                          .regionId2.value);
+                                                          .cityId2.value);
                                                   Navigator.pop(context);
                                                 },
                                                 child: Padding(
@@ -1148,9 +1167,7 @@ class HomeScreen extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(
                                         BorderRadiusValues.br5),
                                   ),
-                                  child: epicenterCtrl.loading.value == true
-                                      ? const BubbleLoader()
-                                      : Row(
+                                  child:  Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceAround,
                                           children: [
@@ -1187,7 +1204,7 @@ class HomeScreen extends StatelessWidget {
                                                   return InkWell(
                                                     onTap: () {
                                                       epicenterCtrl
-                                                              .cityId2.value =
+                                                              .regionId2.value =
                                                           epicenterCtrl
                                                               .allCities2[index]
                                                               .id;
@@ -1196,6 +1213,8 @@ class HomeScreen extends StatelessWidget {
                                                           epicenterCtrl
                                                               .allCities2[index]
                                                               .name;
+                                                      print(epicenterCtrl
+                                                          .regionId2.value);
                                                       // epicenterCtrl
                                                       //     .onTapSelected2();
                                                       Navigator.pop(context);
@@ -1289,9 +1308,10 @@ class HomeScreen extends StatelessWidget {
                                 if (v.isNotEmpty) {
                                   epicenterCtrl.idSearchReport.value = 0;
                                   epicenterCtrl.searchNameReport.value =
-                                  v.isEmpty ? "" : v;
+                                      v.isEmpty ? "" : v;
                                 } else {
-                                  epicenterCtrl.defaultSearchReport();
+                                  epicenterCtrl.searchNameReport.value = "";
+                                  epicenterCtrl.onTapSelectedRegion2();
                                 }
                               },
                               decoration: InputDecoration(
@@ -1299,7 +1319,7 @@ class HomeScreen extends StatelessWidget {
                                   focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(4),
                                       borderSide:
-                                      const BorderSide(color: Colors.grey)),
+                                          const BorderSide(color: Colors.grey)),
                                   enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(4),
                                       borderSide: const BorderSide(
@@ -1315,10 +1335,10 @@ class HomeScreen extends StatelessWidget {
                                 if (v.isNotEmpty) {
                                   epicenterCtrl.searchNameReport.value = "";
                                   epicenterCtrl.idSearchReport.value =
-                                  v.isEmpty ? 0 : int.parse(v);
+                                      v.isEmpty ? 0 : int.parse(v);
                                 } else {
-                                  epicenterCtrl
-                                      .onTapSelectedRegion2();
+                                  epicenterCtrl.idSearchReport.value = 0;
+                                  epicenterCtrl.onTapSelectedRegion2();
                                 }
                               },
                               decoration: InputDecoration(
@@ -1326,7 +1346,7 @@ class HomeScreen extends StatelessWidget {
                                   focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(4),
                                       borderSide:
-                                      const BorderSide(color: Colors.grey)),
+                                          const BorderSide(color: Colors.grey)),
                                   enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(4),
                                       borderSide: const BorderSide(
@@ -1342,15 +1362,17 @@ class HomeScreen extends StatelessWidget {
                         onPressed: () {
                           if (epicenterCtrl.idSearchReport.value == 0 &&
                               epicenterCtrl.searchNameReport.value == "") {
-                            epicenterCtrl
-                                .onTapSelectedRegion2();
+                            print(epicenterCtrl.idSearchReport.value);
+                            epicenterCtrl.onTapSelectedRegion2();
                           } else {
+                            print(epicenterCtrl.idSearchReport.value);
                             print(epicenterCtrl.regionId2.value);
+                            print(epicenterCtrl.cityId2.value);
                             epicenterCtrl.searchReport(
-                              regionId:epicenterCtrl.regionId2.value ,
+                                cityId: epicenterCtrl.cityId2.value,
+                                regionId: epicenterCtrl.regionId2.value,
                                 id: epicenterCtrl.idSearchReport.value,
-                                name: epicenterCtrl.searchNameReport.value
-                            );
+                                name: epicenterCtrl.searchNameReport.value);
                             // epicenterCtrl.search();
                           }
                         },

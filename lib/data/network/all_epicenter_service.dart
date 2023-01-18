@@ -61,10 +61,14 @@ class AllEpicenterServices {
   }
 
   getEpicenters(
-      {int? pageNum, int? regionId, int? status, int? pageSize}) async {
+      {int? pageNum,
+      int? regionId,
+      int? status,
+      int? pageSize,
+      int? cityId}) async {
     http.Response res = await http.get(
       Uri.parse(
-        '${Constants.baseUrl}/Epicenters/GetAllEpicenters?page=$pageNum&pageSize=$pageSize&regionId=$regionId&status=$status',
+        '${Constants.baseUrl}/Epicenters/GetAllEpicenters?cityId=$cityId&regionId=$regionId&page=$pageNum&pageSize=40&status=$status',
       ),
       headers: <String, String>{
         "Content-type": "application/json",
@@ -96,12 +100,15 @@ class AllEpicenterServices {
     return 400;
   }
 
-  searchEpcinters({String? name, int? status, int? id, int? regionId}) async {
+  searchEpcinters(
+      {String? name, int? status, int? id, int? regionId, int? cityId}) async {
     print(name);
     print(id);
+    print(cityId);
+    print(regionId);
     http.Response res = await http.get(
       Uri.parse(
-        '${Constants.baseUrl}/Epicenters/GetAllEpicenters?id=$id&descripton=$name&regionId=$regionId&status=$status&page=1&pageSize=40',
+        '${Constants.baseUrl}/Epicenters/GetAllEpicenters?id=$id&descripton=$name&regionId=$cityId&cityId=$regionId&status=$status&page=1&pageSize=40',
       ),
       headers: <String, String>{
         "Content-type": "application/json",

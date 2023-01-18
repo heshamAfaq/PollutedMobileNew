@@ -152,20 +152,13 @@ class AllEpicenterController extends GetxController {
   final searchNameReport = ''.obs;
   final idSearchReport = 0.obs;
 
-  defaultSearch() async {
-    loading.value = true;
 
-    epicintersModel = await services.searchEpcinters(
-      status: 0,
-      name: "",
-    );
-    listEpicenters.assignAll(epicintersModel!.epicenters!);
-    loading.value = false;
-  }
 
-  search({int? id = 0, String? name = ''}) async {
+  search({int? id = 0, String? name = "", int? regionId, int? cityId}) async {
     loading.value = true;
     epicintersModel = await services.searchEpcinters(
+      regionId: regionId,
+      cityId: cityId,
       name: name,
       id: id,
       status: 0,
@@ -175,20 +168,12 @@ class AllEpicenterController extends GetxController {
     loading.value = false;
   }
 
-  defaultSearchReport() async {
-    loadReports.value = true;
-    epicintersModelReport = await services.searchEpcinters(
-      name: "",
-      status: 4,
-    );
-    listReports.assignAll(epicintersModelReport!.epicenters!);
-    loadReports.value = false;
-  }
-
-  searchReport({int? id=0 , String? name="" , int? regionId}) async {
+  searchReport(
+      {int? id = 0, String? name = "", int? regionId, int? cityId}) async {
     loadReports.value = true;
     epicintersModelReport = await services.searchEpcinters(
       regionId: regionId,
+      cityId: cityId,
       name: name,
       id: id,
       status: 4,
@@ -328,9 +313,10 @@ class AllEpicenterController extends GetxController {
     loading.value = true;
     pageNumber.value = 1;
     epicintersModel = await services.getEpicenters(
-      pageNum: pageNumber.value,
-      regionId: regionId.value,
       status: 0,
+      regionId: cityId.value,
+      cityId: regionId.value,
+      pageNum: pageNumber.value,
     );
     listEpicenters.assignAll(epicintersModel!.epicenters!);
     update();
@@ -374,7 +360,8 @@ class AllEpicenterController extends GetxController {
     loadReports.value = true;
     epicintersModelReport = await services.getEpicenters(
       status: 4,
-      regionId: regionId2.value,
+      regionId: cityId2.value,
+      cityId: regionId2.value,
       pageNum: pageNumber2.value,
     );
     listReports.assignAll(epicintersModelReport!.epicenters!);
