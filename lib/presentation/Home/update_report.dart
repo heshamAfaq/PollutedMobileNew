@@ -248,7 +248,6 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                 .report!.report!.reportIndustrialActivities![i].description,
             distance:
                 widget.report!.report!.reportIndustrialActivities![i].distance,
-            attachment: null,
             industrialActivity: IndustrialActivity(
               name: widget.report!.report!.reportIndustrialActivities![i]
                   .industrialActivity!.name,
@@ -490,7 +489,7 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
             surroundingBuilding: SurroundingBuilding(
                 name: widget.report!.report!.reportSurroundingBuildings![i]
                     .surroundingBuilding!.name!)));
-        print(reportCtrl.distanceOfList.length);
+        print(reportCtrl.distanceOfList.toJson());
       }
     }
 
@@ -3792,6 +3791,7 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                                 content: Text(
                                                     'يجب اختيار صوره'.tr)));
                                       } else {
+                                        // reportCtrl.ActvitesList.clear();
                                         reportCtrl.addActivites(
                                             reportCtrl.allIndustrialActivitiesId
                                                 .value,
@@ -3872,6 +3872,57 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                     ),
                                   )
                                 : SizedBox()),
+                            // Obx(() => reportCtrl.ActvitesListReport.isNotEmpty
+                            //     ? SizedBox(
+                            //         height: 50,
+                            //         child: ListView.builder(
+                            //           itemCount: reportCtrl.ActvitesListReport.length,
+                            //           physics: const BouncingScrollPhysics(),
+                            //           shrinkWrap: true,
+                            //           scrollDirection: Axis.horizontal,
+                            //           itemBuilder: (_, index) => Padding(
+                            //             padding: const EdgeInsets.all(8),
+                            //             child: Stack(
+                            //               alignment: Alignment.topLeft,
+                            //               children: [
+                            //                 Container(
+                            //                   width: 250,
+                            //                   decoration: BoxDecoration(
+                            //                       borderRadius:
+                            //                           BorderRadius.circular(10),
+                            //                       color: ColorManager.primary
+                            //                           .withOpacity(
+                            //                               OpicityValue.o3)),
+                            //                   child: Center(
+                            //                     child: Text(
+                            //                         "${reportCtrl.ActvitesListReport[index].industrialActivity!.name!}:  ${reportCtrl.ActvitesListReport[index].distance!}${"M".tr}",
+                            //                         overflow:
+                            //                             TextOverflow.ellipsis),
+                            //                   ),
+                            //                 ),
+                            //                 // GestureDetector(
+                            //                 //   onTap: () {
+                            //                 //     reportCtrl.removeActivites(
+                            //                 //         reportCtrl
+                            //                 //             .ActvitesList[index]
+                            //                 //             .industrialActivityId!);
+                            //                 //   },
+                            //                 //   child: Container(
+                            //                 //     height: 25,
+                            //                 //     width: 25,
+                            //                 //     decoration: const BoxDecoration(
+                            //                 //         shape: BoxShape.circle,
+                            //                 //         color: Colors.red),
+                            //                 //     child: const Icon(Icons.clear,
+                            //                 //         color: Colors.white),
+                            //                 //   ),
+                            //                 // )
+                            //               ],
+                            //             ),
+                            //           ),
+                            //         ),
+                            //       )
+                            //     : SizedBox()),
                             //!add images and preview images
                             // Obx(() => reportCtrl.imagesList.isNotEmpty
                             //     ? SizedBox(

@@ -205,7 +205,9 @@ class AddReportController extends GetxController {
 
   // final listDistance = <ReportBuildingss>[].obs;
   final distanceOfList = <ReportBuildingss>[].obs;
+  final distanceOfListReport = <ReportBuildingss>[].obs;
   final ActvitesList = <ReportIndustrialActivitiesss>[].obs;
+  final ActvitesListReport = <ReportIndustrialActivitiesss>[].obs;
   final adddistanceOfList = <ReportBuildings>[].obs;
   TextEditingController distanceController = TextEditingController();
   final load = false.obs;
@@ -282,7 +284,6 @@ class AddReportController extends GetxController {
     String name,
     File file,
   ) {
-    distanceOfList.clear();
     print("Added");
     print(file.path);
     // listDistance.add(ReportBuildingss(
@@ -301,16 +302,17 @@ class AddReportController extends GetxController {
     File file,
     String description,
   ) {
-    ActvitesList.clear();
     print("Added");
     print(file.path);
     print(description);
+
     ActvitesList.add(ReportIndustrialActivitiesss(
         industrialActivityId: id,
         distance: distance,
         attachment: file,
         description: description,
         industrialActivity: IndustrialActivity(name: name)));
+    print(ActvitesList);
   }
 
   removeDiatance(int id) {
@@ -843,19 +845,22 @@ class AddReportController extends GetxController {
     //   ScaffoldMessenger.of(context).showSnackBar(
     //       SnackBar(content: Text('please enter HotSpot Images'.tr)));
     // }
-    else if (ActvitesList.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('please enter Industrial Activites'.tr)));
-    } else if (polluationSourcesIds.isEmpty) {
+    // else if (ActvitesList.isEmpty) {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //       SnackBar(content: Text('please enter Industrial Activites'.tr)));
+    // }
+    else if (polluationSourcesIds.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Contaminated media should be introduced'.tr)));
     } else if (potentialPollutantsIds.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Please Enter Potential Pollutants '.tr)));
-    } else if (distanceOfList.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Please Enter Surrounding Buildings '.tr)));
-    } else if (epicenterWidth!.isEmpty) {
+    }
+    // else if (distanceOfList.isEmpty) {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //       SnackBar(content: Text('Please Enter Surrounding Buildings '.tr)));
+    // }
+    else if (epicenterWidth!.isEmpty) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('you must enter width'.tr)));
     } else if (epicenterDepth!.isEmpty) {
@@ -1002,7 +1007,7 @@ class AddReportController extends GetxController {
   final naturalLand = false.obs;
   final rensopleBorder = false.obs;
   final typeWater = false.obs;
-  final pollutionBorder=false.obs;
+  final pollutionBorder = false.obs;
   final description = false.obs;
   final descrptionBorder = false.obs;
   final descripePlace = false.obs;
@@ -1066,19 +1071,24 @@ class AddReportController extends GetxController {
       } else if (imagesList.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('please enter HotSpot Images'.tr)));
-      } else if (ActvitesList.isEmpty) {
+      }
+      else if (ActvitesList.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('please enter Industrial Activites'.tr)));
-      } else if (polluationSourcesIds.isEmpty) {
+      }
+      else if (polluationSourcesIds.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('Contaminated media should be introduced'.tr)));
       } else if (potentialPollutantsIds.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Please Enter Potential Pollutants '.tr)));
-      } else if (distanceOfList.isEmpty) {
+      }
+      else if (distanceOfList.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Please Enter Surrounding Buildings '.tr)));
-      } else if (epicenterWidth.value == 0.0) {
+
+      }
+      else if (epicenterWidth.value == 0.0) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('you must enter width'.tr)));
       } else if (epicenterDepth.value == 0.0) {
