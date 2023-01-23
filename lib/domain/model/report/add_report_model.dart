@@ -179,20 +179,20 @@ class Report {
 }
 class ReportIndustrialActivitiess {
   ReportIndustrialActivitiess({
-    // this.attachment,
+     this.attachment,
     this.description,
     this.distance,
     this.industrialActivityId,
     this.industrialActivity,});
 
   ReportIndustrialActivitiess.fromJson(dynamic json) {
-    // attachment = json['attachment'];
+     attachment = json['attachment'];
     description = json['description'];
     distance = json['distance'];
     industrialActivityId = json['industrialActivityId'];
     industrialActivity = json['industrialActivity'] != null ? IndustrialActivity.fromJson(json['industrialActivity']) : null;
   }
-  // File? attachment;
+   String? attachment;
   String? description;
   double? distance;
   int? industrialActivityId;

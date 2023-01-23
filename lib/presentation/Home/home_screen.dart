@@ -231,6 +231,8 @@ import 'package:enivronment/presentation/report/add_report_screen.dart';
 import 'package:enivronment/presentation/report/widget/report_divider_widget.dart';
 import 'package:enivronment/presentation/resources/constants_manager.dart';
 import 'package:enivronment/presentation/widget/load_image.dart';
+import 'package:flip_card/flip_card.dart';
+import 'package:flip_card/flip_card_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -252,11 +254,28 @@ import 'widget/language_widget.dart';
 import 'widget/list_item_widget.dart';
 
 // ignore: must_be_immutable
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
 
-  int cityId = 0;
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
 
+class _HomeScreenState extends State<HomeScreen>   {
+
+
+  int cityId = 0;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+  }
+  @override
+  void dispose() {
+    super.dispose();
+
+  }
   @override
   Widget build(BuildContext context) {
     final epicenterCtrl = Get.put(AllEpicenterController());
@@ -400,7 +419,7 @@ class HomeScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           Obx(
-                                () => GestureDetector(
+                            () => GestureDetector(
                                 onTap: () {
                                   showModalBottomSheet(
                                     context: context,
@@ -409,7 +428,7 @@ class HomeScreen extends StatelessWidget {
                                             MediaSize.m2_5,
                                         child: ListView.builder(
                                             itemCount:
-                                            epicenterCtrl.allregion.length,
+                                                epicenterCtrl.allregion.length,
                                             itemBuilder: (context, index) {
                                               return InkWell(
                                                 onTap: () {
@@ -417,7 +436,7 @@ class HomeScreen extends StatelessWidget {
                                                       epicenterCtrl
                                                           .allregion[index].id;
                                                   epicenterCtrl
-                                                      .regionText.value =
+                                                          .regionText.value =
                                                       epicenterCtrl
                                                           .allregion[index]
                                                           .name;
@@ -432,20 +451,20 @@ class HomeScreen extends StatelessWidget {
                                                 },
                                                 child: Padding(
                                                   padding: const EdgeInsets
-                                                      .symmetric(
+                                                          .symmetric(
                                                       horizontal:
-                                                      AppPadding.p60,
+                                                          AppPadding.p60,
                                                       vertical: AppPadding.p16),
                                                   child: Container(
                                                     alignment: Alignment.center,
                                                     height: SizeConfig
-                                                        .screenHeight! /
+                                                            .screenHeight! /
                                                         MediaSize.m12,
                                                     decoration: BoxDecoration(
                                                         borderRadius:
-                                                        BorderRadius.circular(
-                                                            BorderRadiusValues
-                                                                .br10),
+                                                            BorderRadius.circular(
+                                                                BorderRadiusValues
+                                                                    .br10),
                                                         border: Border.all(
                                                             width: AppSize.s1,
                                                             color: ColorManager
@@ -472,7 +491,7 @@ class HomeScreen extends StatelessWidget {
                                       top: AppMargin.m20),
                                   alignment: Alignment.centerRight,
                                   height:
-                                  SizeConfig.screenHeight! / MediaSize.m16,
+                                      SizeConfig.screenHeight! / MediaSize.m16,
                                   decoration: BoxDecoration(
                                     border: Border.all(
                                         width: AppSize.s1,
@@ -480,16 +499,14 @@ class HomeScreen extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(
                                         BorderRadiusValues.br5),
                                   ),
-                                  child:  Row(
+                                  child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
+                                        MainAxisAlignment.spaceAround,
                                     children: [
-                                      Text(
-                                          epicenterCtrl.regionText.value,
+                                      Text(epicenterCtrl.regionText.value,
                                           textAlign: TextAlign.center,
                                           style: getSemiBoldStyle(
-                                              color: ColorManager
-                                                  .secondary)),
+                                              color: ColorManager.secondary)),
                                       const Spacer(),
                                       Icon(
                                         Icons.arrow_drop_down,
@@ -501,110 +518,110 @@ class HomeScreen extends StatelessWidget {
                                 )),
                           ),
                           Obx(
-                                () => epicenterCtrl.allCities.isEmpty
+                            () => epicenterCtrl.allCities.isEmpty
                                 ? const SizedBox()
                                 : GestureDetector(
-                                onTap: () {
-                                  showModalBottomSheet(
-                                    context: context,
-                                    builder: (ctx) => SizedBox(
-                                        height: SizeConfig.screenHeight! /
-                                            MediaSize.m2_5,
-                                        child: ListView.builder(
-                                            itemCount: epicenterCtrl
-                                                .allCities.length,
-                                            itemBuilder: (context, index) {
-                                              return InkWell(
-                                                onTap: () {
-                                                  epicenterCtrl
-                                                      .regionId.value =
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                        context: context,
+                                        builder: (ctx) => SizedBox(
+                                            height: SizeConfig.screenHeight! /
+                                                MediaSize.m2_5,
+                                            child: ListView.builder(
+                                                itemCount: epicenterCtrl
+                                                    .allCities.length,
+                                                itemBuilder: (context, index) {
+                                                  return InkWell(
+                                                    onTap: () {
                                                       epicenterCtrl
-                                                          .allCities[index]
-                                                          .id;
-                                                  epicenterCtrl
-                                                      .cityName.value =
+                                                              .regionId.value =
+                                                          epicenterCtrl
+                                                              .allCities[index]
+                                                              .id;
                                                       epicenterCtrl
-                                                          .allCities[index]
-                                                          .name;
-                                                  print(epicenterCtrl
-                                                      .regionId.value);
-                                                  // epicenterCtrl
-                                                  //     .onTapSelected2();
-                                                  Navigator.pop(context);
-                                                },
-                                                child: Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal:
-                                                      AppPadding.p60,
-                                                      vertical:
-                                                      AppPadding.p16),
-                                                  child: Container(
-                                                    alignment:
-                                                    Alignment.center,
-                                                    height: SizeConfig
-                                                        .screenHeight! /
-                                                        MediaSize.m12,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                        BorderRadius.circular(
-                                                            BorderRadiusValues
-                                                                .br10),
-                                                        border: Border.all(
-                                                            width:
-                                                            AppSize.s1,
-                                                            color:
-                                                            ColorManager
-                                                                .grey)),
-                                                    child: Text(
-                                                        epicenterCtrl
-                                                            .allCities[
-                                                        index]
-                                                            .name,
-                                                        style: getSemiBoldStyle(
-                                                            color: ColorManager
-                                                                .secondary)),
-                                                  ),
-                                                ),
-                                              );
-                                            })),
-                                  );
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: AppPadding.p10),
-                                  margin: const EdgeInsets.only(
-                                      right: AppMargin.m30,
-                                      left: AppMargin.m30,
-                                      top: AppMargin.m20),
-                                  alignment: Alignment.centerRight,
-                                  height: SizeConfig.screenHeight! /
-                                      MediaSize.m16,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: AppSize.s1,
-                                        color: ColorManager.grey),
-                                    borderRadius: BorderRadius.circular(
-                                        BorderRadiusValues.br5),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Text(epicenterCtrl.cityName.value,
-                                          textAlign: TextAlign.center,
-                                          style: getSemiBoldStyle(
-                                              color:
-                                              ColorManager.secondary)),
-                                      const Spacer(),
-                                      Icon(
-                                        Icons.arrow_drop_down,
-                                        color: ColorManager.secondary,
-                                        size: AppSize.s30,
+                                                              .cityName.value =
+                                                          epicenterCtrl
+                                                              .allCities[index]
+                                                              .name;
+                                                      print(epicenterCtrl
+                                                          .regionId.value);
+                                                      // epicenterCtrl
+                                                      //     .onTapSelected2();
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Padding(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal:
+                                                              AppPadding.p60,
+                                                          vertical:
+                                                              AppPadding.p16),
+                                                      child: Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        height: SizeConfig
+                                                                .screenHeight! /
+                                                            MediaSize.m12,
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius.circular(
+                                                                    BorderRadiusValues
+                                                                        .br10),
+                                                            border: Border.all(
+                                                                width:
+                                                                    AppSize.s1,
+                                                                color:
+                                                                    ColorManager
+                                                                        .grey)),
+                                                        child: Text(
+                                                            epicenterCtrl
+                                                                .allCities[
+                                                                    index]
+                                                                .name,
+                                                            style: getSemiBoldStyle(
+                                                                color: ColorManager
+                                                                    .secondary)),
+                                                      ),
+                                                    ),
+                                                  );
+                                                })),
+                                      );
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: AppPadding.p10),
+                                      margin: const EdgeInsets.only(
+                                          right: AppMargin.m30,
+                                          left: AppMargin.m30,
+                                          top: AppMargin.m20),
+                                      alignment: Alignment.centerRight,
+                                      height: SizeConfig.screenHeight! /
+                                          MediaSize.m16,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: AppSize.s1,
+                                            color: ColorManager.grey),
+                                        borderRadius: BorderRadius.circular(
+                                            BorderRadiusValues.br5),
                                       ),
-                                    ],
-                                  ),
-                                )),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Text(epicenterCtrl.cityName.value,
+                                              textAlign: TextAlign.center,
+                                              style: getSemiBoldStyle(
+                                                  color:
+                                                      ColorManager.secondary)),
+                                          const Spacer(),
+                                          Icon(
+                                            Icons.arrow_drop_down,
+                                            color: ColorManager.secondary,
+                                            size: AppSize.s30,
+                                          ),
+                                        ],
+                                      ),
+                                    )),
                           )
                         ],
                       ),
@@ -621,22 +638,25 @@ class HomeScreen extends StatelessWidget {
                                 if (v.isNotEmpty) {
                                   epicenterCtrl.idSearch.value = 0;
                                   epicenterCtrl.searchName.value =
-                                  v.isEmpty ? "" : v;
+                                      v.isEmpty ? "" : v;
                                 } else {
                                   epicenterCtrl.searchName.value = "";
                                   epicenterCtrl.onTapSelectedRegion();
                                 }
                               },
                               decoration: InputDecoration(
+                                  hintStyle: TextStyle(
+                                      color: ColorManager.secondary,
+                                      fontSize: 15),
                                   hintText: "Search by name or id".tr,
                                   focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(4),
-                                      borderSide:
-                                      const BorderSide(color: Colors.grey)),
+                                      borderSide: BorderSide(
+                                          color: ColorManager.secondary)),
                                   enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(4),
-                                      borderSide: const BorderSide(
-                                          color: Colors.grey))),
+                                      borderSide: BorderSide(
+                                          color: ColorManager.secondary))),
                             ),
                           ),
                           const SizedBox(width: 5),
@@ -648,7 +668,7 @@ class HomeScreen extends StatelessWidget {
                                 if (v.isNotEmpty) {
                                   epicenterCtrl.searchName.value = "";
                                   epicenterCtrl.idSearch.value =
-                                  v.isEmpty ? 0 : int.parse(v);
+                                      v.isEmpty ? 0 : int.parse(v);
                                 } else {
                                   epicenterCtrl.idSearch.value = 0;
                                   epicenterCtrl.onTapSelectedRegion();
@@ -656,14 +676,17 @@ class HomeScreen extends StatelessWidget {
                               },
                               decoration: InputDecoration(
                                   hintText: "Search id".tr,
+                                  hintStyle: TextStyle(
+                                      color: ColorManager.secondary,
+                                      fontSize: 15),
                                   focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(4),
-                                      borderSide:
-                                      const BorderSide(color: Colors.grey)),
+                                      borderSide: BorderSide(
+                                          color: ColorManager.secondary)),
                                   enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(4),
-                                      borderSide: const BorderSide(
-                                          color: Colors.grey))),
+                                      borderSide: BorderSide(
+                                          color: ColorManager.secondary))),
                             ),
                           ),
                         ],
@@ -696,16 +719,28 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                     Expanded(
-                        child: Obx(() => Container(
-                              padding: const EdgeInsets.only(
-                                  bottom: AppPadding.p8,
-                                  top: AppPadding.p20,
-                                  right: AppPadding.p14,
-                                  left: AppPadding.p14),
-                              width: double.infinity,
-                              color: ColorManager.lightGrey,
+                        child: Obx(() => SizedBox(
                               child: epicenterCtrl.loading.value == true
-                                  ? const LoaderWidget()
+                                  ? Center(
+                                      child: FlipCard(
+
+                                        fill: Fill.fillBack,
+                                        // Fill the back side of the card to make in the same size as the front.
+                                        direction: FlipDirection.HORIZONTAL,
+                                        // default
+                                        side: CardSide.FRONT,
+                                        // The side to initially display.
+                                        front: Image.asset(
+                                            "assets/images/logo.png",
+                                            height: 120),
+                                        back: Image.asset(
+                                            "assets/images/logo.png",
+                                            height: 120),
+                                        autoFlipDuration: const Duration(
+                                            seconds:
+                                                2), // The flip effect will work automatically after the 2 seconds
+                                      ),
+                                    )
                                   : epicenterCtrl.listEpicenters.isEmpty
                                       ? Center(
                                           child:
@@ -861,7 +896,26 @@ class HomeScreen extends StatelessWidget {
                               width: double.infinity,
                               color: ColorManager.lightGrey,
                               child: epicenterCtrl.load.value
-                                  ? const LoaderWidget()
+                                  ? Center(
+                                      child: FlipCard(
+
+                                        fill: Fill.fillBack,
+                                        // Fill the back side of the card to make in the same size as the front.
+                                        direction: FlipDirection.HORIZONTAL,
+                                        // default
+                                        side: CardSide.FRONT,
+                                        // The side to initially display.
+                                        front: Image.asset(
+                                            "assets/images/logo.png",
+                                            height: 120),
+                                        back: Image.asset(
+                                            "assets/images/logo.png",
+                                            height: 120),
+                                        autoFlipDuration: const Duration(
+                                            seconds:
+                                                2), // The flip effect will work automatically after the 2 seconds
+                                      ),
+                                    )
                                   : epicenterCtrl.markers == <Marker>{}
                                       ? Padding(
                                           padding: const EdgeInsets.all(
@@ -1136,7 +1190,7 @@ class HomeScreen extends StatelessWidget {
                                                         border: Border.all(
                                                             width: AppSize.s1,
                                                             color: ColorManager
-                                                                .grey)),
+                                                                .secondary)),
                                                     child: Text(
                                                         epicenterCtrl
                                                             .allregion[index]
@@ -1163,28 +1217,26 @@ class HomeScreen extends StatelessWidget {
                                   decoration: BoxDecoration(
                                     border: Border.all(
                                         width: AppSize.s1,
-                                        color: ColorManager.grey),
+                                        color: ColorManager.secondary),
                                     borderRadius: BorderRadius.circular(
                                         BorderRadiusValues.br5),
                                   ),
-                                  child:  Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Text(
-                                                epicenterCtrl.regionText2.value,
-                                                textAlign: TextAlign.center,
-                                                style: getSemiBoldStyle(
-                                                    color: ColorManager
-                                                        .secondary)),
-                                            const Spacer(),
-                                            Icon(
-                                              Icons.arrow_drop_down,
-                                              color: ColorManager.secondary,
-                                              size: AppSize.s30,
-                                            ),
-                                          ],
-                                        ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Text(epicenterCtrl.regionText2.value,
+                                          textAlign: TextAlign.center,
+                                          style: getSemiBoldStyle(
+                                              color: ColorManager.secondary)),
+                                      const Spacer(),
+                                      Icon(
+                                        Icons.arrow_drop_down,
+                                        color: ColorManager.secondary,
+                                        size: AppSize.s30,
+                                      ),
+                                    ],
+                                  ),
                                 )),
                           ),
                           Obx(
@@ -1240,9 +1292,8 @@ class HomeScreen extends StatelessWidget {
                                                             border: Border.all(
                                                                 width:
                                                                     AppSize.s1,
-                                                                color:
-                                                                    ColorManager
-                                                                        .grey)),
+                                                                color: ColorManager
+                                                                    .secondary)),
                                                         child: Text(
                                                             epicenterCtrl
                                                                 .allCities2[
@@ -1270,7 +1321,7 @@ class HomeScreen extends StatelessWidget {
                                       decoration: BoxDecoration(
                                         border: Border.all(
                                             width: AppSize.s1,
-                                            color: ColorManager.grey),
+                                            color: ColorManager.secondary),
                                         borderRadius: BorderRadius.circular(
                                             BorderRadiusValues.br5),
                                       ),
@@ -1316,14 +1367,17 @@ class HomeScreen extends StatelessWidget {
                               },
                               decoration: InputDecoration(
                                   hintText: "Search by name or id".tr,
+                                  hintStyle: TextStyle(
+                                      color: ColorManager.secondary,
+                                      fontSize: 15),
                                   focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(4),
-                                      borderSide:
-                                          const BorderSide(color: Colors.grey)),
+                                      borderSide: BorderSide(
+                                          color: ColorManager.secondary)),
                                   enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(4),
-                                      borderSide: const BorderSide(
-                                          color: Colors.grey))),
+                                      borderSide: BorderSide(
+                                          color: ColorManager.secondary))),
                             ),
                           ),
                           const SizedBox(width: 5),
@@ -1343,14 +1397,17 @@ class HomeScreen extends StatelessWidget {
                               },
                               decoration: InputDecoration(
                                   hintText: "Search id".tr,
+                                  hintStyle: TextStyle(
+                                      color: ColorManager.secondary,
+                                      fontSize: 15),
                                   focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(4),
-                                      borderSide:
-                                          const BorderSide(color: Colors.grey)),
+                                      borderSide: BorderSide(
+                                          color: ColorManager.secondary)),
                                   enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(4),
-                                      borderSide: const BorderSide(
-                                          color: Colors.grey))),
+                                      borderSide: BorderSide(
+                                          color: ColorManager.secondary))),
                             ),
                           ),
                         ],
@@ -1392,7 +1449,26 @@ class HomeScreen extends StatelessWidget {
                               width: double.infinity,
                               color: ColorManager.lightGrey,
                               child: epicenterCtrl.loadReports.value == true
-                                  ? const LoaderWidget()
+                                  ? Center(
+                                      child: FlipCard(
+
+                                        fill: Fill.fillBack,
+                                        // Fill the back side of the card to make in the same size as the front.
+                                        direction: FlipDirection.HORIZONTAL,
+                                        // default
+                                        side: CardSide.FRONT,
+                                        // The side to initially display.
+                                        front: Image.asset(
+                                            "assets/images/logo.png",
+                                            height: 120),
+                                        back: Image.asset(
+                                            "assets/images/logo.png",
+                                            height: 120),
+                                        autoFlipDuration: const Duration(
+                                            seconds:
+                                                2), // The flip effect will work automatically after the 2 seconds
+                                      ),
+                                    )
                                   : epicenterCtrl.listReports.isEmpty
                                       ? Center(
                                           child:

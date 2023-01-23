@@ -3,11 +3,13 @@ import 'dart:io';
 import 'package:enivronment/app/constants.dart';
 import 'package:enivronment/domain/model/ReportModel.dart';
 import 'package:enivronment/domain/model/polluation_sources/polluation_sources_model.dart';
-import 'package:enivronment/domain/model/report/add_report_model.dart';
-import 'package:enivronment/domain/model/report_industrial_activities/report_industrial_activities_model.dart';
+import 'package:enivronment/presentation/Home/display_activites_screen.dart';
 import 'package:enivronment/presentation/report/widget/report_divider_widget.dart';
 import 'package:enivronment/presentation/report/widget/report_text_field_widget.dart';
 import 'package:enivronment/presentation/widget/load_image.dart';
+import 'package:enivronment/utility/utility.dart';
+import 'package:flip_card/flip_card.dart';
+import 'package:flip_card/flip_card_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
@@ -15,6 +17,7 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 import '../../app/shared_widgets/bubbled_loader_widget.dart';
 import '../../app/shared_widgets/label_widget.dart';
+import '../../app/shared_widgets/loader_widget.dart';
 import '../../data/controller/report/add_report_controller.dart';
 import '../../domain/model/potential_pollutants/potential_pollutants_model.dart';
 import '../../rejon_model.dart';
@@ -41,7 +44,10 @@ class UpdateReportScreen extends StatefulWidget {
   State<UpdateReportScreen> createState() => _UpdateReportScreenState();
 }
 
-class _UpdateReportScreenState extends State<UpdateReportScreen> {
+class _UpdateReportScreenState extends State<UpdateReportScreen>
+   {
+
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   // TextEditingController controllerEpcinter = TextEditingController();
@@ -75,9 +81,9 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
   TextEditingController controllerFirstCarpone = TextEditingController();
   TextEditingController controllerSecoundCarpone = TextEditingController();
   TextEditingController controllervolatileOrganicMatter =
-      TextEditingController();
+  TextEditingController();
   TextEditingController controllertotalDissolvedSolids =
-      TextEditingController();
+  TextEditingController();
   final reportCtrl = Get.put(AddReportController());
 
   load() {
@@ -97,11 +103,11 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
         ? reportCtrl.landFormId.value
         : widget.report!.report!.landForm!.id!;
     reportCtrl.getAllWindDirectionId.value = widget.report!.report == null ||
-            widget.report!.report!.windDirection == null
+        widget.report!.report!.windDirection == null
         ? reportCtrl.getAllWindDirectionId.value
         : widget.report!.report!.windDirection!.id!;
     reportCtrl.getAllWindDirectionText.value = widget.report!.report == null ||
-            widget.report!.report!.windDirection == null
+        widget.report!.report!.windDirection == null
         ? reportCtrl.getAllWindDirectionText.value
         : widget.report!.report!.windDirection!.name!;
     reportCtrl.responsibleText.value = widget.report!.report == null
@@ -239,15 +245,17 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
       reportCtrl.ActvitesList.value = [];
     } else {
       for (int i = 0;
-          i < widget.report!.report!.reportIndustrialActivities!.length;
-          i++) {
+      i < widget.report!.report!.reportIndustrialActivities!.length;
+      i++) {
         reportCtrl.ActvitesList.add(ReportIndustrialActivitiesss(
+            photo: widget
+                .report!.report!.reportIndustrialActivities![i].attachment,
             industrialActivityId: widget.report!.report!
                 .reportIndustrialActivities![i].industrialActivityId,
             description: widget
                 .report!.report!.reportIndustrialActivities![i].description,
             distance:
-                widget.report!.report!.reportIndustrialActivities![i].distance,
+            widget.report!.report!.reportIndustrialActivities![i].distance,
             industrialActivity: IndustrialActivity(
               name: widget.report!.report!.reportIndustrialActivities![i]
                   .industrialActivity!.name,
@@ -269,13 +277,13 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
     //   }
     // }
     if (widget.report!.report == null) {
-      reportCtrl.potentialPollutantsIds.value = [];
+      reportCtrl.listpotinal_pollution.value = [];
     } else {
-      reportCtrl.potentialPollutantsIds.clear();
+      reportCtrl.listpotinal_pollution.clear();
       for (int i = 0;
-          i < widget.report!.report!.reportPotentialPollutants!.length;
-          i++) {
-        reportCtrl.potentialPollutantsIds.add(widget.report!.report!
+      i < widget.report!.report!.reportPotentialPollutants!.length;
+      i++) {
+        reportCtrl.listpotinal_pollution.add(widget.report!.report!
             .reportPotentialPollutants![i].potentialPollutant!.id!);
         print(widget
             .report!.report!.reportPotentialPollutants![i].potentialPollutant);
@@ -286,8 +294,8 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
     } else {
       reportCtrl.potentialcontaminants.clear();
       for (int i = 0;
-          i < widget.report!.report!.reportPotentialPollutants!.length;
-          i++) {
+      i < widget.report!.report!.reportPotentialPollutants!.length;
+      i++) {
         reportCtrl.potentialcontaminants.add(widget.report!.report!
             .reportPotentialPollutants![i].potentialPollutant!.name!);
       }
@@ -326,8 +334,8 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
     } else {
       reportCtrl.listOfsemanticPollution.clear();
       for (int i = 0;
-          i < widget.report!.report!.reportSemanticPollutions!.length;
-          i++) {
+      i < widget.report!.report!.reportSemanticPollutions!.length;
+      i++) {
         reportCtrl.listOfsemanticPollution
             .add(widget.report!.report!.reportSemanticPollutions![i].id!);
         print("listOfsemanticPollution");
@@ -340,8 +348,8 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
     } else {
       reportCtrl.pollution.clear();
       for (int i = 0;
-          i < widget.report!.report!.reportSemanticPollutions!.length;
-          i++) {
+      i < widget.report!.report!.reportSemanticPollutions!.length;
+      i++) {
         reportCtrl.pollution
             .add(widget.report!.report!.reportSemanticPollutions![i].name!);
         print("pollution");
@@ -363,15 +371,15 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
     }
 
     if (widget.report!.report == null) {
-      reportCtrl.polluationSourcesIds.value = [];
+      reportCtrl.listmedium_pollution.value = [];
     } else {
-      reportCtrl.polluationSourcesIds.clear();
+      reportCtrl.listmedium_pollution.clear();
       for (int i = 0;
-          i < widget.report!.report!.reportPolluationSources!.length;
-          i++) {
-        reportCtrl.polluationSourcesIds.add(widget
+      i < widget.report!.report!.reportPolluationSources!.length;
+      i++) {
+        reportCtrl.listmedium_pollution.add(widget
             .report!.report!.reportPolluationSources![i].polluationSource!.id!);
-        print(reportCtrl.polluationSourcesIds.length);
+        print(reportCtrl.listmedium_pollution.length);
       }
     }
     if (widget.report!.report == null) {
@@ -379,8 +387,8 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
     } else {
       reportCtrl.medium.clear();
       for (int i = 0;
-          i < widget.report!.report!.reportPolluationSources!.length;
-          i++) {
+      i < widget.report!.report!.reportPolluationSources!.length;
+      i++) {
         reportCtrl.medium.add(widget.report!.report!.reportPolluationSources![i]
             .polluationSource!.name!);
         print(reportCtrl.medium.length);
@@ -391,8 +399,8 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
     } else {
       reportCtrl.listunderGroundWater.clear();
       for (int i = 0;
-          i < widget.report!.report!.reportUndergroundWaters!.length;
-          i++) {
+      i < widget.report!.report!.reportUndergroundWaters!.length;
+      i++) {
         reportCtrl.listunderGroundWater
             .add(widget.report!.report!.reportUndergroundWaters![i].id!);
         print(reportCtrl.listunderGroundWater.length);
@@ -403,8 +411,8 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
     } else {
       reportCtrl.underGroundList.clear();
       for (int i = 0;
-          i < widget.report!.report!.reportUndergroundWaters!.length;
-          i++) {
+      i < widget.report!.report!.reportUndergroundWaters!.length;
+      i++) {
         reportCtrl.underGroundList
             .add(widget.report!.report!.reportUndergroundWaters![i].name!);
         print(reportCtrl.underGroundList.length);
@@ -416,8 +424,8 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
     } else {
       reportCtrl.listOfsemanticPollution.clear();
       for (int i = 0;
-          i < widget.report!.report!.reportSemanticPollutions!.length;
-          i++) {
+      i < widget.report!.report!.reportSemanticPollutions!.length;
+      i++) {
         print(widget.report!.report!.reportSemanticPollutions!);
         reportCtrl.listOfsemanticPollution
             .add(widget.report!.report!.reportSemanticPollutions![i].id!);
@@ -429,8 +437,8 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
     } else {
       reportCtrl.listOfsurroundedMediums.clear();
       for (int i = 0;
-          i < widget.report!.report!.reportSurroundedMediums!.length;
-          i++) {
+      i < widget.report!.report!.reportSurroundedMediums!.length;
+      i++) {
         print(widget.report!.report!.reportSurroundedMediums!);
         reportCtrl.listOfsurroundedMediums
             .add(widget.report!.report!.reportSurroundedMediums![i].id!);
@@ -442,8 +450,8 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
     } else {
       reportCtrl.mediumPollution.clear();
       for (int i = 0;
-          i < widget.report!.report!.reportSurroundedMediums!.length;
-          i++) {
+      i < widget.report!.report!.reportSurroundedMediums!.length;
+      i++) {
         print(widget.report!.report!.reportSurroundedMediums!);
         reportCtrl.mediumPollution
             .add(widget.report!.report!.reportSurroundedMediums![i].name!);
@@ -478,14 +486,14 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
     } else {
       reportCtrl.distanceOfList.clear();
       for (int i = 0;
-          i < widget.report!.report!.reportSurroundingBuildings!.length;
-          i++) {
+      i < widget.report!.report!.reportSurroundingBuildings!.length;
+      i++) {
         print(widget.report!.report!.reportSurroundingBuildings!);
         reportCtrl.distanceOfList.add(ReportBuildingss(
             surroundingBuildingId: widget.report!.report!
                 .reportSurroundingBuildings![i].surroundingBuildingId,
             distance:
-                widget.report!.report!.reportSurroundingBuildings![i].distance,
+            widget.report!.report!.reportSurroundingBuildings![i].distance,
             surroundingBuilding: SurroundingBuilding(
                 name: widget.report!.report!.reportSurroundingBuildings![i]
                     .surroundingBuilding!.name!)));
@@ -512,6 +520,11 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
     // TODO: implement initState
     super.initState();
     load();
+
+  }
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -520,11 +533,14 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
         child: Scaffold(
             appBar: AppBar(
               backgroundColor: ColorManager.white,
-              leading: IconButton(
-                onPressed: () => Get.back(),
-                icon: const Icon(Icons.arrow_back_ios),
-                color: ColorManager.primary,
-              ),
+              elevation: 0,
+              automaticallyImplyLeading: false,
+              // leading: IconButton(
+              //   onPressed: () => Get.back(),
+              //   icon: const Icon(Icons.arrow_back_ios),
+              //   color: ColorManager.primary,
+              // ),
+              centerTitle: true,
               title: Center(
                 child: Text(
                   "update report".tr,
@@ -535,13 +551,36 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
               ),
             ),
             body: Obx(
-              () => reportCtrl.load.value
+                  () =>
+              reportCtrl.load.value
                   ? Center(
-                      child: CircularProgressIndicator(),
-                    )
+                child: FlipCard(
+                  fill: Fill.fillBack,
+                  // Fill the back side of the card to make in the same size as the front.
+                  direction: FlipDirection.HORIZONTAL,
+                  // default
+                  side: CardSide.FRONT,
+                  // The side to initially display.
+                  front: Image.asset(
+                      "assets/images/logo.png",
+                      height: 120),
+                  back: Image.asset(
+                      "assets/images/logo.png",
+                      height: 120),
+                  autoFlipDuration: const Duration(
+                      seconds:
+                      2), // The flip effect will work automatically after the 2 seconds
+                ),
+              )
                   : Form(
-                      key: _formKey,
-                      child: SingleChildScrollView(
+                  key: _formKey,
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Material(
+                        shape: RoundedRectangleBorder(side: BorderSide(
+                            color: ColorManager.primary, width: 2
+                        )),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -664,10 +703,11 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                               children: [
                                 Row(
                                   children: [
-                                    Obx(() => Radio(
+                                    Obx(() =>
+                                        Radio(
                                           value: true,
                                           groupValue:
-                                              reportCtrl.residentialArea.value,
+                                          reportCtrl.residentialArea.value,
                                           toggleable: true,
                                           activeColor: ColorManager.secondary,
                                           onChanged: (bool? v) {
@@ -684,10 +724,11 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                 ),
                                 Row(
                                   children: [
-                                    Obx(() => Radio(
+                                    Obx(() =>
+                                        Radio(
                                           value: false,
                                           groupValue:
-                                              reportCtrl.residentialArea.value,
+                                          reportCtrl.residentialArea.value,
                                           toggleable: true,
                                           activeColor: ColorManager.secondary,
                                           onChanged: (bool? v) {
@@ -709,7 +750,8 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                               children: [
                                 Row(
                                   children: [
-                                    Obx(() => Radio(
+                                    Obx(() =>
+                                        Radio(
                                           value: true,
                                           groupValue: reportCtrl.sunRise.value,
                                           toggleable: true,
@@ -728,7 +770,8 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                 ),
                                 Row(
                                   children: [
-                                    Obx(() => Radio(
+                                    Obx(() =>
+                                        Radio(
                                           value: false,
                                           groupValue: reportCtrl.sunRise.value,
                                           toggleable: true,
@@ -756,7 +799,8 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                               children: [
                                 Row(
                                   children: [
-                                    Obx(() => Radio(
+                                    Obx(() =>
+                                        Radio(
                                           value: true,
                                           groupValue: reportCtrl.plants.value,
                                           toggleable: true,
@@ -775,7 +819,8 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                 ),
                                 Row(
                                   children: [
-                                    Obx(() => Radio(
+                                    Obx(() =>
+                                        Radio(
                                           value: false,
                                           groupValue: reportCtrl.plants.value,
                                           toggleable: true,
@@ -794,447 +839,19 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                 )
                               ],
                             ),
-                            Obx(() => reportCtrl.plants.value == true
+                            Obx(() =>
+                            reportCtrl.plants.value == true
                                 ? Obx(
-                                    () => Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 30),
-                                      child: MultiSelectDialogField(
-                                        listType: MultiSelectListType.LIST,
-                                        chipDisplay: MultiSelectChipDisplay(
-                                          textStyle: const TextStyle(
-                                              color: Colors.white),
-                                          chipColor: ColorManager.primary,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: Colors.blue.withOpacity(0.1),
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(10)),
-                                          border: Border.all(
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                        buttonIcon: const Icon(
-                                          Icons.arrow_drop_down_sharp,
-                                          color: Colors.grey,
-                                        ),
-                                        buttonText: Text(
-                                          reportCtrl.plantText.value,
-                                          style: TextStyle(
-                                            color: ColorManager.secondary,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                        items: reportCtrl.plantList
-                                            .map((player) =>
-                                                MultiSelectItem<CitiesModel>(
-                                                    player, player.name))
-                                            .toList(),
-                                        selectedColor: Colors.blue,
-                                        searchable: true,
-                                        onConfirm: (results) {
-                                          reportCtrl.selectedPlayer = results;
-                                          reportCtrl.selectedPlayerValue.value =
-                                              "";
-                                          reportCtrl.selectedPlayer
-                                              .forEach((element) {
-                                            reportCtrl.listPlantPlaces
-                                                .add(element.id);
-                                            print(element.id);
-                                            reportCtrl
-                                                    .selectedPlayerValue.value =
-                                                "${reportCtrl.selectedPlayerValue.value} " +
-                                                    element.name;
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                    // GestureDetector(
-                                    //     onTap: () {
-                                    //       showModalBottomSheet(
-                                    //         context: context,
-                                    //         builder: (ctx) => SizedBox(
-                                    //             height: SizeConfig.screenHeight! /
-                                    //                 MediaSize.m2_5,
-                                    //             child: ListView.builder(
-                                    //                 itemCount:
-                                    //                     reportCtrl.plantList.length,
-                                    //                 itemBuilder: (context, index) {
-                                    //                   return Padding(
-                                    //                     padding: const EdgeInsets
-                                    //                             .symmetric(
-                                    //                         horizontal:
-                                    //                             AppPadding.p60,
-                                    //                         vertical:
-                                    //                             AppPadding.p16),
-                                    //                     child: Container(
-                                    //                       alignment:
-                                    //                           Alignment.center,
-                                    //                       height: SizeConfig
-                                    //                               .screenHeight! /
-                                    //                           MediaSize.m12,
-                                    //                       decoration: BoxDecoration(
-                                    //                           borderRadius:
-                                    //                               BorderRadius.circular(
-                                    //                                   BorderRadiusValues
-                                    //                                       .br10),
-                                    //                           border: Border.all(
-                                    //                               width: AppSize.s1,
-                                    //                               color:
-                                    //                                   ColorManager
-                                    //                                       .grey)),
-                                    //                       child: Row(
-                                    //                         children: [
-                                    //                           Obx(() => Checkbox(
-                                    //                               activeColor:
-                                    //                                   ColorManager
-                                    //                                       .primary,
-                                    //                               value: reportCtrl
-                                    //                                       .plantListList[
-                                    //                                   index],
-                                    //                               onChanged: (v) {
-                                    //                                 reportCtrl
-                                    //                                         .plantListList[
-                                    //                                     index] = v;
-                                    //                                 reportCtrl
-                                    //                                         .plantId
-                                    //                                         .value =
-                                    //                                     reportCtrl
-                                    //                                         .plantList[
-                                    //                                             index]
-                                    //                                         .id;
-                                    //                                 reportCtrl.addPlantList(
-                                    //                                     index,
-                                    //                                     reportCtrl
-                                    //                                             .plantId
-                                    //                                             .value =
-                                    //                                         reportCtrl
-                                    //                                             .plantList[
-                                    //                                                 index]
-                                    //                                             .id,
-                                    //                                     reportCtrl
-                                    //                                         .plantList[
-                                    //                                             index]
-                                    //                                         .name);
-                                    //                                 print(v);
-                                    //                               })),
-                                    //                           Flexible(
-                                    //                             child: Text(
-                                    //                                 reportCtrl
-                                    //                                     .plantList[
-                                    //                                         index]
-                                    //                                     .name,
-                                    //                                 style: getSemiBoldStyle(
-                                    //                                     color: ColorManager
-                                    //                                         .secondary)),
-                                    //                           ),
-                                    //                           Spacer(),
-                                    //                           GestureDetector(
-                                    //                             onTap: () {
-                                    //                               Navigator.pop(
-                                    //                                   context);
-                                    //                             },
-                                    //                             child: Container(
-                                    //                                 width: 25,
-                                    //                                 height: 25,
-                                    //                                 color:
-                                    //                                     ColorManager
-                                    //                                         .primary,
-                                    //                                 child: Icon(
-                                    //                                   Icons.add,
-                                    //                                   color: Colors
-                                    //                                       .white,
-                                    //                                 )),
-                                    //                           ),
-                                    //                         ],
-                                    //                       ),
-                                    //                     ),
-                                    //                   );
-                                    //                 })),
-                                    //       );
-                                    //     },
-                                    //     child: Container(
-                                    //       padding: const EdgeInsets.symmetric(
-                                    //           horizontal: AppPadding.p10),
-                                    //       margin: const EdgeInsets.only(
-                                    //           right: AppMargin.m30,
-                                    //           left: AppMargin.m30,
-                                    //           top: AppMargin.m20),
-                                    //       alignment: Alignment.centerRight,
-                                    //       height: SizeConfig.screenHeight! /
-                                    //           MediaSize.m16,
-                                    //       decoration: BoxDecoration(
-                                    //         border: Border.all(
-                                    //             width: AppSize.s1,
-                                    //             color: ColorManager.grey),
-                                    //         borderRadius: BorderRadius.circular(
-                                    //             BorderRadiusValues.br5),
-                                    //       ),
-                                    //       child: reportCtrl.load.value
-                                    //           ? const BubbleLoader()
-                                    //           : Row(
-                                    //               mainAxisAlignment:
-                                    //                   MainAxisAlignment.spaceAround,
-                                    //               children: [
-                                    //                 Text(reportCtrl.plantText.value,
-                                    //                     textAlign: TextAlign.center,
-                                    //                     style: getSemiBoldStyle(
-                                    //                         color: ColorManager
-                                    //                             .secondary)),
-                                    //                 const Spacer(),
-                                    //                 Icon(
-                                    //                   Icons.arrow_drop_down,
-                                    //                   color: ColorManager.secondary,
-                                    //                   size: AppSize.s30,
-                                    //                 ),
-                                    //               ],
-                                    //             ),
-                                    //     ))
-                                  )
-                                // Obx(() => GestureDetector(
-                                //         onTap: () {
-                                //           showModalBottomSheet(
-                                //             context: context,
-                                //             builder: (ctx) => SizedBox(
-                                //                 height: SizeConfig.screenHeight! /
-                                //                     MediaSize.m2_5,
-                                //                 child: ListView.builder(
-                                //                     itemCount:
-                                //                         reportCtrl.plantList.length,
-                                //                     itemBuilder: (context, index) {
-                                //                       return InkWell(
-                                //                         onTap: () {
-                                //                           reportCtrl
-                                //                                   .plantText.value =
-                                //                               reportCtrl
-                                //                                   .plantList[index]
-                                //                                   .name;
-                                //                           reportCtrl.plantId.value =
-                                //                               reportCtrl
-                                //                                   .plantList[index]
-                                //                                   .id;
-                                //                           Navigator.pop(context);
-                                //                         },
-                                //                         child: Padding(
-                                //                           padding: const EdgeInsets
-                                //                                   .symmetric(
-                                //                               horizontal:
-                                //                                   AppPadding.p60,
-                                //                               vertical:
-                                //                                   AppPadding.p16),
-                                //                           child: Container(
-                                //                             alignment:
-                                //                                 Alignment.center,
-                                //                             height: SizeConfig
-                                //                                     .screenHeight! /
-                                //                                 MediaSize.m12,
-                                //                             decoration: BoxDecoration(
-                                //                                 borderRadius:
-                                //                                     BorderRadius.circular(
-                                //                                         BorderRadiusValues
-                                //                                             .br10),
-                                //                                 border: Border.all(
-                                //                                     width:
-                                //                                         AppSize.s1,
-                                //                                     color:
-                                //                                         ColorManager
-                                //                                             .grey)),
-                                //                             child: Row(
-                                //                               children: [
-                                //                                 Obx(() => Checkbox(
-                                //                                     activeColor:
-                                //                                         ColorManager
-                                //                                             .primary,
-                                //                                     value: reportCtrl
-                                //                                             .plantListList[
-                                //                                         index],
-                                //                                     onChanged: (v) {
-                                //                                       reportCtrl
-                                //                                               .plantListList[
-                                //                                           index] = v;
-                                //                                       reportCtrl
-                                //                                               .plantId
-                                //                                               .value =
-                                //                                           reportCtrl
-                                //                                               .plantList[
-                                //                                                   index]
-                                //                                               .id;
-                                //                                       reportCtrl
-                                //                                           .addPlantList(
-                                //                                         index,
-                                //                                         reportCtrl
-                                //                                                 .plantId
-                                //                                                 .value =
-                                //                                             reportCtrl
-                                //                                                 .plantList[index]
-                                //                                                 .id,
-                                //                                         reportCtrl
-                                //                                             .plantList[
-                                //                                                 index]
-                                //                                             .name,
-                                //                                       );
-                                //                                       print(v);
-                                //                                     })),
-                                //                                 Flexible(
-                                //                                   child: Text(
-                                //                                       reportCtrl
-                                //                                           .plantList[
-                                //                                               index]
-                                //                                           .name,
-                                //                                       style: getSemiBoldStyle(
-                                //                                           color: ColorManager
-                                //                                               .secondary)),
-                                //                                 ),
-                                //                                 Spacer(),
-                                //                                 GestureDetector(
-                                //                                   onTap: () {
-                                //                                     Navigator.pop(
-                                //                                         context);
-                                //                                   },
-                                //                                   child: Container(
-                                //                                       width: 25,
-                                //                                       height: 25,
-                                //                                       color: ColorManager
-                                //                                           .primary,
-                                //                                       child: Icon(
-                                //                                         Icons.add,
-                                //                                         color: Colors
-                                //                                             .white,
-                                //                                       )),
-                                //                                 ),
-                                //                               ],
-                                //                             ),
-                                //                           ),
-                                //                         ),
-                                //                       );
-                                //                     })),
-                                //           );
-                                //         },
-                                //         child: Container(
-                                //           padding: const EdgeInsets.symmetric(
-                                //               horizontal: AppPadding.p10),
-                                //           margin: const EdgeInsets.only(
-                                //               right: AppMargin.m30,
-                                //               left: AppMargin.m30,
-                                //               top: AppMargin.m20),
-                                //           alignment: Alignment.centerRight,
-                                //           height: SizeConfig.screenHeight! /
-                                //               MediaSize.m16,
-                                //           decoration: BoxDecoration(
-                                //             border: Border.all(
-                                //                 width: AppSize.s1,
-                                //                 color: ColorManager.grey),
-                                //             borderRadius: BorderRadius.circular(
-                                //                 BorderRadiusValues.br5),
-                                //           ),
-                                //           child: reportCtrl.load.value
-                                //               ? const BubbleLoader()
-                                //               : Row(
-                                //                   mainAxisAlignment:
-                                //                       MainAxisAlignment.spaceAround,
-                                //                   children: [
-                                //                     Text(reportCtrl.plantText.value,
-                                //                         textAlign: TextAlign.center,
-                                //                         style: getSemiBoldStyle(
-                                //                             color: ColorManager
-                                //                                 .secondary)),
-                                //                     const Spacer(),
-                                //                     Icon(
-                                //                       Icons.arrow_drop_down,
-                                //                       color: ColorManager.secondary,
-                                //                       size: AppSize.s30,
-                                //                     ),
-                                //                   ],
-                                //                 ),
-                                //         )))
-                                : const SizedBox()),
-
-                            Obx(() => reportCtrl.plantsList.isNotEmpty &&
-                                    reportCtrl.plants.isTrue
-                                ? SizedBox(
-                                    height: 45,
-                                    child: ListView.builder(
-                                      itemCount: reportCtrl.plantsList.length,
-                                      physics: const BouncingScrollPhysics(),
-                                      shrinkWrap: true,
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (_, index) => Padding(
-                                        padding: const EdgeInsets.all(8),
-                                        child: Container(
-                                          width: 100,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: ColorManager.secondary
-                                                  .withOpacity(
-                                                      OpicityValue.o3)),
-                                          child: Center(
-                                            child: Text(
-                                                reportCtrl.plantsList[index],
-                                                overflow:
-                                                    TextOverflow.ellipsis),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                : SizedBox()),
-                            const ReportDividerWidget(),
-
-                            //!ground water
-                            LabelWidget(label: "Is there ground water ?".tr),
-                            Row(
-                              children: [
-                                Row(
-                                  children: [
-                                    Obx(() => Radio(
-                                          value: true,
-                                          groupValue:
-                                              reportCtrl.underGround.value,
-                                          toggleable: true,
-                                          activeColor: ColorManager.secondary,
-                                          onChanged: (bool? v) {
-                                            reportCtrl.addUnderGround(v!);
-                                            print(v);
-                                          },
-                                        )),
-                                    Text(
-                                      'yes'.tr,
-                                      style: getSemiBoldStyle(
-                                          color: ColorManager.secondary),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Obx(() => Radio(
-                                          value: false,
-                                          groupValue:
-                                              reportCtrl.underGround.value,
-                                          toggleable: true,
-                                          activeColor: ColorManager.secondary,
-                                          onChanged: (bool? v) {
-                                            reportCtrl.addUnderGround(v!);
-                                            print(v);
-                                          },
-                                        )),
-                                    Text(
-                                      'no'.tr,
-                                      style: getSemiBoldStyle(
-                                          color: ColorManager.secondary),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-
-                            Obx(() => reportCtrl.underGround.value
-                                ? Padding(
+                                  () =>
+                                  Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 30),
                                     child: MultiSelectDialogField(
                                       listType: MultiSelectListType.LIST,
                                       chipDisplay: MultiSelectChipDisplay(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(4)),
                                         textStyle: const TextStyle(
                                             color: Colors.white),
                                         chipColor: ColorManager.primary,
@@ -1252,423 +869,891 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                         color: Colors.grey,
                                       ),
                                       buttonText: Text(
-                                        reportCtrl.groundWaterText.value,
+                                        reportCtrl.plantText.value,
                                         style: TextStyle(
                                           color: ColorManager.secondary,
                                           fontSize: 16,
                                         ),
                                       ),
-                                      items: reportCtrl.underGroundWater
+                                      items: reportCtrl.plantList
                                           .map((player) =>
-                                              MultiSelectItem<CitiesModel>(
-                                                  player, player.name))
+                                          MultiSelectItem<CitiesModel>(
+                                              player, player.name))
                                           .toList(),
                                       selectedColor: Colors.blue,
                                       searchable: true,
                                       onConfirm: (results) {
                                         reportCtrl.selectedPlayer = results;
                                         reportCtrl.selectedPlayerValue.value =
-                                            "";
+                                        "";
                                         reportCtrl.selectedPlayer
                                             .forEach((element) {
-                                          reportCtrl.listunderGroundWater
+                                          reportCtrl.listPlantPlaces
                                               .add(element.id);
                                           print(element.id);
-                                          reportCtrl.selectedPlayerValue.value =
-                                              "${reportCtrl.selectedPlayerValue.value} " +
+                                          reportCtrl
+                                              .selectedPlayerValue.value =
+                                              "${reportCtrl.selectedPlayerValue
+                                                  .value} " +
                                                   element.name;
                                         });
                                       },
                                     ),
-                                  )
-                                // GestureDetector(
-                                //         onTap: () {
-                                //           showModalBottomSheet(
-                                //             context: context,
-                                //             builder: (ctx) => SizedBox(
-                                //                 height: SizeConfig.screenHeight! /
-                                //                     MediaSize.m2_5,
-                                //                 child: ListView.builder(
-                                //                     itemCount: reportCtrl
-                                //                         .underGroundWater.length,
-                                //                     itemBuilder: (context, index) {
-                                //                       return InkWell(
-                                //                         onTap: () {
-                                //                           reportCtrl.groundWaterText
-                                //                                   .value =
-                                //                               reportCtrl
-                                //                                   .underGroundWater[
-                                //                                       index]
-                                //                                   .name;
-                                //                           reportCtrl.waterGroundId
-                                //                                   .value =
-                                //                               reportCtrl
-                                //                                   .underGroundWater[
-                                //                                       index]
-                                //                                   .id;
-                                //                           Navigator.pop(context);
-                                //                         },
-                                //                         child: Padding(
-                                //                           padding: const EdgeInsets
-                                //                                   .symmetric(
-                                //                               horizontal:
-                                //                                   AppPadding.p60,
-                                //                               vertical:
-                                //                                   AppPadding.p16),
-                                //                           child: Container(
-                                //                             alignment:
-                                //                                 Alignment.center,
-                                //                             height: SizeConfig
-                                //                                     .screenHeight! /
-                                //                                 MediaSize.m12,
-                                //                             decoration: BoxDecoration(
-                                //                                 borderRadius:
-                                //                                     BorderRadius.circular(
-                                //                                         BorderRadiusValues
-                                //                                             .br10),
-                                //                                 border: Border.all(
-                                //                                     width:
-                                //                                         AppSize.s1,
-                                //                                     color:
-                                //                                         ColorManager
-                                //                                             .grey)),
-                                //                             child: Row(
-                                //                               children: [
-                                //                                 Obx(() => Checkbox(
-                                //                                     activeColor:
-                                //                                         ColorManager
-                                //                                             .primary,
-                                //                                     value: reportCtrl
-                                //                                             .underGroundWaterList[
-                                //                                         index],
-                                //                                     onChanged: (v) {
-                                //                                       reportCtrl
-                                //                                               .underGroundWaterList[
-                                //                                           index] = v;
-                                //                                       reportCtrl
-                                //                                               .waterGroundId
-                                //                                               .value =
-                                //                                           reportCtrl
-                                //                                               .underGroundWater[
-                                //                                                   index]
-                                //                                               .id;
-                                //                                       reportCtrl.addunderGroundWaterList(
-                                //                                           index,
-                                //                                           reportCtrl
-                                //                                               .waterGroundId
-                                //                                               .value,
-                                //                                           reportCtrl
-                                //                                               .underGroundWater[
-                                //                                                   index]
-                                //                                               .name);
-                                //                                       print(v);
-                                //                                     })),
-                                //                                 Flexible(
-                                //                                   child: Text(
-                                //                                       reportCtrl
-                                //                                           .underGroundWater[
-                                //                                               index]
-                                //                                           .name,
-                                //                                       style: getSemiBoldStyle(
-                                //                                           color: ColorManager
-                                //                                               .secondary)),
-                                //                                 ),
-                                //                                 Spacer(),
-                                //                                 GestureDetector(
-                                //                                   onTap: () {
-                                //                                     Navigator.pop(
-                                //                                         context);
-                                //                                   },
-                                //                                   child: Container(
-                                //                                       width: 25,
-                                //                                       height: 25,
-                                //                                       color: ColorManager
-                                //                                           .primary,
-                                //                                       child: Icon(
-                                //                                         Icons.add,
-                                //                                         color: Colors
-                                //                                             .white,
-                                //                                       )),
-                                //                                 ),
-                                //                               ],
-                                //                             ),
-                                //                           ),
-                                //                         ),
-                                //                       );
-                                //                     })),
-                                //           );
-                                //         },
-                                //         child: Container(
-                                //           padding: const EdgeInsets.symmetric(
-                                //               horizontal: AppPadding.p10),
-                                //           margin: const EdgeInsets.only(
-                                //               right: AppMargin.m30,
-                                //               left: AppMargin.m30,
-                                //               top: AppMargin.m20),
-                                //           alignment: Alignment.centerRight,
-                                //           height: SizeConfig.screenHeight! /
-                                //               MediaSize.m16,
-                                //           decoration: BoxDecoration(
-                                //             border: Border.all(
-                                //                 width: AppSize.s1,
-                                //                 color: ColorManager.grey),
-                                //             borderRadius: BorderRadius.circular(
-                                //                 BorderRadiusValues.br5),
-                                //           ),
-                                //           child: Row(
-                                //             mainAxisAlignment:
-                                //                 MainAxisAlignment.spaceAround,
-                                //             children: [
-                                //               Obx(() => reportCtrl
-                                //                       .groundWaterText.isEmpty
-                                //                   ? BubbleLoader()
-                                //                   : Text(
-                                //                       reportCtrl
-                                //                           .groundWaterText.value,
-                                //                       textAlign: TextAlign.center,
-                                //                       style: getSemiBoldStyle(
-                                //                           color: ColorManager
-                                //                               .secondary))),
-                                //               const Spacer(),
-                                //               Icon(
-                                //                 Icons.arrow_drop_down,
-                                //                 color: ColorManager.secondary,
-                                //                 size: AppSize.s30,
-                                //               ),
-                                //             ],
-                                //           ),
-                                //         ))
-                                : SizedBox()),
-                            Obx(() => reportCtrl.underGroundList.isNotEmpty &&
-                                    reportCtrl.underGround.isTrue
+                                  ),
+                              // GestureDetector(
+                              //     onTap: () {
+                              //       showModalBottomSheet(
+                              //         context: context,
+                              //         builder: (ctx) => SizedBox(
+                              //             height: SizeConfig.screenHeight! /
+                              //                 MediaSize.m2_5,
+                              //             child: ListView.builder(
+                              //                 itemCount:
+                              //                     reportCtrl.plantList.length,
+                              //                 itemBuilder: (context, index) {
+                              //                   return Padding(
+                              //                     padding: const EdgeInsets
+                              //                             .symmetric(
+                              //                         horizontal:
+                              //                             AppPadding.p60,
+                              //                         vertical:
+                              //                             AppPadding.p16),
+                              //                     child: Container(
+                              //                       alignment:
+                              //                           Alignment.center,
+                              //                       height: SizeConfig
+                              //                               .screenHeight! /
+                              //                           MediaSize.m12,
+                              //                       decoration: BoxDecoration(
+                              //                           borderRadius:
+                              //                               BorderRadius.circular(
+                              //                                   BorderRadiusValues
+                              //                                       .br10),
+                              //                           border: Border.all(
+                              //                               width: AppSize.s1,
+                              //                               color:
+                              //                                   ColorManager
+                              //                                       .grey)),
+                              //                       child: Row(
+                              //                         children: [
+                              //                           Obx(() => Checkbox(
+                              //                               activeColor:
+                              //                                   ColorManager
+                              //                                       .primary,
+                              //                               value: reportCtrl
+                              //                                       .plantListList[
+                              //                                   index],
+                              //                               onChanged: (v) {
+                              //                                 reportCtrl
+                              //                                         .plantListList[
+                              //                                     index] = v;
+                              //                                 reportCtrl
+                              //                                         .plantId
+                              //                                         .value =
+                              //                                     reportCtrl
+                              //                                         .plantList[
+                              //                                             index]
+                              //                                         .id;
+                              //                                 reportCtrl.addPlantList(
+                              //                                     index,
+                              //                                     reportCtrl
+                              //                                             .plantId
+                              //                                             .value =
+                              //                                         reportCtrl
+                              //                                             .plantList[
+                              //                                                 index]
+                              //                                             .id,
+                              //                                     reportCtrl
+                              //                                         .plantList[
+                              //                                             index]
+                              //                                         .name);
+                              //                                 print(v);
+                              //                               })),
+                              //                           Flexible(
+                              //                             child: Text(
+                              //                                 reportCtrl
+                              //                                     .plantList[
+                              //                                         index]
+                              //                                     .name,
+                              //                                 style: getSemiBoldStyle(
+                              //                                     color: ColorManager
+                              //                                         .secondary)),
+                              //                           ),
+                              //                           Spacer(),
+                              //                           GestureDetector(
+                              //                             onTap: () {
+                              //                               Navigator.pop(
+                              //                                   context);
+                              //                             },
+                              //                             child: Container(
+                              //                                 width: 25,
+                              //                                 height: 25,
+                              //                                 color:
+                              //                                     ColorManager
+                              //                                         .primary,
+                              //                                 child: Icon(
+                              //                                   Icons.add,
+                              //                                   color: Colors
+                              //                                       .white,
+                              //                                 )),
+                              //                           ),
+                              //                         ],
+                              //                       ),
+                              //                     ),
+                              //                   );
+                              //                 })),
+                              //       );
+                              //     },
+                              //     child: Container(
+                              //       padding: const EdgeInsets.symmetric(
+                              //           horizontal: AppPadding.p10),
+                              //       margin: const EdgeInsets.only(
+                              //           right: AppMargin.m30,
+                              //           left: AppMargin.m30,
+                              //           top: AppMargin.m20),
+                              //       alignment: Alignment.centerRight,
+                              //       height: SizeConfig.screenHeight! /
+                              //           MediaSize.m16,
+                              //       decoration: BoxDecoration(
+                              //         border: Border.all(
+                              //             width: AppSize.s1,
+                              //             color: ColorManager.grey),
+                              //         borderRadius: BorderRadius.circular(
+                              //             BorderRadiusValues.br5),
+                              //       ),
+                              //       child: reportCtrl.load.value
+                              //           ? const BubbleLoader()
+                              //           : Row(
+                              //               mainAxisAlignment:
+                              //                   MainAxisAlignment.spaceAround,
+                              //               children: [
+                              //                 Text(reportCtrl.plantText.value,
+                              //                     textAlign: TextAlign.center,
+                              //                     style: getSemiBoldStyle(
+                              //                         color: ColorManager
+                              //                             .secondary)),
+                              //                 const Spacer(),
+                              //                 Icon(
+                              //                   Icons.arrow_drop_down,
+                              //                   color: ColorManager.secondary,
+                              //                   size: AppSize.s30,
+                              //                 ),
+                              //               ],
+                              //             ),
+                              //     ))
+                            )
+                            // Obx(() => GestureDetector(
+                            //         onTap: () {
+                            //           showModalBottomSheet(
+                            //             context: context,
+                            //             builder: (ctx) => SizedBox(
+                            //                 height: SizeConfig.screenHeight! /
+                            //                     MediaSize.m2_5,
+                            //                 child: ListView.builder(
+                            //                     itemCount:
+                            //                         reportCtrl.plantList.length,
+                            //                     itemBuilder: (context, index) {
+                            //                       return InkWell(
+                            //                         onTap: () {
+                            //                           reportCtrl
+                            //                                   .plantText.value =
+                            //                               reportCtrl
+                            //                                   .plantList[index]
+                            //                                   .name;
+                            //                           reportCtrl.plantId.value =
+                            //                               reportCtrl
+                            //                                   .plantList[index]
+                            //                                   .id;
+                            //                           Navigator.pop(context);
+                            //                         },
+                            //                         child: Padding(
+                            //                           padding: const EdgeInsets
+                            //                                   .symmetric(
+                            //                               horizontal:
+                            //                                   AppPadding.p60,
+                            //                               vertical:
+                            //                                   AppPadding.p16),
+                            //                           child: Container(
+                            //                             alignment:
+                            //                                 Alignment.center,
+                            //                             height: SizeConfig
+                            //                                     .screenHeight! /
+                            //                                 MediaSize.m12,
+                            //                             decoration: BoxDecoration(
+                            //                                 borderRadius:
+                            //                                     BorderRadius.circular(
+                            //                                         BorderRadiusValues
+                            //                                             .br10),
+                            //                                 border: Border.all(
+                            //                                     width:
+                            //                                         AppSize.s1,
+                            //                                     color:
+                            //                                         ColorManager
+                            //                                             .grey)),
+                            //                             child: Row(
+                            //                               children: [
+                            //                                 Obx(() => Checkbox(
+                            //                                     activeColor:
+                            //                                         ColorManager
+                            //                                             .primary,
+                            //                                     value: reportCtrl
+                            //                                             .plantListList[
+                            //                                         index],
+                            //                                     onChanged: (v) {
+                            //                                       reportCtrl
+                            //                                               .plantListList[
+                            //                                           index] = v;
+                            //                                       reportCtrl
+                            //                                               .plantId
+                            //                                               .value =
+                            //                                           reportCtrl
+                            //                                               .plantList[
+                            //                                                   index]
+                            //                                               .id;
+                            //                                       reportCtrl
+                            //                                           .addPlantList(
+                            //                                         index,
+                            //                                         reportCtrl
+                            //                                                 .plantId
+                            //                                                 .value =
+                            //                                             reportCtrl
+                            //                                                 .plantList[index]
+                            //                                                 .id,
+                            //                                         reportCtrl
+                            //                                             .plantList[
+                            //                                                 index]
+                            //                                             .name,
+                            //                                       );
+                            //                                       print(v);
+                            //                                     })),
+                            //                                 Flexible(
+                            //                                   child: Text(
+                            //                                       reportCtrl
+                            //                                           .plantList[
+                            //                                               index]
+                            //                                           .name,
+                            //                                       style: getSemiBoldStyle(
+                            //                                           color: ColorManager
+                            //                                               .secondary)),
+                            //                                 ),
+                            //                                 Spacer(),
+                            //                                 GestureDetector(
+                            //                                   onTap: () {
+                            //                                     Navigator.pop(
+                            //                                         context);
+                            //                                   },
+                            //                                   child: Container(
+                            //                                       width: 25,
+                            //                                       height: 25,
+                            //                                       color: ColorManager
+                            //                                           .primary,
+                            //                                       child: Icon(
+                            //                                         Icons.add,
+                            //                                         color: Colors
+                            //                                             .white,
+                            //                                       )),
+                            //                                 ),
+                            //                               ],
+                            //                             ),
+                            //                           ),
+                            //                         ),
+                            //                       );
+                            //                     })),
+                            //           );
+                            //         },
+                            //         child: Container(
+                            //           padding: const EdgeInsets.symmetric(
+                            //               horizontal: AppPadding.p10),
+                            //           margin: const EdgeInsets.only(
+                            //               right: AppMargin.m30,
+                            //               left: AppMargin.m30,
+                            //               top: AppMargin.m20),
+                            //           alignment: Alignment.centerRight,
+                            //           height: SizeConfig.screenHeight! /
+                            //               MediaSize.m16,
+                            //           decoration: BoxDecoration(
+                            //             border: Border.all(
+                            //                 width: AppSize.s1,
+                            //                 color: ColorManager.grey),
+                            //             borderRadius: BorderRadius.circular(
+                            //                 BorderRadiusValues.br5),
+                            //           ),
+                            //           child: reportCtrl.load.value
+                            //               ? const BubbleLoader()
+                            //               : Row(
+                            //                   mainAxisAlignment:
+                            //                       MainAxisAlignment.spaceAround,
+                            //                   children: [
+                            //                     Text(reportCtrl.plantText.value,
+                            //                         textAlign: TextAlign.center,
+                            //                         style: getSemiBoldStyle(
+                            //                             color: ColorManager
+                            //                                 .secondary)),
+                            //                     const Spacer(),
+                            //                     Icon(
+                            //                       Icons.arrow_drop_down,
+                            //                       color: ColorManager.secondary,
+                            //                       size: AppSize.s30,
+                            //                     ),
+                            //                   ],
+                            //                 ),
+                            //         )))
+                                : const SizedBox()),
+
+                            Obx(() =>
+                            reportCtrl.plantsList.isNotEmpty &&
+                                reportCtrl.plants.isTrue
                                 ? SizedBox(
-                                    height: 45,
-                                    child: ListView.builder(
-                                      itemCount:
-                                          reportCtrl.underGroundList.length,
-                                      physics: const BouncingScrollPhysics(),
-                                      shrinkWrap: true,
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (_, index) => Padding(
-                                        padding: const EdgeInsets.all(8),
-                                        child: Container(
-                                          width: 100,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: ColorManager.secondary
-                                                  .withOpacity(
-                                                      OpicityValue.o3)),
-                                          child: Center(
-                                            child: Text(
-                                                reportCtrl
-                                                    .underGroundList[index],
-                                                overflow:
-                                                    TextOverflow.ellipsis),
-                                          ),
+                              height: 45,
+                              child: ListView.builder(
+                                itemCount: reportCtrl.plantsList.length,
+                                physics: const BouncingScrollPhysics(),
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (_, index) =>
+                                    Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Container(
+                                        width: 100,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                            BorderRadius.circular(4),
+                                            color: ColorManager.primary),
+                                        child: Center(
+                                          child: Text(
+                                              reportCtrl.plantsList[index],
+                                              style: const TextStyle(
+                                                  color: Colors.white),
+                                              overflow:
+                                              TextOverflow.ellipsis),
                                         ),
                                       ),
                                     ),
-                                  )
+                              ),
+                            )
+                                : SizedBox()),
+                            const ReportDividerWidget(),
+
+                            //!ground water
+                            LabelWidget(label: "Is there ground water ?".tr),
+                            Row(
+                              children: [
+                                Row(
+                                  children: [
+                                    Obx(() =>
+                                        Radio(
+                                          value: true,
+                                          groupValue:
+                                          reportCtrl.underGround.value,
+                                          toggleable: true,
+                                          activeColor: ColorManager.secondary,
+                                          onChanged: (bool? v) {
+                                            reportCtrl.addUnderGround(v!);
+                                            print(v);
+                                          },
+                                        )),
+                                    Text(
+                                      'yes'.tr,
+                                      style: getSemiBoldStyle(
+                                          color: ColorManager.secondary),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Obx(() =>
+                                        Radio(
+                                          value: false,
+                                          groupValue:
+                                          reportCtrl.underGround.value,
+                                          toggleable: true,
+                                          activeColor: ColorManager.secondary,
+                                          onChanged: (bool? v) {
+                                            reportCtrl.addUnderGround(v!);
+                                            print(v);
+                                          },
+                                        )),
+                                    Text(
+                                      'no'.tr,
+                                      style: getSemiBoldStyle(
+                                          color: ColorManager.secondary),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+
+                            Obx(() =>
+                            reportCtrl.underGround.value
+                                ? Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 30),
+                              child: MultiSelectDialogField(
+                                listType: MultiSelectListType.LIST,
+                                chipDisplay: MultiSelectChipDisplay(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(4)),
+                                  textStyle: const TextStyle(
+                                      color: Colors.white),
+                                  chipColor: ColorManager.primary,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.blue.withOpacity(0.1),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10)),
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                buttonIcon: const Icon(
+                                  Icons.arrow_drop_down_sharp,
+                                  color: Colors.grey,
+                                ),
+                                buttonText: Text(
+                                  reportCtrl.groundWaterText.value,
+                                  style: TextStyle(
+                                    color: ColorManager.secondary,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                items: reportCtrl.underGroundWater
+                                    .map((player) =>
+                                    MultiSelectItem<CitiesModel>(
+                                        player, player.name))
+                                    .toList(),
+                                selectedColor: Colors.blue,
+                                searchable: true,
+                                onConfirm: (results) {
+                                  reportCtrl.selectedPlayer = results;
+                                  reportCtrl.selectedPlayerValue.value =
+                                  "";
+                                  reportCtrl.selectedPlayer
+                                      .forEach((element) {
+                                    reportCtrl.listunderGroundWater
+                                        .add(element.id);
+                                    print(element.id);
+                                    reportCtrl.selectedPlayerValue.value =
+                                        "${reportCtrl.selectedPlayerValue
+                                            .value} " +
+                                            element.name;
+                                  });
+                                },
+                              ),
+                            )
+                            // GestureDetector(
+                            //         onTap: () {
+                            //           showModalBottomSheet(
+                            //             context: context,
+                            //             builder: (ctx) => SizedBox(
+                            //                 height: SizeConfig.screenHeight! /
+                            //                     MediaSize.m2_5,
+                            //                 child: ListView.builder(
+                            //                     itemCount: reportCtrl
+                            //                         .underGroundWater.length,
+                            //                     itemBuilder: (context, index) {
+                            //                       return InkWell(
+                            //                         onTap: () {
+                            //                           reportCtrl.groundWaterText
+                            //                                   .value =
+                            //                               reportCtrl
+                            //                                   .underGroundWater[
+                            //                                       index]
+                            //                                   .name;
+                            //                           reportCtrl.waterGroundId
+                            //                                   .value =
+                            //                               reportCtrl
+                            //                                   .underGroundWater[
+                            //                                       index]
+                            //                                   .id;
+                            //                           Navigator.pop(context);
+                            //                         },
+                            //                         child: Padding(
+                            //                           padding: const EdgeInsets
+                            //                                   .symmetric(
+                            //                               horizontal:
+                            //                                   AppPadding.p60,
+                            //                               vertical:
+                            //                                   AppPadding.p16),
+                            //                           child: Container(
+                            //                             alignment:
+                            //                                 Alignment.center,
+                            //                             height: SizeConfig
+                            //                                     .screenHeight! /
+                            //                                 MediaSize.m12,
+                            //                             decoration: BoxDecoration(
+                            //                                 borderRadius:
+                            //                                     BorderRadius.circular(
+                            //                                         BorderRadiusValues
+                            //                                             .br10),
+                            //                                 border: Border.all(
+                            //                                     width:
+                            //                                         AppSize.s1,
+                            //                                     color:
+                            //                                         ColorManager
+                            //                                             .grey)),
+                            //                             child: Row(
+                            //                               children: [
+                            //                                 Obx(() => Checkbox(
+                            //                                     activeColor:
+                            //                                         ColorManager
+                            //                                             .primary,
+                            //                                     value: reportCtrl
+                            //                                             .underGroundWaterList[
+                            //                                         index],
+                            //                                     onChanged: (v) {
+                            //                                       reportCtrl
+                            //                                               .underGroundWaterList[
+                            //                                           index] = v;
+                            //                                       reportCtrl
+                            //                                               .waterGroundId
+                            //                                               .value =
+                            //                                           reportCtrl
+                            //                                               .underGroundWater[
+                            //                                                   index]
+                            //                                               .id;
+                            //                                       reportCtrl.addunderGroundWaterList(
+                            //                                           index,
+                            //                                           reportCtrl
+                            //                                               .waterGroundId
+                            //                                               .value,
+                            //                                           reportCtrl
+                            //                                               .underGroundWater[
+                            //                                                   index]
+                            //                                               .name);
+                            //                                       print(v);
+                            //                                     })),
+                            //                                 Flexible(
+                            //                                   child: Text(
+                            //                                       reportCtrl
+                            //                                           .underGroundWater[
+                            //                                               index]
+                            //                                           .name,
+                            //                                       style: getSemiBoldStyle(
+                            //                                           color: ColorManager
+                            //                                               .secondary)),
+                            //                                 ),
+                            //                                 Spacer(),
+                            //                                 GestureDetector(
+                            //                                   onTap: () {
+                            //                                     Navigator.pop(
+                            //                                         context);
+                            //                                   },
+                            //                                   child: Container(
+                            //                                       width: 25,
+                            //                                       height: 25,
+                            //                                       color: ColorManager
+                            //                                           .primary,
+                            //                                       child: Icon(
+                            //                                         Icons.add,
+                            //                                         color: Colors
+                            //                                             .white,
+                            //                                       )),
+                            //                                 ),
+                            //                               ],
+                            //                             ),
+                            //                           ),
+                            //                         ),
+                            //                       );
+                            //                     })),
+                            //           );
+                            //         },
+                            //         child: Container(
+                            //           padding: const EdgeInsets.symmetric(
+                            //               horizontal: AppPadding.p10),
+                            //           margin: const EdgeInsets.only(
+                            //               right: AppMargin.m30,
+                            //               left: AppMargin.m30,
+                            //               top: AppMargin.m20),
+                            //           alignment: Alignment.centerRight,
+                            //           height: SizeConfig.screenHeight! /
+                            //               MediaSize.m16,
+                            //           decoration: BoxDecoration(
+                            //             border: Border.all(
+                            //                 width: AppSize.s1,
+                            //                 color: ColorManager.grey),
+                            //             borderRadius: BorderRadius.circular(
+                            //                 BorderRadiusValues.br5),
+                            //           ),
+                            //           child: Row(
+                            //             mainAxisAlignment:
+                            //                 MainAxisAlignment.spaceAround,
+                            //             children: [
+                            //               Obx(() => reportCtrl
+                            //                       .groundWaterText.isEmpty
+                            //                   ? BubbleLoader()
+                            //                   : Text(
+                            //                       reportCtrl
+                            //                           .groundWaterText.value,
+                            //                       textAlign: TextAlign.center,
+                            //                       style: getSemiBoldStyle(
+                            //                           color: ColorManager
+                            //                               .secondary))),
+                            //               const Spacer(),
+                            //               Icon(
+                            //                 Icons.arrow_drop_down,
+                            //                 color: ColorManager.secondary,
+                            //                 size: AppSize.s30,
+                            //               ),
+                            //             ],
+                            //           ),
+                            //         ))
+                                : SizedBox()),
+                            Obx(() =>
+                            reportCtrl.underGroundList.isNotEmpty &&
+                                reportCtrl.underGround.isTrue
+                                ? SizedBox(
+                              height: 45,
+                              child: ListView.builder(
+                                itemCount:
+                                reportCtrl.underGroundList.length,
+                                physics: const BouncingScrollPhysics(),
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (_, index) =>
+                                    Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Container(
+                                        width: 100,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                            BorderRadius.circular(4),
+                                            color: ColorManager.primary),
+                                        child: Center(
+                                          child: Text(
+                                              reportCtrl
+                                                  .underGroundList[index],
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                              overflow:
+                                              TextOverflow.ellipsis),
+                                        ),
+                                      ),
+                                    ),
+                              ),
+                            )
                                 : SizedBox()),
                             const ReportDividerWidget(),
                             //!Land Form
                             LabelWidget(label: "Land Form ".tr),
-                            Obx(() => GestureDetector(
-                                onTap: () {
-                                  showModalBottomSheet(
-                                    context: context,
-                                    builder: (ctx) => SizedBox(
-                                        height: SizeConfig.screenHeight! /
-                                            MediaSize.m2_5,
-                                        child: ListView.builder(
-                                            itemCount:
-                                                reportCtrl.allLandForm.length,
-                                            itemBuilder: (context, index) {
-                                              return InkWell(
-                                                onTap: () {
-                                                  reportCtrl.onTapSelected(
-                                                      ctx,
-                                                      reportCtrl
-                                                          .allLandForm[index]
-                                                          .id,
-                                                      reportCtrl
-                                                          .allLandForm[index]
-                                                          .name);
-                                                },
-                                                child: Padding(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal:
-                                                          AppPadding.p60,
-                                                      vertical: AppPadding.p16),
-                                                  child: Container(
-                                                    alignment: Alignment.center,
-                                                    height: SizeConfig
-                                                            .screenHeight! /
-                                                        MediaSize.m12,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                BorderRadiusValues
-                                                                    .br10),
-                                                        border: Border.all(
-                                                            width: AppSize.s1,
-                                                            color: ColorManager
-                                                                .grey)),
-                                                    child: Text(
-                                                        reportCtrl
-                                                            .allLandForm[index]
-                                                            .name,
-                                                        style: getSemiBoldStyle(
-                                                            color: ColorManager
-                                                                .secondary)),
-                                                  ),
-                                                ),
-                                              );
-                                            })),
-                                  );
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: AppPadding.p10),
-                                  margin: const EdgeInsets.only(
-                                      right: AppMargin.m30,
-                                      left: AppMargin.m30,
-                                      top: AppMargin.m20),
-                                  alignment: Alignment.centerRight,
-                                  height:
+                            Obx(() =>
+                                GestureDetector(
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                        context: context,
+                                        builder: (ctx) =>
+                                            SizedBox(
+                                                height: SizeConfig
+                                                    .screenHeight! /
+                                                    MediaSize.m2_5,
+                                                child: ListView.builder(
+                                                    itemCount:
+                                                    reportCtrl.allLandForm
+                                                        .length,
+                                                    itemBuilder: (context,
+                                                        index) {
+                                                      return InkWell(
+                                                        onTap: () {
+                                                          reportCtrl
+                                                              .onTapSelected(
+                                                              ctx,
+                                                              reportCtrl
+                                                                  .allLandForm[index]
+                                                                  .id,
+                                                              reportCtrl
+                                                                  .allLandForm[index]
+                                                                  .name);
+                                                        },
+                                                        child: Padding(
+                                                          padding: const EdgeInsets
+                                                              .symmetric(
+                                                              horizontal:
+                                                              AppPadding.p60,
+                                                              vertical: AppPadding
+                                                                  .p16),
+                                                          child: Container(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            height: SizeConfig
+                                                                .screenHeight! /
+                                                                MediaSize.m12,
+                                                            decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                    BorderRadiusValues
+                                                                        .br10),
+                                                                border: Border
+                                                                    .all(
+                                                                    width: AppSize
+                                                                        .s1,
+                                                                    color: ColorManager
+                                                                        .grey)),
+                                                            child: Text(
+                                                                reportCtrl
+                                                                    .allLandForm[index]
+                                                                    .name,
+                                                                style: getSemiBoldStyle(
+                                                                    color: ColorManager
+                                                                        .secondary)),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    })),
+                                      );
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: AppPadding.p10),
+                                      margin: const EdgeInsets.only(
+                                          right: AppMargin.m30,
+                                          left: AppMargin.m30,
+                                          top: AppMargin.m20),
+                                      alignment: Alignment.centerRight,
+                                      height:
                                       SizeConfig.screenHeight! / MediaSize.m16,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: AppSize.s1,
-                                        color: ColorManager.grey),
-                                    borderRadius: BorderRadius.circular(
-                                        BorderRadiusValues.br5),
-                                  ),
-                                  child: reportCtrl.loading.value
-                                      ? const BubbleLoader()
-                                      : Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Text(reportCtrl.landFormText.value,
-                                                textAlign: TextAlign.center,
-                                                style: getSemiBoldStyle(
-                                                    color: ColorManager
-                                                        .secondary)),
-                                            const Spacer(),
-                                            Icon(
-                                              Icons.arrow_drop_down,
-                                              color: ColorManager.secondary,
-                                              size: AppSize.s30,
-                                            ),
-                                          ],
-                                        ),
-                                ))),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: AppSize.s1,
+                                            color: ColorManager.grey),
+                                        borderRadius: BorderRadius.circular(
+                                            BorderRadiusValues.br5),
+                                      ),
+                                      child: reportCtrl.loading.value
+                                          ? const BubbleLoader()
+                                          : Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Text(reportCtrl.landFormText.value,
+                                              textAlign: TextAlign.center,
+                                              style: getSemiBoldStyle(
+                                                  color: ColorManager
+                                                      .secondary)),
+                                          const Spacer(),
+                                          Icon(
+                                            Icons.arrow_drop_down,
+                                            color: ColorManager.secondary,
+                                            size: AppSize.s30,
+                                          ),
+                                        ],
+                                      ),
+                                    ))),
 
                             LabelWidget(label: "ResponsibleAuthorities".tr),
-                            Obx(() => GestureDetector(
-                                onTap: () {
-                                  showModalBottomSheet(
-                                    context: context,
-                                    builder: (ctx) => SizedBox(
-                                        height: SizeConfig.screenHeight! /
-                                            MediaSize.m2_5,
-                                        child: ListView.builder(
-                                            itemCount: reportCtrl
-                                                .responsibleAuthoritiesModel
-                                                .length,
-                                            itemBuilder: (context, index) {
-                                              return InkWell(
-                                                onTap: () {
-                                                  reportCtrl
-                                                          .responsibleId.value =
-                                                      reportCtrl
-                                                          .responsibleAuthoritiesModel[
-                                                              index]
-                                                          .id!;
-                                                  reportCtrl.responsibleText
-                                                          .value =
-                                                      reportCtrl
-                                                          .responsibleAuthoritiesModel[
-                                                              index]
-                                                          .name!;
-                                                  Navigator.pop(context);
-                                                },
-                                                child: Padding(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal:
-                                                          AppPadding.p60,
-                                                      vertical: AppPadding.p16),
-                                                  child: Container(
-                                                    alignment: Alignment.center,
-                                                    height: SizeConfig
-                                                            .screenHeight! /
-                                                        MediaSize.m12,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                BorderRadiusValues
-                                                                    .br10),
-                                                        border: Border.all(
-                                                            width: AppSize.s1,
-                                                            color: ColorManager
-                                                                .grey)),
-                                                    child: Text(
-                                                        reportCtrl
-                                                            .responsibleAuthoritiesModel[
+                            Obx(() =>
+                                GestureDetector(
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                        context: context,
+                                        builder: (ctx) =>
+                                            SizedBox(
+                                                height: SizeConfig
+                                                    .screenHeight! /
+                                                    MediaSize.m2_5,
+                                                child: ListView.builder(
+                                                    itemCount: reportCtrl
+                                                        .responsibleAuthoritiesModel
+                                                        .length,
+                                                    itemBuilder: (context,
+                                                        index) {
+                                                      return InkWell(
+                                                        onTap: () {
+                                                          reportCtrl
+                                                              .responsibleId
+                                                              .value =
+                                                          reportCtrl
+                                                              .responsibleAuthoritiesModel[
+                                                          index]
+                                                              .id!;
+                                                          reportCtrl
+                                                              .responsibleText
+                                                              .value =
+                                                          reportCtrl
+                                                              .responsibleAuthoritiesModel[
+                                                          index]
+                                                              .name!;
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Padding(
+                                                          padding: const EdgeInsets
+                                                              .symmetric(
+                                                              horizontal:
+                                                              AppPadding.p60,
+                                                              vertical: AppPadding
+                                                                  .p16),
+                                                          child: Container(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            height: SizeConfig
+                                                                .screenHeight! /
+                                                                MediaSize.m12,
+                                                            decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                    BorderRadiusValues
+                                                                        .br10),
+                                                                border: Border
+                                                                    .all(
+                                                                    width: AppSize
+                                                                        .s1,
+                                                                    color: ColorManager
+                                                                        .grey)),
+                                                            child: Text(
+                                                                reportCtrl
+                                                                    .responsibleAuthoritiesModel[
                                                                 index]
-                                                            .name!,
-                                                        style: getSemiBoldStyle(
-                                                            color: ColorManager
-                                                                .secondary)),
-                                                  ),
-                                                ),
-                                              );
-                                            })),
-                                  );
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: AppPadding.p10),
-                                  margin: const EdgeInsets.only(
-                                      right: AppMargin.m30,
-                                      left: AppMargin.m30,
-                                      top: AppMargin.m20),
-                                  alignment: Alignment.centerRight,
-                                  height:
+                                                                    .name!,
+                                                                style: getSemiBoldStyle(
+                                                                    color: ColorManager
+                                                                        .secondary)),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    })),
+                                      );
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: AppPadding.p10),
+                                      margin: const EdgeInsets.only(
+                                          right: AppMargin.m30,
+                                          left: AppMargin.m30,
+                                          top: AppMargin.m20),
+                                      alignment: Alignment.centerRight,
+                                      height:
                                       SizeConfig.screenHeight! / MediaSize.m16,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: AppSize.s1,
-                                        color: ColorManager.grey),
-                                    borderRadius: BorderRadius.circular(
-                                        BorderRadiusValues.br5),
-                                  ),
-                                  child: reportCtrl.loading.value
-                                      ? const BubbleLoader()
-                                      : Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Text(
-                                                reportCtrl
-                                                    .responsibleText.value,
-                                                textAlign: TextAlign.center,
-                                                style: getSemiBoldStyle(
-                                                    color: ColorManager
-                                                        .secondary)),
-                                            const Spacer(),
-                                            Icon(
-                                              Icons.arrow_drop_down,
-                                              color: ColorManager.secondary,
-                                              size: AppSize.s30,
-                                            ),
-                                          ],
-                                        ),
-                                ))),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: AppSize.s1,
+                                            color: ColorManager.grey),
+                                        borderRadius: BorderRadius.circular(
+                                            BorderRadiusValues.br5),
+                                      ),
+                                      child: reportCtrl.loading.value
+                                          ? const BubbleLoader()
+                                          : Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Text(
+                                              reportCtrl
+                                                  .responsibleText.value,
+                                              textAlign: TextAlign.center,
+                                              style: getSemiBoldStyle(
+                                                  color: ColorManager
+                                                      .secondary)),
+                                          const Spacer(),
+                                          Icon(
+                                            Icons.arrow_drop_down,
+                                            color: ColorManager.secondary,
+                                            size: AppSize.s30,
+                                          ),
+                                        ],
+                                      ),
+                                    ))),
                             //? divider
                             // const ReportDividerWidget(),
                             // //!Pollutant Reactivities
@@ -1755,206 +1840,232 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                             const ReportDividerWidget(),
                             //!Surface Water
                             LabelWidget(label: "Surface Water".tr),
-                            Obx(() => GestureDetector(
-                                onTap: () {
-                                  showModalBottomSheet(
-                                    context: context,
-                                    builder: (ctx) => SizedBox(
-                                        height: SizeConfig.screenHeight! /
-                                            MediaSize.m2_5,
-                                        child: ListView.builder(
-                                            itemCount: reportCtrl
-                                                .allSurfaceWater.length,
-                                            itemBuilder: (context, index) {
-                                              return InkWell(
-                                                onTap: () {
-                                                  reportCtrl
-                                                      .onTapSelectedSurface(
-                                                          ctx,
+                            Obx(() =>
+                                GestureDetector(
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                        context: context,
+                                        builder: (ctx) =>
+                                            SizedBox(
+                                                height: SizeConfig
+                                                    .screenHeight! /
+                                                    MediaSize.m2_5,
+                                                child: ListView.builder(
+                                                    itemCount: reportCtrl
+                                                        .allSurfaceWater.length,
+                                                    itemBuilder: (context,
+                                                        index) {
+                                                      return InkWell(
+                                                        onTap: () {
                                                           reportCtrl
-                                                              .allSurfaceWater[
-                                                                  index]
-                                                              .id,
-                                                          reportCtrl
-                                                              .allSurfaceWater[
-                                                                  index]
-                                                              .name);
-                                                },
-                                                child: Padding(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal:
-                                                          AppPadding.p60,
-                                                      vertical: AppPadding.p16),
-                                                  child: Container(
-                                                    alignment: Alignment.center,
-                                                    height: SizeConfig
-                                                            .screenHeight! /
-                                                        MediaSize.m12,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                BorderRadiusValues
-                                                                    .br10),
-                                                        border: Border.all(
-                                                            width: AppSize.s1,
-                                                            color: ColorManager
-                                                                .grey)),
-                                                    child: Text(
-                                                        reportCtrl
-                                                            .allSurfaceWater[
+                                                              .onTapSelectedSurface(
+                                                              ctx,
+                                                              reportCtrl
+                                                                  .allSurfaceWater[
+                                                              index]
+                                                                  .id,
+                                                              reportCtrl
+                                                                  .allSurfaceWater[
+                                                              index]
+                                                                  .name);
+                                                        },
+                                                        child: Padding(
+                                                          padding: const EdgeInsets
+                                                              .symmetric(
+                                                              horizontal:
+                                                              AppPadding.p60,
+                                                              vertical: AppPadding
+                                                                  .p16),
+                                                          child: Container(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            height: SizeConfig
+                                                                .screenHeight! /
+                                                                MediaSize.m12,
+                                                            decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                    BorderRadiusValues
+                                                                        .br10),
+                                                                border: Border
+                                                                    .all(
+                                                                    width: AppSize
+                                                                        .s1,
+                                                                    color: ColorManager
+                                                                        .grey)),
+                                                            child: Text(
+                                                                reportCtrl
+                                                                    .allSurfaceWater[
                                                                 index]
-                                                            .name,
-                                                        style: getSemiBoldStyle(
-                                                            color: ColorManager
-                                                                .secondary)),
-                                                  ),
-                                                ),
-                                              );
-                                            })),
-                                  );
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: AppPadding.p10),
-                                  margin: const EdgeInsets.only(
-                                      right: AppMargin.m30,
-                                      left: AppMargin.m30,
-                                      top: AppMargin.m20),
-                                  alignment: Alignment.centerRight,
-                                  height:
+                                                                    .name,
+                                                                style: getSemiBoldStyle(
+                                                                    color: ColorManager
+                                                                        .secondary)),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    })),
+                                      );
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: AppPadding.p10),
+                                      margin: const EdgeInsets.only(
+                                          right: AppMargin.m30,
+                                          left: AppMargin.m30,
+                                          top: AppMargin.m20),
+                                      alignment: Alignment.centerRight,
+                                      height:
                                       SizeConfig.screenHeight! / MediaSize.m16,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: AppSize.s1,
-                                        color: ColorManager.grey),
-                                    borderRadius: BorderRadius.circular(
-                                        BorderRadiusValues.br5),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Text(reportCtrl.surfaceWaterText.value,
-                                          textAlign: TextAlign.center,
-                                          style: getSemiBoldStyle(
-                                              color: ColorManager.secondary)),
-                                      const Spacer(),
-                                      Icon(
-                                        Icons.arrow_drop_down,
-                                        color: ColorManager.secondary,
-                                        size: AppSize.s30,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: AppSize.s1,
+                                            color: ColorManager.grey),
+                                        borderRadius: BorderRadius.circular(
+                                            BorderRadiusValues.br5),
                                       ),
-                                    ],
-                                  ),
-                                ))),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Text(
+                                              reportCtrl.surfaceWaterText.value,
+                                              textAlign: TextAlign.center,
+                                              style: getSemiBoldStyle(
+                                                  color: ColorManager
+                                                      .secondary)),
+                                          const Spacer(),
+                                          Icon(
+                                            Icons.arrow_drop_down,
+                                            color: ColorManager.secondary,
+                                            size: AppSize.s30,
+                                          ),
+                                        ],
+                                      ),
+                                    ))),
                             const ReportDividerWidget(),
                             //!Pollutant Place
                             LabelWidget(label: "Pollutant Places".tr),
-                            Obx(() => GestureDetector(
-                                onTap: () {
-                                  showModalBottomSheet(
-                                    context: context,
-                                    builder: (ctx) => SizedBox(
-                                        height: SizeConfig.screenHeight! /
-                                            MediaSize.m2_5,
-                                        child: ListView.builder(
-                                            itemCount: reportCtrl
-                                                .allPollutantPlace.length,
-                                            itemBuilder: (context, index) {
-                                              return InkWell(
-                                                onTap: () {
-                                                  reportCtrl.onTapSelectedPlace(
-                                                      ctx,
-                                                      reportCtrl
-                                                          .allPollutantPlace[
+                            Obx(() =>
+                                GestureDetector(
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                        context: context,
+                                        builder: (ctx) =>
+                                            SizedBox(
+                                                height: SizeConfig
+                                                    .screenHeight! /
+                                                    MediaSize.m2_5,
+                                                child: ListView.builder(
+                                                    itemCount: reportCtrl
+                                                        .allPollutantPlace
+                                                        .length,
+                                                    itemBuilder: (context,
+                                                        index) {
+                                                      return InkWell(
+                                                        onTap: () {
+                                                          reportCtrl
+                                                              .onTapSelectedPlace(
+                                                              ctx,
+                                                              reportCtrl
+                                                                  .allPollutantPlace[
                                                               index]
-                                                          .id,
-                                                      reportCtrl
-                                                          .allPollutantPlace[
+                                                                  .id,
+                                                              reportCtrl
+                                                                  .allPollutantPlace[
                                                               index]
-                                                          .name);
-                                                },
-                                                child: Padding(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal:
-                                                          AppPadding.p60,
-                                                      vertical: AppPadding.p16),
-                                                  child: Container(
-                                                    alignment: Alignment.center,
-                                                    height: SizeConfig
-                                                            .screenHeight! /
-                                                        MediaSize.m12,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                BorderRadiusValues
-                                                                    .br10),
-                                                        border: Border.all(
-                                                            width: AppSize.s1,
-                                                            color: ColorManager
-                                                                .grey)),
-                                                    child: Text(
-                                                        reportCtrl
-                                                            .allPollutantPlace[
+                                                                  .name);
+                                                        },
+                                                        child: Padding(
+                                                          padding: const EdgeInsets
+                                                              .symmetric(
+                                                              horizontal:
+                                                              AppPadding.p60,
+                                                              vertical: AppPadding
+                                                                  .p16),
+                                                          child: Container(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            height: SizeConfig
+                                                                .screenHeight! /
+                                                                MediaSize.m12,
+                                                            decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                    BorderRadiusValues
+                                                                        .br10),
+                                                                border: Border
+                                                                    .all(
+                                                                    width: AppSize
+                                                                        .s1,
+                                                                    color: ColorManager
+                                                                        .grey)),
+                                                            child: Text(
+                                                                reportCtrl
+                                                                    .allPollutantPlace[
                                                                 index]
-                                                            .name,
-                                                        style: getSemiBoldStyle(
-                                                            color: ColorManager
-                                                                .secondary)),
-                                                  ),
-                                                ),
-                                              );
-                                            })),
-                                  );
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: AppPadding.p10),
-                                  margin: const EdgeInsets.only(
-                                      right: AppMargin.m30,
-                                      left: AppMargin.m30,
-                                      top: AppMargin.m20),
-                                  alignment: Alignment.centerRight,
-                                  height:
+                                                                    .name,
+                                                                style: getSemiBoldStyle(
+                                                                    color: ColorManager
+                                                                        .secondary)),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    })),
+                                      );
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: AppPadding.p10),
+                                      margin: const EdgeInsets.only(
+                                          right: AppMargin.m30,
+                                          left: AppMargin.m30,
+                                          top: AppMargin.m20),
+                                      alignment: Alignment.centerRight,
+                                      height:
                                       SizeConfig.screenHeight! / MediaSize.m16,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: AppSize.s1,
-                                        color: ColorManager.grey),
-                                    borderRadius: BorderRadius.circular(
-                                        BorderRadiusValues.br5),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Text(reportCtrl.pollutantPlaceText.value,
-                                          textAlign: TextAlign.center,
-                                          style: getSemiBoldStyle(
-                                              color: ColorManager.secondary)),
-                                      const Spacer(),
-                                      Icon(
-                                        Icons.arrow_drop_down,
-                                        color: ColorManager.secondary,
-                                        size: AppSize.s30,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: AppSize.s1,
+                                            color: ColorManager.grey),
+                                        borderRadius: BorderRadius.circular(
+                                            BorderRadiusValues.br5),
                                       ),
-                                    ],
-                                  ),
-                                ))),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Text(reportCtrl.pollutantPlaceText
+                                              .value,
+                                              textAlign: TextAlign.center,
+                                              style: getSemiBoldStyle(
+                                                  color: ColorManager
+                                                      .secondary)),
+                                          const Spacer(),
+                                          Icon(
+                                            Icons.arrow_drop_down,
+                                            color: ColorManager.secondary,
+                                            size: AppSize.s30,
+                                          ),
+                                        ],
+                                      ),
+                                    ))),
                             //? divider
 
                             const ReportDividerWidget(),
                             LabelWidget(label: "connotations of pollution".tr),
                             Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 30),
+                              const EdgeInsets.symmetric(horizontal: 30),
                               child: MultiSelectDialogField(
                                 listType: MultiSelectListType.LIST,
                                 chipDisplay: MultiSelectChipDisplay(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(4)),
                                   textStyle:
-                                      const TextStyle(color: Colors.white),
+                                  const TextStyle(color: Colors.white),
                                   chipColor: ColorManager.primary,
                                 ),
                                 decoration: BoxDecoration(
@@ -1978,8 +2089,8 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                 ),
                                 items: reportCtrl.semanticPollution
                                     .map((player) =>
-                                        MultiSelectItem<CitiesModel>(
-                                            player, player.name))
+                                    MultiSelectItem<CitiesModel>(
+                                        player, player.name))
                                     .toList(),
                                 selectedColor: Colors.blue,
                                 searchable: true,
@@ -1991,7 +2102,8 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                         .add(element.id);
                                     print(element.id);
                                     reportCtrl.selectedPlayerValue.value =
-                                        "${reportCtrl.selectedPlayerValue.value} " +
+                                        "${reportCtrl.selectedPlayerValue
+                                            .value} " +
                                             element.name;
                                   });
                                 },
@@ -2152,34 +2264,36 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                             //         ],
                             //       ),
                             //     )),
-                            Obx(() => reportCtrl.pollution.isNotEmpty
+                            Obx(() =>
+                            reportCtrl.pollution.isNotEmpty
                                 ? SizedBox(
-                                    height: 50,
-                                    child: ListView.builder(
-                                      itemCount: reportCtrl.pollution.length,
-                                      physics: const BouncingScrollPhysics(),
-                                      shrinkWrap: true,
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (_, index) => Padding(
-                                        padding: const EdgeInsets.all(8),
-                                        child: Container(
-                                          width: 250,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: ColorManager.secondary
-                                                  .withOpacity(
-                                                      OpicityValue.o3)),
-                                          child: Center(
-                                            child: Text(
-                                                reportCtrl.pollution[index],
-                                                overflow:
-                                                    TextOverflow.ellipsis),
-                                          ),
+                              height: 50,
+                              child: ListView.builder(
+                                itemCount: reportCtrl.pollution.length,
+                                physics: const BouncingScrollPhysics(),
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (_, index) =>
+                                    Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Container(
+                                        width: 250,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                            BorderRadius.circular(4),
+                                            color: ColorManager.primary),
+                                        child: Center(
+                                          child: Text(
+                                              reportCtrl.pollution[index],
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                              overflow:
+                                              TextOverflow.ellipsis),
                                         ),
                                       ),
                                     ),
-                                  )
+                              ),
+                            )
                                 : SizedBox()),
                             const ReportDividerWidget(),
                             LabelWidget(
@@ -2188,131 +2302,168 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                 onTap: () {
                                   showModalBottomSheet(
                                       context: context,
-                                      builder: (ctx) => SizedBox(
+                                      builder: (ctx) =>
+                                          SizedBox(
                                             height: SizeConfig.screenHeight! /
                                                 MediaSize.m2_5,
                                             child: Obx(() =>
-                                                reportCtrl.surroundedMediums
-                                                        .isEmpty
-                                                    ? Center(
-                                                        child:
-                                                            CircularProgressIndicator(),
-                                                      )
-                                                    : ListView.builder(
-                                                        itemCount: reportCtrl
-                                                            .surroundedMediums
-                                                            .length,
-                                                        itemBuilder:
-                                                            (context, index) {
-                                                          return InkWell(
-                                                            onTap: () {
-                                                              reportCtrl
-                                                                      .surroundedMediumsText
-                                                                      .value =
-                                                                  reportCtrl
-                                                                      .surroundedMediums[
-                                                                          index]
-                                                                      .name;
-                                                              reportCtrl
-                                                                      .surroundedMediumsId
-                                                                      .value =
-                                                                  reportCtrl
-                                                                      .surroundedMediums[
-                                                                          index]
-                                                                      .id;
-                                                              Navigator.pop(
-                                                                  context);
-                                                            },
-                                                            child: Padding(
-                                                              padding: const EdgeInsets
-                                                                      .symmetric(
-                                                                  horizontal:
-                                                                      AppPadding
-                                                                          .p60,
-                                                                  vertical:
-                                                                      AppPadding
-                                                                          .p16),
-                                                              child: Container(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                height: SizeConfig
-                                                                        .screenHeight! /
-                                                                    MediaSize
-                                                                        .m12,
-                                                                decoration: BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(BorderRadiusValues
-                                                                            .br10),
-                                                                    border: Border.all(
-                                                                        width: AppSize
-                                                                            .s1,
-                                                                        color: ColorManager
-                                                                            .grey)),
-                                                                child: Row(
-                                                                  children: [
-                                                                    Obx(() => Checkbox(
-                                                                        activeColor: ColorManager.primary,
-                                                                        value: reportCtrl.surroundedMediumsList[index],
-                                                                        onChanged: (v) {
-                                                                          reportCtrl.surroundedMediumsList[index] =
-                                                                              v;
+                                            reportCtrl.surroundedMediums
+                                                .isEmpty
+                                                ? Center(
+                                              child:
+                                              CircularProgressIndicator(),
+                                            )
+                                                : ListView.builder(
+                                                itemCount: reportCtrl
+                                                    .surroundedMediums
+                                                    .length,
+                                                itemBuilder:
+                                                    (context, index) {
+                                                  return InkWell(
+                                                    onTap: () {
+                                                      reportCtrl
+                                                          .surroundedMediumsText
+                                                          .value =
+                                                          reportCtrl
+                                                              .surroundedMediums[
+                                                          index]
+                                                              .name;
+                                                      reportCtrl
+                                                          .surroundedMediumsId
+                                                          .value =
+                                                          reportCtrl
+                                                              .surroundedMediums[
+                                                          index]
+                                                              .id;
+                                                      Navigator.pop(
+                                                          context);
+                                                    },
+                                                    child: Padding(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal:
+                                                          AppPadding
+                                                              .p60,
+                                                          vertical:
+                                                          AppPadding
+                                                              .p16),
+                                                      child: Container(
+                                                        alignment:
+                                                        Alignment
+                                                            .center,
+                                                        height: SizeConfig
+                                                            .screenHeight! /
+                                                            MediaSize
+                                                                .m12,
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                                BorderRadiusValues
+                                                                    .br10),
+                                                            border: Border.all(
+                                                                width: AppSize
+                                                                    .s1,
+                                                                color: ColorManager
+                                                                    .grey)),
+                                                        child: Row(
+                                                          children: [
+                                                            Obx(() =>
+                                                                Checkbox(
+                                                                    activeColor: ColorManager
+                                                                        .primary,
+                                                                    value: reportCtrl
+                                                                        .surroundedMediumsList[index],
+                                                                    onChanged: (
+                                                                        v) {
+                                                                      reportCtrl
+                                                                          .surroundedMediumsList[index] =
+                                                                          v;
+                                                                      reportCtrl
+                                                                          .surroundedMediumsId
+                                                                          .value =
                                                                           reportCtrl
-                                                                              .surroundedMediumsId
-                                                                              .value = reportCtrl.surroundedMediums[index].id;
-                                                                          reportCtrl.addsurroundedMediumsList(
-                                                                              index,
-                                                                              reportCtrl.surroundedMediums[index].id,
-                                                                              reportCtrl.surroundedMediums[index].name);
-                                                                          if (reportCtrl.surroundedMediums[index].name ==
-                                                                              "مياه") {
-                                                                            reportCtrl.water.value =
-                                                                                reportCtrl.surroundedMediumsList[index];
-                                                                          } else if (reportCtrl.surroundedMediums[index].name ==
-                                                                              "تربه") {
-                                                                            reportCtrl.earth.value =
-                                                                                reportCtrl.surroundedMediumsList[index];
-                                                                          } else if (reportCtrl.surroundedMediums[index].name ==
-                                                                              "هواء") {
-                                                                            reportCtrl.air.value =
-                                                                                reportCtrl.surroundedMediumsList[index];
-                                                                          }
+                                                                              .surroundedMediums[index]
+                                                                              .id;
+                                                                      reportCtrl
+                                                                          .addsurroundedMediumsList(
+                                                                          index,
+                                                                          reportCtrl
+                                                                              .surroundedMediums[index]
+                                                                              .id,
+                                                                          reportCtrl
+                                                                              .surroundedMediums[index]
+                                                                              .name);
+                                                                      if (reportCtrl
+                                                                          .surroundedMediums[index]
+                                                                          .name ==
+                                                                          "مياه") {
+                                                                        reportCtrl
+                                                                            .water
+                                                                            .value =
+                                                                        reportCtrl
+                                                                            .surroundedMediumsList[index];
+                                                                      } else
+                                                                      if (reportCtrl
+                                                                          .surroundedMediums[index]
+                                                                          .name ==
+                                                                          "تربه") {
+                                                                        reportCtrl
+                                                                            .earth
+                                                                            .value =
+                                                                        reportCtrl
+                                                                            .surroundedMediumsList[index];
+                                                                      } else
+                                                                      if (reportCtrl
+                                                                          .surroundedMediums[index]
+                                                                          .name ==
+                                                                          "هواء") {
+                                                                        reportCtrl
+                                                                            .air
+                                                                            .value =
+                                                                        reportCtrl
+                                                                            .surroundedMediumsList[index];
+                                                                      }
 
-                                                                          print(
-                                                                              v);
-                                                                        })),
-                                                                    Flexible(
-                                                                      child: Text(
-                                                                          reportCtrl
-                                                                              .surroundedMediums[
-                                                                                  index]
-                                                                              .name,
-                                                                          style:
-                                                                              getSemiBoldStyle(color: ColorManager.secondary)),
-                                                                    ),
-                                                                    Spacer(),
-                                                                    GestureDetector(
-                                                                      onTap:
-                                                                          () {
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                      },
-                                                                      child: Container(
-                                                                          width: 25,
-                                                                          height: 25,
-                                                                          color: ColorManager.primary,
-                                                                          child: Icon(
-                                                                            Icons.add,
-                                                                            color:
-                                                                                Colors.white,
-                                                                          )),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ),
+                                                                      print(
+                                                                          v);
+                                                                    })),
+                                                            Flexible(
+                                                              child: Text(
+                                                                  reportCtrl
+                                                                      .surroundedMediums[
+                                                                  index]
+                                                                      .name,
+                                                                  style:
+                                                                  getSemiBoldStyle(
+                                                                      color: ColorManager
+                                                                          .secondary)),
                                                             ),
-                                                          );
-                                                        })),
+                                                            Spacer(),
+                                                            GestureDetector(
+                                                              onTap:
+                                                                  () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                              child: Container(
+                                                                  width: 25,
+                                                                  height: 25,
+                                                                  color: ColorManager
+                                                                      .primary,
+                                                                  child: Icon(
+                                                                    Icons.add,
+                                                                    color:
+                                                                    Colors
+                                                                        .white,
+                                                                  )),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  );
+                                                })),
                                           ));
                                 },
                                 child: Container(
@@ -2324,7 +2475,7 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                       top: AppMargin.m20),
                                   alignment: Alignment.centerRight,
                                   height:
-                                      SizeConfig.screenHeight! / MediaSize.m16,
+                                  SizeConfig.screenHeight! / MediaSize.m16,
                                   decoration: BoxDecoration(
                                     border: Border.all(
                                         width: AppSize.s1,
@@ -2334,14 +2485,16 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                   ),
                                   child: Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
+                                    MainAxisAlignment.spaceAround,
                                     children: [
-                                      Obx(() => Text(
-                                          reportCtrl
-                                              .surroundedMediumsText.value,
-                                          textAlign: TextAlign.center,
-                                          style: getSemiBoldStyle(
-                                              color: ColorManager.secondary))),
+                                      Obx(() =>
+                                          Text(
+                                              reportCtrl
+                                                  .surroundedMediumsText.value,
+                                              textAlign: TextAlign.center,
+                                              style: getSemiBoldStyle(
+                                                  color: ColorManager
+                                                      .secondary))),
                                       const Spacer(),
                                       Icon(
                                         Icons.arrow_drop_down,
@@ -2351,36 +2504,38 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                     ],
                                   ),
                                 )),
-                            Obx(() => reportCtrl.mediumPollution.isNotEmpty
+                            Obx(() =>
+                            reportCtrl.mediumPollution.isNotEmpty
                                 ? SizedBox(
-                                    height: 50,
-                                    child: ListView.builder(
-                                      itemCount:
-                                          reportCtrl.mediumPollution.length,
-                                      physics: const BouncingScrollPhysics(),
-                                      shrinkWrap: true,
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (_, index) => Padding(
-                                        padding: const EdgeInsets.all(8),
-                                        child: Container(
-                                          width: 100,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: ColorManager.secondary
-                                                  .withOpacity(
-                                                      OpicityValue.o3)),
-                                          child: Center(
-                                            child: Text(
-                                                reportCtrl
-                                                    .mediumPollution[index],
-                                                overflow:
-                                                    TextOverflow.ellipsis),
-                                          ),
+                              height: 50,
+                              child: ListView.builder(
+                                itemCount:
+                                reportCtrl.mediumPollution.length,
+                                physics: const BouncingScrollPhysics(),
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (_, index) =>
+                                    Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Container(
+                                        width: 100,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                            BorderRadius.circular(4),
+                                            color: ColorManager.primary),
+                                        child: Center(
+                                          child: Text(
+                                              reportCtrl
+                                                  .mediumPollution[index],
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                              overflow:
+                                              TextOverflow.ellipsis),
                                         ),
                                       ),
                                     ),
-                                  )
+                              ),
+                            )
                                 : SizedBox()),
                             const ReportDividerWidget(),
                             LabelWidget(label: "The nature of the area".tr),
@@ -2388,62 +2543,68 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                 onTap: () {
                                   showModalBottomSheet(
                                     context: context,
-                                    builder: (ctx) => SizedBox(
-                                        height: SizeConfig.screenHeight! /
-                                            MediaSize.m2_5,
-                                        child: ListView.builder(
-                                            itemCount: reportCtrl
-                                                .natureOfEpicenter.length,
-                                            itemBuilder: (context, index) {
-                                              return InkWell(
-                                                onTap: () {
-                                                  reportCtrl
+                                    builder: (ctx) =>
+                                        SizedBox(
+                                            height: SizeConfig.screenHeight! /
+                                                MediaSize.m2_5,
+                                            child: ListView.builder(
+                                                itemCount: reportCtrl
+                                                    .natureOfEpicenter.length,
+                                                itemBuilder: (context, index) {
+                                                  return InkWell(
+                                                    onTap: () {
+                                                      reportCtrl
                                                           .natureOfEpicenterText
                                                           .value =
+                                                          reportCtrl
+                                                              .natureOfEpicenter[
+                                                          index]
+                                                              .name;
                                                       reportCtrl
-                                                          .natureOfEpicenter[
-                                                              index]
-                                                          .name;
-                                                  reportCtrl.natureOfEpicenterId
+                                                          .natureOfEpicenterId
                                                           .value =
-                                                      reportCtrl
-                                                          .natureOfEpicenter[
-                                                              index]
-                                                          .id;
-                                                  Navigator.pop(context);
-                                                },
-                                                child: Padding(
-                                                  padding: const EdgeInsets
+                                                          reportCtrl
+                                                              .natureOfEpicenter[
+                                                          index]
+                                                              .id;
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Padding(
+                                                      padding: const EdgeInsets
                                                           .symmetric(
-                                                      horizontal:
+                                                          horizontal:
                                                           AppPadding.p60,
-                                                      vertical: AppPadding.p16),
-                                                  child: Container(
-                                                    alignment: Alignment.center,
-                                                    height: SizeConfig
+                                                          vertical: AppPadding
+                                                              .p16),
+                                                      child: Container(
+                                                        alignment: Alignment
+                                                            .center,
+                                                        height: SizeConfig
                                                             .screenHeight! /
-                                                        MediaSize.m12,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
+                                                            MediaSize.m12,
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                            BorderRadius
+                                                                .circular(
                                                                 BorderRadiusValues
                                                                     .br10),
-                                                        border: Border.all(
-                                                            width: AppSize.s1,
-                                                            color: ColorManager
-                                                                .grey)),
-                                                    child: Text(
-                                                        reportCtrl
-                                                            .natureOfEpicenter[
-                                                                index]
-                                                            .name,
-                                                        style: getSemiBoldStyle(
-                                                            color: ColorManager
-                                                                .secondary)),
-                                                  ),
-                                                ),
-                                              );
-                                            })),
+                                                            border: Border.all(
+                                                                width: AppSize
+                                                                    .s1,
+                                                                color: ColorManager
+                                                                    .grey)),
+                                                        child: Text(
+                                                            reportCtrl
+                                                                .natureOfEpicenter[
+                                                            index]
+                                                                .name,
+                                                            style: getSemiBoldStyle(
+                                                                color: ColorManager
+                                                                    .secondary)),
+                                                      ),
+                                                    ),
+                                                  );
+                                                })),
                                   );
                                 },
                                 child: Container(
@@ -2455,7 +2616,7 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                       top: AppMargin.m20),
                                   alignment: Alignment.centerRight,
                                   height:
-                                      SizeConfig.screenHeight! / MediaSize.m16,
+                                  SizeConfig.screenHeight! / MediaSize.m16,
                                   decoration: BoxDecoration(
                                     border: Border.all(
                                         width: AppSize.s1,
@@ -2465,18 +2626,19 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                   ),
                                   child: Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
+                                    MainAxisAlignment.spaceAround,
                                     children: [
-                                      Obx(() => reportCtrl
-                                              .natureOfEpicenterText.isEmpty
+                                      Obx(() =>
+                                      reportCtrl
+                                          .natureOfEpicenterText.isEmpty
                                           ? const BubbleLoader()
                                           : Text(
-                                              reportCtrl
-                                                  .natureOfEpicenterText.value,
-                                              textAlign: TextAlign.center,
-                                              style: getSemiBoldStyle(
-                                                  color:
-                                                      ColorManager.secondary))),
+                                          reportCtrl
+                                              .natureOfEpicenterText.value,
+                                          textAlign: TextAlign.center,
+                                          style: getSemiBoldStyle(
+                                              color:
+                                              ColorManager.secondary))),
                                       const Spacer(),
                                       Icon(
                                         Icons.arrow_drop_down,
@@ -2565,111 +2727,128 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                             const ReportDividerWidget(),
                             //!location
                             LabelWidget(label: "Location".tr),
-                            Obx(() => GestureDetector(
-                                onTap: () {
-                                  showModalBottomSheet(
-                                    context: context,
-                                    builder: (ctx) => SizedBox(
-                                        height: SizeConfig.screenHeight! /
-                                            MediaSize.m2_5,
-                                        child: ListView.builder(
-                                            itemCount:
-                                                reportCtrl.allregion.length,
-                                            itemBuilder: (context, index) {
-                                              return InkWell(
-                                                onTap: () {
-                                                  reportCtrl.regionId.value =
-                                                      reportCtrl
-                                                          .allregion[index].id;
-                                                  reportCtrl.regionText.value =
-                                                      reportCtrl
-                                                          .allregion[index]
-                                                          .name;
-                                                  reportCtrl.getCities();
-                                                  Navigator.pop(context);
-                                                  // reportCtrl.onTapSelectedcity(
-                                                  //     ctx,
-                                                  //     reportCtrl.allGovernorate[index].id,
-                                                  //     reportCtrl.allGovernorate[index].name);
-                                                },
-                                                child: Padding(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal:
-                                                          AppPadding.p60,
-                                                      vertical: AppPadding.p16),
-                                                  child: Container(
-                                                    alignment: Alignment.center,
-                                                    height: SizeConfig
-                                                            .screenHeight! /
-                                                        MediaSize.m12,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                BorderRadiusValues
-                                                                    .br10),
-                                                        border: Border.all(
-                                                            width: AppSize.s1,
-                                                            color: ColorManager
-                                                                .grey)),
-                                                    child: Text(
-                                                        reportCtrl
-                                                            .allregion[index]
-                                                            .name,
-                                                        style: getSemiBoldStyle(
-                                                            color: ColorManager
-                                                                .secondary)),
-                                                  ),
-                                                ),
-                                              );
-                                            })),
-                                  );
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: AppPadding.p10),
-                                  margin: const EdgeInsets.only(
-                                      right: AppMargin.m30,
-                                      left: AppMargin.m30,
-                                      top: AppMargin.m20),
-                                  alignment: Alignment.centerRight,
-                                  height:
-                                      SizeConfig.screenHeight! / MediaSize.m16,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: AppSize.s1,
-                                        color: ColorManager.grey),
-                                    borderRadius: BorderRadius.circular(
-                                        BorderRadiusValues.br5),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Text(reportCtrl.regionText.value,
-                                          textAlign: TextAlign.center,
-                                          style: getSemiBoldStyle(
-                                              color: ColorManager.secondary)),
-                                      const Spacer(),
-                                      Icon(
-                                        Icons.arrow_drop_down,
-                                        color: ColorManager.secondary,
-                                        size: AppSize.s30,
-                                      ),
-                                    ],
-                                  ),
-                                ))),
-                            Obx(() => reportCtrl.regionId.value != 0
-                                ? GestureDetector(
+                            Obx(() =>
+                                GestureDetector(
                                     onTap: () {
                                       showModalBottomSheet(
                                         context: context,
-                                        builder: (ctx) => SizedBox(
+                                        builder: (ctx) =>
+                                            SizedBox(
+                                                height: SizeConfig
+                                                    .screenHeight! /
+                                                    MediaSize.m2_5,
+                                                child: ListView.builder(
+                                                    itemCount:
+                                                    reportCtrl.allregion.length,
+                                                    itemBuilder: (context,
+                                                        index) {
+                                                      return InkWell(
+                                                        onTap: () {
+                                                          reportCtrl.regionId
+                                                              .value =
+                                                              reportCtrl
+                                                                  .allregion[index]
+                                                                  .id;
+                                                          reportCtrl.regionText
+                                                              .value =
+                                                              reportCtrl
+                                                                  .allregion[index]
+                                                                  .name;
+                                                          reportCtrl
+                                                              .getCities();
+                                                          Navigator.pop(
+                                                              context);
+                                                          // reportCtrl.onTapSelectedcity(
+                                                          //     ctx,
+                                                          //     reportCtrl.allGovernorate[index].id,
+                                                          //     reportCtrl.allGovernorate[index].name);
+                                                        },
+                                                        child: Padding(
+                                                          padding: const EdgeInsets
+                                                              .symmetric(
+                                                              horizontal:
+                                                              AppPadding.p60,
+                                                              vertical: AppPadding
+                                                                  .p16),
+                                                          child: Container(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            height: SizeConfig
+                                                                .screenHeight! /
+                                                                MediaSize.m12,
+                                                            decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                    BorderRadiusValues
+                                                                        .br10),
+                                                                border: Border
+                                                                    .all(
+                                                                    width: AppSize
+                                                                        .s1,
+                                                                    color: ColorManager
+                                                                        .grey)),
+                                                            child: Text(
+                                                                reportCtrl
+                                                                    .allregion[index]
+                                                                    .name,
+                                                                style: getSemiBoldStyle(
+                                                                    color: ColorManager
+                                                                        .secondary)),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    })),
+                                      );
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: AppPadding.p10),
+                                      margin: const EdgeInsets.only(
+                                          right: AppMargin.m30,
+                                          left: AppMargin.m30,
+                                          top: AppMargin.m20),
+                                      alignment: Alignment.centerRight,
+                                      height:
+                                      SizeConfig.screenHeight! / MediaSize.m16,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: AppSize.s1,
+                                            color: ColorManager.grey),
+                                        borderRadius: BorderRadius.circular(
+                                            BorderRadiusValues.br5),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Text(reportCtrl.regionText.value,
+                                              textAlign: TextAlign.center,
+                                              style: getSemiBoldStyle(
+                                                  color: ColorManager
+                                                      .secondary)),
+                                          const Spacer(),
+                                          Icon(
+                                            Icons.arrow_drop_down,
+                                            color: ColorManager.secondary,
+                                            size: AppSize.s30,
+                                          ),
+                                        ],
+                                      ),
+                                    ))),
+                            Obx(() =>
+                            reportCtrl.regionId.value != 0
+                                ? GestureDetector(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (ctx) =>
+                                        SizedBox(
                                             height: SizeConfig.screenHeight! /
                                                 MediaSize.m2_5,
                                             child: ListView.builder(
                                                 itemCount:
-                                                    reportCtrl.cities.length,
+                                                reportCtrl.cities.length,
                                                 itemBuilder: (context, index) {
                                                   return InkWell(
                                                     onTap: () {
@@ -2677,7 +2856,7 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                                           reportCtrl
                                                               .cities[index].id;
                                                       reportCtrl
-                                                              .cityText.value =
+                                                          .cityText.value =
                                                           reportCtrl
                                                               .cities[index]
                                                               .name;
@@ -2685,28 +2864,29 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                                     },
                                                     child: Padding(
                                                       padding: const EdgeInsets
-                                                              .symmetric(
+                                                          .symmetric(
                                                           horizontal:
-                                                              AppPadding.p60,
+                                                          AppPadding.p60,
                                                           vertical:
-                                                              AppPadding.p16),
+                                                          AppPadding.p16),
                                                       child: Container(
                                                         alignment:
-                                                            Alignment.center,
+                                                        Alignment.center,
                                                         height: SizeConfig
-                                                                .screenHeight! /
+                                                            .screenHeight! /
                                                             MediaSize.m12,
                                                         decoration: BoxDecoration(
                                                             borderRadius:
-                                                                BorderRadius.circular(
-                                                                    BorderRadiusValues
-                                                                        .br10),
+                                                            BorderRadius
+                                                                .circular(
+                                                                BorderRadiusValues
+                                                                    .br10),
                                                             border: Border.all(
                                                                 width:
-                                                                    AppSize.s1,
+                                                                AppSize.s1,
                                                                 color:
-                                                                    ColorManager
-                                                                        .grey)),
+                                                                ColorManager
+                                                                    .grey)),
                                                         child: Text(
                                                             reportCtrl
                                                                 .cities[index]
@@ -2718,43 +2898,43 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                                     ),
                                                   );
                                                 })),
-                                      );
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: AppPadding.p10),
-                                      margin: const EdgeInsets.only(
-                                          right: AppMargin.m30,
-                                          left: AppMargin.m30,
-                                          top: AppMargin.m20),
-                                      alignment: Alignment.centerRight,
-                                      height: SizeConfig.screenHeight! /
-                                          MediaSize.m16,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                            width: AppSize.s1,
-                                            color: ColorManager.grey),
-                                        borderRadius: BorderRadius.circular(
-                                            BorderRadiusValues.br5),
+                                  );
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: AppPadding.p10),
+                                  margin: const EdgeInsets.only(
+                                      right: AppMargin.m30,
+                                      left: AppMargin.m30,
+                                      top: AppMargin.m20),
+                                  alignment: Alignment.centerRight,
+                                  height: SizeConfig.screenHeight! /
+                                      MediaSize.m16,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: AppSize.s1,
+                                        color: ColorManager.grey),
+                                    borderRadius: BorderRadius.circular(
+                                        BorderRadiusValues.br5),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Text(reportCtrl.cityText.value,
+                                          textAlign: TextAlign.center,
+                                          style: getSemiBoldStyle(
+                                              color:
+                                              ColorManager.secondary)),
+                                      const Spacer(),
+                                      Icon(
+                                        Icons.arrow_drop_down,
+                                        color: ColorManager.secondary,
+                                        size: AppSize.s30,
                                       ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          Text(reportCtrl.cityText.value,
-                                              textAlign: TextAlign.center,
-                                              style: getSemiBoldStyle(
-                                                  color:
-                                                      ColorManager.secondary)),
-                                          const Spacer(),
-                                          Icon(
-                                            Icons.arrow_drop_down,
-                                            color: ColorManager.secondary,
-                                            size: AppSize.s30,
-                                          ),
-                                        ],
-                                      ),
-                                    ))
+                                    ],
+                                  ),
+                                ))
                                 : SizedBox()),
                             const ReportDividerWidget(),
                             //!Industrial Activities
@@ -2806,37 +2986,37 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                             //         },
                             //       ),
                             //     )),
-                            Obx(() => reportCtrl.industralActivity.isNotEmpty
-                                ? SizedBox(
-                                    height: 50,
-                                    child: ListView.builder(
-                                      itemCount:
-                                          reportCtrl.industralActivity.length,
-                                      physics: const BouncingScrollPhysics(),
-                                      shrinkWrap: true,
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (_, index) => Padding(
-                                        padding: const EdgeInsets.all(8),
-                                        child: Container(
-                                          width: 250,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: ColorManager.secondary
-                                                  .withOpacity(
-                                                      OpicityValue.o3)),
-                                          child: Center(
-                                            child: Text(
-                                                reportCtrl
-                                                    .industralActivity[index],
-                                                overflow:
-                                                    TextOverflow.ellipsis),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                : SizedBox()),
+                            // Obx(() => reportCtrl.industralActivity.isNotEmpty
+                            //     ? SizedBox(
+                            //         height: 50,
+                            //         child: ListView.builder(
+                            //           itemCount:
+                            //               reportCtrl.industralActivity.length,
+                            //           physics: const BouncingScrollPhysics(),
+                            //           shrinkWrap: true,
+                            //           scrollDirection: Axis.horizontal,
+                            //           itemBuilder: (_, index) => Padding(
+                            //             padding: const EdgeInsets.all(8),
+                            //             child: Container(
+                            //               width: 250,
+                            //               decoration: BoxDecoration(
+                            //                   borderRadius:
+                            //                       BorderRadius.circular(10),
+                            //                   color: ColorManager.secondary
+                            //                       .withOpacity(
+                            //                           OpicityValue.o3)),
+                            //               child: Center(
+                            //                 child: Text(
+                            //                     reportCtrl
+                            //                         .industralActivity[index],
+                            //                     overflow:
+                            //                         TextOverflow.ellipsis),
+                            //               ),
+                            //             ),
+                            //           ),
+                            //         ),
+                            //       )
+                            //     : SizedBox()),
                             // const ReportIndustrialActivitiesWidget(),
                             //? divider
                             // const ReportDividerWidget(),
@@ -2889,178 +3069,389 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                             //     )),
                             // const ReportIndustrialPolluationSourceWidget(),
                             //? divider
-                            const ReportDividerWidget(),
+                            // const ReportDividerWidget(),
                             //!Polluation Source
                             // const ReportPolluationSourcesWidget(),
-                            Obx(() => Padding(
+                            // Obx(() => Padding(
+                            //       padding: const EdgeInsets.symmetric(
+                            //           horizontal: 30),
+                            //       child: MultiSelectDialogField(
+                            //         confirmText: Text(
+                            //           'ok'.tr,
+                            //           style: getSemiBoldStyle(
+                            //               color: ColorManager.secondary),
+                            //           overflow: TextOverflow.fade,
+                            //         ),
+                            //         cancelText: Text(
+                            //           'cancel'.tr,
+                            //           style: getSemiBoldStyle(
+                            //               color: ColorManager.secondary),
+                            //           overflow: TextOverflow.fade,
+                            //         ),
+                            //         items: reportCtrl.itemsPolluationSources,
+                            //         title: reportCtrl.loading.value == true
+                            //             ? const BubbleLoader()
+                            //             : Text("polluted medium".tr),
+                            //         selectedColor: ColorManager.secondary,
+                            //         decoration: BoxDecoration(
+                            //           color: ColorManager.secondary
+                            //               .withOpacity(OpicityValue.o1),
+                            //           borderRadius: const BorderRadius.all(
+                            //               Radius.circular(
+                            //                   BorderRadiusValues.br10)),
+                            //           border: Border.all(
+                            //             color: ColorManager.secondary,
+                            //             width: AppSize.s2,
+                            //           ),
+                            //         ),
+                            //         buttonIcon: Icon(
+                            //           Icons.list,
+                            //           color: ColorManager.secondary,
+                            //         ),
+                            //         buttonText: Text(
+                            //           "polluted medium".tr,
+                            //           style: getSemiBoldStyle(
+                            //               color: ColorManager.secondary),
+                            //         ),
+                            //         onConfirm:
+                            //             (List<PolluationSourcesModel> results) {
+                            //           reportCtrl
+                            //               .getSelectedDataPolluationSources(
+                            //                   results);
+                            //         },
+                            //       ),
+                            //     )),
+                            LabelWidget(label: "polluted medium".tr),
+
+                            Obx(() =>
+                                Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 30),
                                   child: MultiSelectDialogField(
-                                    confirmText: Text(
-                                      'ok'.tr,
-                                      style: getSemiBoldStyle(
-                                          color: ColorManager.secondary),
-                                      overflow: TextOverflow.fade,
+                                    listType: MultiSelectListType.LIST,
+                                    chipDisplay: MultiSelectChipDisplay(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(4)),
+                                      textStyle:
+                                      const TextStyle(color: Colors.white),
+                                      chipColor: ColorManager.primary,
                                     ),
-                                    cancelText: Text(
-                                      'cancel'.tr,
-                                      style: getSemiBoldStyle(
-                                          color: ColorManager.secondary),
-                                      overflow: TextOverflow.fade,
-                                    ),
-                                    items: reportCtrl.itemsPolluationSources,
-                                    title: reportCtrl.loading.value == true
-                                        ? const BubbleLoader()
-                                        : Text("polluted medium".tr),
-                                    selectedColor: ColorManager.secondary,
                                     decoration: BoxDecoration(
-                                      color: ColorManager.secondary
-                                          .withOpacity(OpicityValue.o1),
+                                      color: Colors.blue.withOpacity(0.1),
                                       borderRadius: const BorderRadius.all(
-                                          Radius.circular(
-                                              BorderRadiusValues.br10)),
+                                          Radius.circular(10)),
                                       border: Border.all(
-                                        color: ColorManager.secondary,
-                                        width: AppSize.s2,
+                                        color: Colors.grey,
                                       ),
                                     ),
-                                    buttonIcon: Icon(
-                                      Icons.list,
-                                      color: ColorManager.secondary,
+                                    buttonIcon: const Icon(
+                                      Icons.arrow_drop_down_sharp,
+                                      color: Colors.grey,
                                     ),
                                     buttonText: Text(
-                                      "polluted medium".tr,
-                                      style: getSemiBoldStyle(
-                                          color: ColorManager.secondary),
+                                      reportCtrl.medium_pollutionText.value,
+                                      style: TextStyle(
+                                        color: ColorManager.secondary,
+                                        fontSize: 16,
+                                      ),
                                     ),
-                                    onConfirm:
-                                        (List<PolluationSourcesModel> results) {
-                                      reportCtrl
-                                          .getSelectedDataPolluationSources(
-                                              results);
+                                    items: reportCtrl.medium_pollution
+                                        .map((player) =>
+                                        MultiSelectItem<CitiesModel>(
+                                            player, player.name))
+                                        .toList(),
+                                    selectedColor: Colors.blue,
+                                    searchable: true,
+                                    onConfirm: (results) {
+                                      reportCtrl.selectedPlayer = results;
+                                      reportCtrl.selectedPlayerValue.value = "";
+                                      reportCtrl.selectedPlayer
+                                          .forEach((element) {
+                                        reportCtrl.listmedium_pollution
+                                            .add(element.id);
+                                        print(element.id);
+                                        reportCtrl.selectedPlayerValue.value =
+                                            "${reportCtrl.selectedPlayerValue
+                                                .value} " +
+                                                element.name;
+                                      });
                                     },
                                   ),
+                                  // MultiSelectDialogField(
+                                  //   confirmText: Text(
+                                  //     'ok'.tr,
+                                  //     style: getSemiBoldStyle(
+                                  //         color: ColorManager.secondary),
+                                  //     overflow: TextOverflow.fade,
+                                  //   ),
+                                  //   cancelText: Text(
+                                  //     'cancel'.tr,
+                                  //     style: getSemiBoldStyle(
+                                  //         color: ColorManager.secondary),
+                                  //     overflow: TextOverflow.fade,
+                                  //   ),
+                                  //   items: reportCtrl.itemsPolluationSources,
+                                  //   title: reportCtrl.loading.value == true
+                                  //       ? const BubbleLoader()
+                                  //       : Text("polluted medium".tr),
+                                  //   selectedColor: ColorManager.secondary,
+                                  //   decoration: BoxDecoration(
+                                  //     color: ColorManager.secondary
+                                  //         .withOpacity(OpicityValue.o1),
+                                  //     borderRadius: const BorderRadius.all(
+                                  //         Radius.circular(BorderRadiusValues.br10)),
+                                  //     border: Border.all(
+                                  //       color:
+                                  //           reportCtrl.polluationSourcesIds.isEmpty
+                                  //               ? Colors.red
+                                  //               : ColorManager.secondary,
+                                  //       width: AppSize.s2,
+                                  //     ),
+                                  //   ),
+                                  //   buttonIcon: Icon(
+                                  //     Icons.list,
+                                  //     color: ColorManager.secondary,
+                                  //   ),
+                                  //   buttonText: Text(
+                                  //     "polluted medium".tr,
+                                  //     style: getSemiBoldStyle(
+                                  //         color: ColorManager.secondary),
+                                  //   ),
+                                  //   onConfirm:
+                                  //       (List<PolluationSourcesModel> results) {
+                                  //     reportCtrl.getSelectedDataPolluationSources(
+                                  //         results);
+                                  //   },
+                                  // ),
                                 )),
-                            Obx(() => reportCtrl.medium.isNotEmpty
+                            Obx(() =>
+                            reportCtrl.medium.isNotEmpty
                                 ? SizedBox(
-                                    height: 50,
-                                    child: ListView.builder(
-                                      itemCount: reportCtrl.medium.length,
-                                      physics: const BouncingScrollPhysics(),
-                                      shrinkWrap: true,
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (_, index) => Padding(
-                                        padding: const EdgeInsets.all(8),
-                                        child: Container(
-                                          width: 250,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: ColorManager.secondary
-                                                  .withOpacity(
-                                                      OpicityValue.o3)),
-                                          child: Center(
-                                            child: Text(
-                                                reportCtrl.medium[index],
-                                                overflow:
-                                                    TextOverflow.ellipsis),
-                                          ),
+                              height: 50,
+                              child: ListView.builder(
+                                itemCount: reportCtrl.medium.length,
+                                physics: const BouncingScrollPhysics(),
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (_, index) =>
+                                    Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Container(
+                                        width: 250,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                            BorderRadius.circular(4),
+                                            color: ColorManager.primary),
+                                        child: Center(
+                                          child: Text(
+                                              reportCtrl.medium[index],
+                                              style: const TextStyle(
+                                                  color: Colors.white),
+                                              overflow:
+                                              TextOverflow.ellipsis),
                                         ),
                                       ),
                                     ),
-                                  )
+                              ),
+                            )
                                 : SizedBox()),
                             //? divider
                             const ReportDividerWidget(),
                             //!Potential Pollutants
                             // const ReportPotentialPollutantsWidget(),
-                            Obx(() => Padding(
+                            // Obx(() => Padding(
+                            //       padding: const EdgeInsets.symmetric(
+                            //           horizontal: 30),
+                            //       child: MultiSelectDialogField(
+                            //         confirmText: Text(
+                            //           'ok'.tr,
+                            //           style: getSemiBoldStyle(
+                            //               color: ColorManager.secondary),
+                            //           overflow: TextOverflow.fade,
+                            //         ),
+                            //         cancelText: Text(
+                            //           'cancel'.tr,
+                            //           style: getSemiBoldStyle(
+                            //               color: ColorManager.secondary),
+                            //           overflow: TextOverflow.fade,
+                            //         ),
+                            //         items: reportCtrl.itemsPollutants,
+                            //         title: reportCtrl.loading.value == true
+                            //             ? const BubbleLoader()
+                            //             : Text("Potential Pollutants".tr),
+                            //         selectedColor: ColorManager.secondary,
+                            //         decoration: BoxDecoration(
+                            //           color: ColorManager.secondary
+                            //               .withOpacity(OpicityValue.o1),
+                            //           borderRadius: const BorderRadius.all(
+                            //               Radius.circular(
+                            //                   BorderRadiusValues.br10)),
+                            //           border: Border.all(
+                            //             color: ColorManager.secondary,
+                            //             width: AppSize.s2,
+                            //           ),
+                            //         ),
+                            //         buttonIcon: Icon(
+                            //           Icons.list,
+                            //           color: ColorManager.secondary,
+                            //         ),
+                            //         buttonText: Text(
+                            //           "Potential Pollutants".tr,
+                            //           style: getSemiBoldStyle(
+                            //               color: ColorManager.secondary),
+                            //         ),
+                            //         onConfirm: (List<PotentialPollutantsModel>
+                            //             results) {
+                            //           reportCtrl
+                            //               .getSelectedDataPollutants(results);
+                            //         },
+                            //       ),
+                            //     )),
+                            LabelWidget(label: "Potential Pollutants".tr),
+                            Obx(() =>
+                                Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 30),
                                   child: MultiSelectDialogField(
-                                    confirmText: Text(
-                                      'ok'.tr,
-                                      style: getSemiBoldStyle(
-                                          color: ColorManager.secondary),
-                                      overflow: TextOverflow.fade,
+                                    listType: MultiSelectListType.LIST,
+                                    chipDisplay: MultiSelectChipDisplay(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(4)),
+                                      textStyle:
+                                      const TextStyle(color: Colors.white),
+                                      chipColor: ColorManager.primary,
                                     ),
-                                    cancelText: Text(
-                                      'cancel'.tr,
-                                      style: getSemiBoldStyle(
-                                          color: ColorManager.secondary),
-                                      overflow: TextOverflow.fade,
-                                    ),
-                                    items: reportCtrl.itemsPollutants,
-                                    title: reportCtrl.loading.value == true
-                                        ? const BubbleLoader()
-                                        : Text("Potential Pollutants".tr),
-                                    selectedColor: ColorManager.secondary,
                                     decoration: BoxDecoration(
-                                      color: ColorManager.secondary
-                                          .withOpacity(OpicityValue.o1),
+                                      color: Colors.blue.withOpacity(0.1),
                                       borderRadius: const BorderRadius.all(
-                                          Radius.circular(
-                                              BorderRadiusValues.br10)),
+                                          Radius.circular(10)),
                                       border: Border.all(
-                                        color: ColorManager.secondary,
-                                        width: AppSize.s2,
+                                        color: Colors.grey,
                                       ),
                                     ),
-                                    buttonIcon: Icon(
-                                      Icons.list,
-                                      color: ColorManager.secondary,
+                                    buttonIcon: const Icon(
+                                      Icons.arrow_drop_down_sharp,
+                                      color: Colors.grey,
                                     ),
                                     buttonText: Text(
-                                      "Potential Pollutants".tr,
-                                      style: getSemiBoldStyle(
-                                          color: ColorManager.secondary),
+                                      reportCtrl.potinal_pollutionText.value,
+                                      style: TextStyle(
+                                        color: ColorManager.secondary,
+                                        fontSize: 16,
+                                      ),
                                     ),
-                                    onConfirm: (List<PotentialPollutantsModel>
-                                        results) {
-                                      reportCtrl
-                                          .getSelectedDataPollutants(results);
+                                    items: reportCtrl.potinal_pollution
+                                        .map((player) =>
+                                        MultiSelectItem<CitiesModel>(
+                                            player, player.name))
+                                        .toList(),
+                                    selectedColor: Colors.blue,
+                                    searchable: true,
+                                    onConfirm: (results) {
+                                      reportCtrl.selectedPlayer = results;
+                                      reportCtrl.selectedPlayerValue.value = "";
+                                      reportCtrl.selectedPlayer
+                                          .forEach((element) {
+                                        reportCtrl.listpotinal_pollution
+                                            .add(element.id);
+                                        print(element.id);
+                                        reportCtrl.selectedPlayerValue.value =
+                                            "${reportCtrl.selectedPlayerValue
+                                                .value} " +
+                                                element.name;
+                                      });
                                     },
                                   ),
+                                  // MultiSelectDialogField(
+                                  //
+                                  //   confirmText: Text(
+                                  //     'ok'.tr,
+                                  //     style: getSemiBoldStyle(
+                                  //         color: ColorManager.secondary),
+                                  //     overflow: TextOverflow.fade,
+                                  //   ),
+                                  //   cancelText: Text(
+                                  //     'cancel'.tr,
+                                  //     style: getSemiBoldStyle(
+                                  //         color: ColorManager.secondary),
+                                  //     overflow: TextOverflow.fade,
+                                  //   ),
+                                  //   items: reportCtrl.itemsPollutants,
+                                  //   title: reportCtrl.loading.value == true
+                                  //       ? const BubbleLoader()
+                                  //       : Text("Potential Pollutants".tr),
+                                  //   selectedColor: ColorManager.secondary,
+                                  //   decoration: BoxDecoration(
+                                  //     color: ColorManager.secondary
+                                  //         .withOpacity(OpicityValue.o1),
+                                  //     borderRadius: const BorderRadius.all(
+                                  //         Radius.circular(BorderRadiusValues.br10)),
+                                  //     border: Border.all(
+                                  //       color: reportCtrl
+                                  //               .potentialPollutantsIds.isEmpty
+                                  //           ? Colors.red
+                                  //           : ColorManager.secondary,
+                                  //       width: AppSize.s2,
+                                  //     ),
+                                  //   ),
+                                  //   buttonIcon: Icon(
+                                  //     Icons.list,
+                                  //     color: ColorManager.secondary,
+                                  //   ),
+                                  //   buttonText: Text(
+                                  //     "Potential Pollutants".tr,
+                                  //     style: getSemiBoldStyle(
+                                  //         color: ColorManager.secondary),
+                                  //   ),
+                                  //   onConfirm:
+                                  //       (List<PotentialPollutantsModel> results) {
+                                  //     reportCtrl.getSelectedDataPollutants(results);
+                                  //   },
+                                  // ),
                                 )),
-                            Obx(() => reportCtrl
-                                    .potentialcontaminants.isNotEmpty
+                            Obx(() =>
+                            reportCtrl
+                                .potentialcontaminants.isNotEmpty
                                 ? SizedBox(
-                                    height: 50,
-                                    child: ListView.builder(
-                                      itemCount: reportCtrl
-                                          .potentialcontaminants.length,
-                                      physics: const BouncingScrollPhysics(),
-                                      shrinkWrap: true,
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (_, index) => Padding(
-                                        padding: const EdgeInsets.all(8),
-                                        child: Container(
-                                          width: 250,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: ColorManager.secondary
-                                                  .withOpacity(
-                                                      OpicityValue.o3)),
-                                          child: Center(
-                                            child: Text(
-                                                reportCtrl
-                                                        .potentialcontaminants[
-                                                    index],
-                                                overflow:
-                                                    TextOverflow.ellipsis),
-                                          ),
+                              height: 50,
+                              child: ListView.builder(
+                                itemCount: reportCtrl
+                                    .potentialcontaminants.length,
+                                physics: const BouncingScrollPhysics(),
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (_, index) =>
+                                    Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Container(
+                                        width: 250,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                            BorderRadius.circular(4),
+                                            color: ColorManager.primary),
+                                        child: Center(
+                                          child: Text(
+                                              reportCtrl
+                                                  .potentialcontaminants[
+                                              index],
+                                              style: const TextStyle(
+                                                  color: Colors.white),
+                                              overflow:
+                                              TextOverflow.ellipsis),
                                         ),
                                       ),
                                     ),
-                                  )
+                              ),
+                            )
                                 : SizedBox()),
                             //? divider
                             const ReportDividerWidget(),
                             LabelWidget(label: 'Another Notes'.tr),
                             Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 30),
+                              const EdgeInsets.symmetric(horizontal: 30),
                               child: TextFormField(
                                 controller: controllerotherNote,
                                 keyboardType: TextInputType.text,
@@ -3072,14 +3463,14 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                           width: AppSize.s2,
                                           color: ColorManager.secondary),
                                       borderRadius:
-                                          BorderRadius.circular(AppSize.s12),
+                                      BorderRadius.circular(AppSize.s12),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                           width: AppSize.s2,
                                           color: ColorManager.secondary),
                                       borderRadius:
-                                          BorderRadius.circular(AppSize.s12),
+                                      BorderRadius.circular(AppSize.s12),
                                     ),
                                     hintStyle: TextStyle(
                                         fontSize: FontSize.s12,
@@ -3113,80 +3504,83 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                 children: [
                                   widget.report == null
                                       ? const SizedBox()
-                                      : Obx(() => Expanded(
-                                            child: ListView.builder(
-                                                shrinkWrap: true,
-                                                physics:
-                                                    const BouncingScrollPhysics(),
-                                                itemCount: reportCtrl
-                                                    .listOfImages.length,
-                                                scrollDirection:
-                                                    Axis.horizontal,
-                                                itemBuilder: (context, index) {
-                                                  return Stack(
-                                                    children: [
-                                                      Container(
-                                                        clipBehavior:
-                                                            Clip.antiAlias,
-                                                        margin: const EdgeInsets
-                                                                .symmetric(
-                                                            vertical:
-                                                                AppMargin.m8,
-                                                            horizontal:
-                                                                AppMargin.m8),
-                                                        width: SizeConfig
-                                                                .screenWidth! /
-                                                            MediaSize.m5,
-                                                        height: 100,
-                                                        decoration: BoxDecoration(
-                                                            color: ColorManager
-                                                                .black,
-                                                            borderRadius:
-                                                                BorderRadius.circular(
-                                                                    BorderRadiusValues
-                                                                        .br5)),
-                                                        child: LoadImage(
-                                                            image: Constants
-                                                                    .reportImage +
-                                                                reportCtrl
-                                                                        .listOfImages[
-                                                                    index]),
-                                                      ),
-                                                      GestureDetector(
-                                                        onTap: () {
-                                                          reportCtrl.remove(
-                                                              reportCtrl
-                                                                      .listOfImages[
-                                                                  index]);
+                                      : Obx(() =>
+                                      Expanded(
+                                        child: ListView.builder(
+                                            shrinkWrap: true,
+                                            physics:
+                                            const BouncingScrollPhysics(),
+                                            itemCount: reportCtrl
+                                                .listOfImages.length,
+                                            scrollDirection:
+                                            Axis.horizontal,
+                                            itemBuilder: (context, index) {
+                                              return Stack(
+                                                alignment: Alignment.topLeft,
+                                                children: [
+                                                  Container(
+                                                    clipBehavior:
+                                                    Clip.antiAlias,
+                                                    margin: const EdgeInsets
+                                                        .symmetric(
+                                                        vertical:
+                                                        AppMargin.m8,
+                                                        horizontal:
+                                                        AppMargin.m8),
+                                                    width: SizeConfig
+                                                        .screenWidth! /
+                                                        MediaSize.m5,
+                                                    height: 100,
+                                                    decoration: BoxDecoration(
+                                                        color: ColorManager
+                                                            .black,
+                                                        borderRadius:
+                                                        BorderRadius.circular(
+                                                            BorderRadiusValues
+                                                                .br5)),
+                                                    child: LoadImage(
+                                                        image: Constants
+                                                            .reportImage +
+                                                            reportCtrl
+                                                                .listOfImages[
+                                                            index]),
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      reportCtrl.remove(
                                                           reportCtrl
-                                                              .listIgnoriedPhotos
-                                                              .add(widget
-                                                                  .report!
-                                                                  .report!
-                                                                  .reportPhotos![
-                                                                      index]
-                                                                  .id!);
-                                                        },
-                                                        child: Container(
-                                                          width: 25,
-                                                          height: 25,
-                                                          decoration: BoxDecoration(
-                                                              color:
-                                                                  ColorManager
-                                                                      .error,
-                                                              shape: BoxShape
-                                                                  .circle),
-                                                          child: Icon(
-                                                            Icons.clear,
-                                                            color: ColorManager
-                                                                .white,
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  );
-                                                }),
-                                          )),
+                                                              .listOfImages[
+                                                          index]);
+                                                      reportCtrl
+                                                          .listIgnoriedPhotos
+                                                          .add(widget
+                                                          .report!
+                                                          .report!
+                                                          .reportPhotos![
+                                                      index]
+                                                          .id!);
+                                                    },
+                                                    child: Container(
+                                                      width: 20,
+                                                      height: 20,
+                                                      decoration: BoxDecoration(
+                                                          color:
+                                                          ColorManager
+                                                              .error,
+                                                          shape: BoxShape
+                                                              .circle),
+                                                      child: Icon(
+                                                        size: 15,
+                                                        Icons.clear,
+                                                        color: ColorManager
+                                                            .white,
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              );
+                                            }),
+                                      )),
                                   widget.report == null
                                       ? const Spacer()
                                       : const SizedBox(),
@@ -3216,62 +3610,64 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                             ),
 
                             //!add images and preview images
-                            Obx(() => reportCtrl.imagesList.isNotEmpty
+                            Obx(() =>
+                            reportCtrl.imagesList.isNotEmpty
                                 ? SizedBox(
-                                    height: 120,
-                                    width: double.infinity,
-                                    child: ListView.builder(
-                                        shrinkWrap: true,
-                                        physics: const BouncingScrollPhysics(),
-                                        itemCount: reportCtrl.imagesList.length,
-                                        scrollDirection: Axis.horizontal,
-                                        itemBuilder: (context, index) {
-                                          return Stack(
-                                            children: [
-                                              Container(
-                                                margin:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: AppMargin.m8,
-                                                        horizontal:
-                                                            AppMargin.m8),
-                                                width: SizeConfig.screenWidth! /
-                                                    MediaSize.m5,
-                                                height: 100,
-                                                decoration: BoxDecoration(
-                                                    image: DecorationImage(
-                                                        image: FileImage(
-                                                            reportCtrl
-                                                                    .imagesList[
-                                                                index]),
-                                                        fit: BoxFit.cover),
-                                                    color: ColorManager.black,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            BorderRadiusValues
-                                                                .br5)),
-                                              ),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  reportCtrl.removeImages(
+                              height: 120,
+                              width: double.infinity,
+                              child: ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const BouncingScrollPhysics(),
+                                  itemCount: reportCtrl.imagesList.length,
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (context, index) {
+                                    return Stack(alignment: Alignment.topLeft,
+                                      children: [
+                                        Container(
+                                          margin:
+                                          const EdgeInsets.symmetric(
+                                              vertical: AppMargin.m8,
+                                              horizontal:
+                                              AppMargin.m8),
+                                          width: SizeConfig.screenWidth! /
+                                              MediaSize.m5,
+                                          height: 100,
+                                          decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: FileImage(
                                                       reportCtrl
-                                                          .imagesList[index]);
-                                                },
-                                                child: Container(
-                                                  width: 25,
-                                                  height: 25,
-                                                  decoration: BoxDecoration(
-                                                      color: ColorManager.error,
-                                                      shape: BoxShape.circle),
-                                                  child: Icon(
-                                                    Icons.clear,
-                                                    color: ColorManager.white,
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          );
-                                        }),
-                                  )
+                                                          .imagesList[
+                                                      index]),
+                                                  fit: BoxFit.cover),
+                                              color: ColorManager.black,
+                                              borderRadius:
+                                              BorderRadius.circular(
+                                                  BorderRadiusValues
+                                                      .br5)),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            reportCtrl.removeImages(
+                                                reportCtrl
+                                                    .imagesList[index]);
+                                          },
+                                          child: Container(
+                                            width: 20,
+                                            height: 20,
+                                            decoration: BoxDecoration(
+                                                color: ColorManager.error,
+                                                shape: BoxShape.circle),
+                                            child: Icon(
+                                              size: 15,
+                                              Icons.clear,
+                                              color: ColorManager.white,
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    );
+                                  }),
+                            )
                                 : SizedBox()),
                             //! Add Icon
 
@@ -3565,7 +3961,24 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                             //         ),
                             //       )
                             //     : SizedBox()),
-                            LabelWidget(label: 'Industrial activity'.tr),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  LabelWidget(label: 'Industrial activity'.tr),
+                                  // GestureDetector(
+                                  //   onTap: () {},
+                                  //   child: Icon(
+                                  //     Icons.visibility_rounded,
+                                  //     color: ColorManager.primary,
+                                  //   ),
+                                  // )
+                                ],
+                              ),
+                            ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Column(
@@ -3576,85 +3989,94 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                         onTap: () {
                                           showModalBottomSheet(
                                               context: context,
-                                              builder: (ctx) => SizedBox(
+                                              builder: (ctx) =>
+                                                  SizedBox(
                                                     height:
-                                                        SizeConfig.screenHeight,
-                                                    child: Obx(() => reportCtrl
-                                                            .allIndustrialActivities
-                                                            .isEmpty
+                                                    SizeConfig.screenHeight,
+                                                    child: Obx(() =>
+                                                    reportCtrl
+                                                        .allIndustrialActivities
+                                                        .isEmpty
                                                         ? const Center(
-                                                            child:
-                                                                CircularProgressIndicator(),
-                                                          )
+                                                      child:
+                                                      CircularProgressIndicator(),
+                                                    )
                                                         : ListView.builder(
-                                                            itemCount: reportCtrl
-                                                                .allIndustrialActivities
-                                                                .length,
-                                                            itemBuilder:
-                                                                (context,
-                                                                    index) {
-                                                              return Padding(
-                                                                padding: const EdgeInsets
-                                                                        .symmetric(
-                                                                    horizontal:
-                                                                        AppPadding
-                                                                            .p60,
-                                                                    vertical:
-                                                                        AppPadding
-                                                                            .p16),
+                                                        itemCount: reportCtrl
+                                                            .allIndustrialActivities
+                                                            .length,
+                                                        itemBuilder:
+                                                            (context,
+                                                            index) {
+                                                          return Padding(
+                                                            padding: const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal:
+                                                                AppPadding
+                                                                    .p60,
+                                                                vertical:
+                                                                AppPadding
+                                                                    .p16),
+                                                            child:
+                                                            GestureDetector(
+                                                              onTap: () {
+                                                                reportCtrl
+                                                                    .allIndustrialActivitiesText
+                                                                    .value =
+                                                                    reportCtrl
+                                                                        .allIndustrialActivities[index]
+                                                                        .name;
+                                                                reportCtrl
+                                                                    .allIndustrialActivitiesId
+                                                                    .value =
+                                                                    reportCtrl
+                                                                        .allIndustrialActivities[index]
+                                                                        .id;
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                              child:
+                                                              Container(
+                                                                alignment:
+                                                                Alignment
+                                                                    .center,
+                                                                height: SizeConfig
+                                                                    .screenHeight! /
+                                                                    MediaSize
+                                                                        .m12,
+                                                                width: double
+                                                                    .infinity,
+                                                                decoration: BoxDecoration(
+                                                                    borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                        BorderRadiusValues
+                                                                            .br10),
+                                                                    border: Border
+                                                                        .all(
+                                                                        width:
+                                                                        AppSize
+                                                                            .s1,
+                                                                        color: ColorManager
+                                                                            .grey)),
                                                                 child:
-                                                                    GestureDetector(
-                                                                  onTap: () {
-                                                                    reportCtrl
-                                                                            .allIndustrialActivitiesText
-                                                                            .value =
-                                                                        reportCtrl
-                                                                            .allIndustrialActivities[index]
-                                                                            .name;
-                                                                    reportCtrl
-                                                                            .allIndustrialActivitiesId
-                                                                            .value =
-                                                                        reportCtrl
-                                                                            .allIndustrialActivities[index]
-                                                                            .id;
-                                                                    Navigator.pop(
-                                                                        context);
-                                                                  },
-                                                                  child:
-                                                                      Container(
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .center,
-                                                                    height: SizeConfig
-                                                                            .screenHeight! /
-                                                                        MediaSize
-                                                                            .m12,
-                                                                    width: double
-                                                                        .infinity,
-                                                                    decoration: BoxDecoration(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(BorderRadiusValues
-                                                                                .br10),
-                                                                        border: Border.all(
-                                                                            width:
-                                                                                AppSize.s1,
-                                                                            color: ColorManager.grey)),
-                                                                    child:
-                                                                        Center(
-                                                                      child: Text(
-                                                                          reportCtrl
-                                                                              .allIndustrialActivities[
-                                                                                  index]
-                                                                              .name,
-                                                                          textAlign: TextAlign
-                                                                              .center,
-                                                                          style:
-                                                                              getSemiBoldStyle(color: ColorManager.secondary)),
-                                                                    ),
-                                                                  ),
+                                                                Center(
+                                                                  child: Text(
+                                                                      reportCtrl
+                                                                          .allIndustrialActivities[
+                                                                      index]
+                                                                          .name,
+                                                                      textAlign: TextAlign
+                                                                          .center,
+                                                                      style:
+                                                                      getSemiBoldStyle(
+                                                                          color: ColorManager
+                                                                              .secondary)),
                                                                 ),
-                                                              );
-                                                            })),
+                                                              ),
+                                                            ),
+                                                          );
+                                                        })),
                                                   ));
                                         },
                                         child: Container(
@@ -3663,15 +4085,15 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                             decoration: BoxDecoration(
                                               border: Border.all(
                                                   color:
-                                                      ColorManager.secondary),
+                                                  ColorManager.secondary),
                                               borderRadius:
-                                                  BorderRadius.circular(5),
+                                              BorderRadius.circular(5),
                                               color: Colors.white,
                                             ),
                                             child: Center(
                                               child: Row(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                                                MainAxisAlignment.center,
                                                 children: [
                                                   Flexible(
                                                     child: Text(
@@ -3696,7 +4118,7 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                               height: 40,
                                               child: TextFormField(
                                                 keyboardType:
-                                                    TextInputType.number,
+                                                TextInputType.number,
                                                 onChanged: (v) {
                                                   reportCtrl
                                                       .allIndustrialActivitiesDistance
@@ -3704,7 +4126,7 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                                 },
                                                 initialValue: "0.0",
                                                 decoration:
-                                                    const InputDecoration(),
+                                                const InputDecoration(),
                                               ))),
                                     ],
                                   ),
@@ -3721,17 +4143,18 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                               decoration: BoxDecoration(
                                                 color: Colors.grey,
                                                 borderRadius:
-                                                    BorderRadius.circular(8),
+                                                BorderRadius.circular(8),
                                               ),
                                               child: Obx(
-                                                () => reportCtrl
-                                                            .imageIndustrail !=
-                                                        ""
+                                                    () =>
+                                                reportCtrl
+                                                    .imageIndustrail !=
+                                                    ""
                                                     ? Image.file(
-                                                        File(reportCtrl
-                                                            .imageIndustrail),
-                                                        fit: BoxFit.cover,
-                                                      )
+                                                  File(reportCtrl
+                                                      .imageIndustrail),
+                                                  fit: BoxFit.cover,
+                                                )
                                                     : SizedBox(),
                                               )),
                                           GestureDetector(
@@ -3745,7 +4168,7 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                               decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   color:
-                                                      ColorManager.secondary),
+                                                  ColorManager.secondary),
                                               child: const Icon(
                                                 Icons.add,
                                                 color: Colors.white,
@@ -3762,34 +4185,34 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                               height: 40,
                                               child: TextFormField(
                                                 keyboardType:
-                                                    TextInputType.text,
+                                                TextInputType.text,
                                                 onChanged: (v) {
                                                   reportCtrl
                                                       .allIndustrialActivitiesDescription
                                                       .value = v;
                                                 },
                                                 decoration:
-                                                    const InputDecoration(
-                                                        hintText: "ادخل الوصف"),
+                                                const InputDecoration(
+                                                    hintText: "ادخل الوصف"),
                                               ))),
                                     ],
                                   ),
                                   GestureDetector(
                                     onTap: () {
                                       if (reportCtrl.allIndustrialActivitiesId
-                                              .value ==
+                                          .value ==
                                           0) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(
-                                                content: Text(
-                                                    'please enter Industrial Activites'
-                                                        .tr)));
+                                            content: Text(
+                                                'please enter Industrial Activites'
+                                                    .tr)));
                                       } else if (reportCtrl.imageIndustrail ==
                                           "") {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(
-                                                content: Text(
-                                                    'يجب اختيار صوره'.tr)));
+                                            content: Text(
+                                                'يجب اختيار صوره'.tr)));
                                       } else {
                                         // reportCtrl.ActvitesList.clear();
                                         reportCtrl.addActivites(
@@ -3805,72 +4228,497 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                             reportCtrl
                                                 .allIndustrialActivitiesDescription
                                                 .value);
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                            backgroundColor:
+                                            ColorManager.primary,
+                                            content:
+                                            Text('تم الاضافه'.tr)));
                                       }
                                     },
                                     child: Container(
-                                      width: 40,
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                          color: ColorManager.primary,
-                                          borderRadius:
-                                              BorderRadius.circular(4)),
-                                      child: const Icon(Icons.add,
-                                          color: Colors.white),
-                                    ),
+                                        width: 70,
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                            color: ColorManager.primary,
+                                            borderRadius: BorderRadius.circular(
+                                                4)),
+                                        child: const Center(
+                                            child: Text(
+                                              "اضافه",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ))),
                                   ),
                                 ],
                               ),
                             ),
-                            Obx(() => reportCtrl.ActvitesList.isNotEmpty
+                            Obx(() =>
+                            reportCtrl.ActvitesList.isNotEmpty
                                 ? SizedBox(
-                                    height: 50,
-                                    child: ListView.builder(
-                                      itemCount: reportCtrl.ActvitesList.length,
-                                      physics: const BouncingScrollPhysics(),
-                                      shrinkWrap: true,
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (_, index) => Padding(
-                                        padding: const EdgeInsets.all(8),
-                                        child: Stack(
-                                          alignment: Alignment.topLeft,
-                                          children: [
-                                            Container(
+                              height: 50,
+                              child: ListView.builder(
+                                itemCount: reportCtrl.ActvitesList.length,
+                                physics: const BouncingScrollPhysics(),
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (_, index) =>
+                                    Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Stack(
+                                        alignment: Alignment.topLeft,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              Utility.showBottomSheet(
+                                                  context,
+                                                  SingleChildScrollView(
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                      CrossAxisAlignment
+                                                          .start,
+                                                      children: [
+                                                        Center(
+                                                          child: LabelWidget(
+                                                              label: 'تعديل الانشطه الصناعيه'
+                                                          ),
+                                                        ),
+                                                        // Center(
+                                                        //   child: Text(
+                                                        //     "تعديل الانشطه الصناعيه",
+                                                        //     style: TextStyle(
+                                                        //         color: ColorManager
+                                                        //             .primary,
+                                                        //         fontSize: 18),
+                                                        //   ),
+                                                        // ),
+                                                        Row(
+                                                          crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                          mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceEvenly,
+                                                          children: [
+                                                            Column(
+                                                              crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                              children: [
+                                                                LabelWidget(
+                                                                    label: 'Industrial activity'
+                                                                        .tr),
+                                                                GestureDetector(
+                                                                  onTap: () {
+                                                                    showModalBottomSheet(
+                                                                        context:
+                                                                        context,
+                                                                        builder: (
+                                                                            ctx) =>
+                                                                            SizedBox(
+                                                                              height: SizeConfig
+                                                                                  .screenHeight,
+                                                                              child: Obx(() =>
+                                                                              reportCtrl
+                                                                                  .allIndustrialActivities
+                                                                                  .isEmpty
+                                                                                  ? const Center(
+                                                                                child: CircularProgressIndicator(),
+                                                                              )
+                                                                                  : ListView
+                                                                                  .builder(
+                                                                                  itemCount: reportCtrl
+                                                                                      .allIndustrialActivities
+                                                                                      .length,
+                                                                                  itemBuilder: (
+                                                                                      context,
+                                                                                      index) {
+                                                                                    return Padding(
+                                                                                      padding: const EdgeInsets
+                                                                                          .symmetric(
+                                                                                          horizontal: AppPadding
+                                                                                              .p60,
+                                                                                          vertical: AppPadding
+                                                                                              .p16),
+                                                                                      child: GestureDetector(
+                                                                                        onTap: () {
+                                                                                          reportCtrl
+                                                                                              .allIndustrialActivitiesTextUpdate
+                                                                                              .value =
+                                                                                              reportCtrl
+                                                                                                  .allIndustrialActivities[index]
+                                                                                                  .name;
+                                                                                          reportCtrl
+                                                                                              .allIndustrialActivitiesIdUpdate
+                                                                                              .value =
+                                                                                              reportCtrl
+                                                                                                  .allIndustrialActivities[index]
+                                                                                                  .id;
+                                                                                          Navigator
+                                                                                              .pop(
+                                                                                              context);
+                                                                                        },
+                                                                                        child: Container(
+                                                                                          alignment: Alignment
+                                                                                              .center,
+                                                                                          height: SizeConfig
+                                                                                              .screenHeight! /
+                                                                                              MediaSize
+                                                                                                  .m12,
+                                                                                          width: double
+                                                                                              .infinity,
+                                                                                          decoration: BoxDecoration(
+                                                                                              borderRadius: BorderRadius
+                                                                                                  .circular(
+                                                                                                  BorderRadiusValues
+                                                                                                      .br10),
+                                                                                              border: Border
+                                                                                                  .all(
+                                                                                                  width: AppSize
+                                                                                                      .s1,
+                                                                                                  color: ColorManager
+                                                                                                      .grey)),
+                                                                                          child: Center(
+                                                                                            child: Text(
+                                                                                                reportCtrl
+                                                                                                    .allIndustrialActivities[index]
+                                                                                                    .name,
+                                                                                                textAlign: TextAlign
+                                                                                                    .center,
+                                                                                                style: getSemiBoldStyle(
+                                                                                                    color: ColorManager
+                                                                                                        .secondary)),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    );
+                                                                                  })),
+                                                                            ));
+                                                                  },
+                                                                  child: Container(
+                                                                      width: 150,
+                                                                      height: 40,
+                                                                      decoration: BoxDecoration(
+                                                                        border:
+                                                                        Border
+                                                                            .all(
+                                                                            color: ColorManager
+                                                                                .secondary),
+                                                                        borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(
+                                                                            5),
+                                                                        color:
+                                                                        Colors
+                                                                            .white,
+                                                                      ),
+                                                                      child: Center(
+                                                                        child:
+                                                                        Row(
+                                                                          mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .center,
+                                                                          children: [
+                                                                            Flexible(
+                                                                              child: Obx(() =>
+                                                                                  Text(
+                                                                                      reportCtrl
+                                                                                          .allIndustrialActivitiesTextUpdate
+                                                                                          .value,
+                                                                                      overflow: TextOverflow
+                                                                                          .ellipsis,
+                                                                                      maxLines: 1)),
+                                                                            ),
+                                                                            const Icon(
+                                                                                Icons
+                                                                                    .arrow_drop_down_rounded)
+                                                                          ],
+                                                                        ),
+                                                                      )),
+                                                                ),
+                                                                LabelWidget(
+                                                                    label: 'Distance'
+                                                                        .tr),
+                                                                SizedBox(
+                                                                  width: 250,
+                                                                  child:
+                                                                  TextFormField(
+                                                                    keyboardType:
+                                                                    TextInputType
+                                                                        .number,
+                                                                    onChanged:
+                                                                        (v) {
+                                                                      reportCtrl
+                                                                          .allIndustrialActivitiesDistance
+                                                                          .value =
+                                                                          double
+                                                                              .parse(
+                                                                              v);
+                                                                    },
+                                                                    initialValue: reportCtrl
+                                                                        .ActvitesList[
+                                                                    index]
+                                                                        .distance
+                                                                        .toString(),
+                                                                    decoration:
+                                                                    const InputDecoration(),
+                                                                  ),
+                                                                ),
+                                                                LabelWidget(
+                                                                    label: "description"
+                                                                        .tr),
+                                                                SizedBox(
+                                                                    width:
+                                                                    250,
+                                                                    child:
+                                                                    TextFormField(
+                                                                      initialValue: reportCtrl
+                                                                          .ActvitesList[index]
+                                                                          .description,
+                                                                      keyboardType:
+                                                                      TextInputType
+                                                                          .text,
+                                                                      onChanged:
+                                                                          (v) {
+                                                                        reportCtrl
+                                                                            .allIndustrialActivitiesDescription
+                                                                            .value =
+                                                                            v;
+                                                                      },
+                                                                      decoration:
+                                                                      const InputDecoration(
+                                                                          hintText: "ادخل الوصف"),
+                                                                    ))
+                                                              ],
+                                                            ),
+                                                            Stack(
+                                                              alignment: Alignment
+                                                                  .bottomLeft,
+                                                              children: [
+                                                                Container(
+                                                                    clipBehavior:
+                                                                    Clip
+                                                                        .antiAlias,
+                                                                    height:
+                                                                    100,
+                                                                    width:
+                                                                    100,
+                                                                    decoration:
+                                                                    BoxDecoration(
+                                                                      color: Colors
+                                                                          .grey,
+                                                                      borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                          8),
+                                                                    ),
+                                                                    child: Obx(
+                                                                            () =>
+                                                                        reportCtrl
+                                                                            .photoIndustrialUpdate !=
+                                                                            ""
+                                                                            ? Image
+                                                                            .file(
+                                                                          File(
+                                                                              reportCtrl
+                                                                                  .photoIndustrialUpdate
+                                                                                  .value),
+                                                                          fit: BoxFit
+                                                                              .cover,
+                                                                        )
+                                                                            : SizedBox()
+                                                                      // LoadImage(image: Constants.reportImage + reportCtrl.ActvitesList[index].photo.toString()),
+                                                                    )),
+                                                                GestureDetector(
+                                                                  onTap: () {
+                                                                    reportCtrl
+                                                                        .selectPhotoIndustrial();
+                                                                  },
+                                                                  child:
+                                                                  Container(
+                                                                    width: 25,
+                                                                    height:
+                                                                    25,
+                                                                    decoration: BoxDecoration(
+                                                                        shape: BoxShape
+                                                                            .circle,
+                                                                        color:
+                                                                        ColorManager
+                                                                            .secondary),
+                                                                    child:
+                                                                    const Icon(
+                                                                      Icons
+                                                                          .add,
+                                                                      color: Colors
+                                                                          .white,
+                                                                    ),
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 30,
+                                                        ),
+                                                        Center(
+                                                          child: SizedBox(
+                                                            width: 250,
+                                                            height: 40,
+                                                            child: TextButton(
+                                                                onPressed:
+                                                                    () {
+                                                                  reportCtrl
+                                                                      .ActvitesList[index] =
+                                                                      ReportIndustrialActivitiesss(
+                                                                          industrialActivityId: reportCtrl
+                                                                              .allIndustrialActivitiesIdUpdate
+                                                                              .value ==
+                                                                              0
+                                                                              ? reportCtrl
+                                                                              .ActvitesList[
+                                                                          index]
+                                                                              .industrialActivityId
+                                                                              : reportCtrl
+                                                                              .allIndustrialActivitiesIdUpdate
+                                                                              .value,
+                                                                          distance: reportCtrl
+                                                                              .allIndustrialActivitiesDistance
+                                                                              .value ==
+                                                                              0.0
+                                                                              ? reportCtrl
+                                                                              .ActvitesList[
+                                                                          index]
+                                                                              .distance
+                                                                              : reportCtrl
+                                                                              .allIndustrialActivitiesDistance
+                                                                              .value,
+                                                                          attachment: reportCtrl
+                                                                              .photoIndustrialUpdate
+                                                                              .value ==
+                                                                              ""
+                                                                              ? null
+                                                                              : File(
+                                                                              reportCtrl
+                                                                                  .photoIndustrialUpdate
+                                                                                  .value),
+                                                                          description: reportCtrl
+                                                                              .allIndustrialActivitiesDescription
+                                                                              .value ==
+                                                                              ""
+                                                                              ? reportCtrl
+                                                                              .ActvitesList[index]
+                                                                              .description
+                                                                              : reportCtrl
+                                                                              .allIndustrialActivitiesDescription
+                                                                              .value,
+                                                                          industrialActivity: IndustrialActivity(
+                                                                              name: reportCtrl
+                                                                                  .allIndustrialActivitiesTextUpdate
+                                                                                  .value ==
+                                                                                  "Choose the type of industrial activity"
+                                                                                      .tr
+                                                                                  ? reportCtrl
+                                                                                  .ActvitesList[index]
+                                                                                  .industrialActivity!
+                                                                                  .name!
+                                                                                  : reportCtrl
+                                                                                  .allIndustrialActivitiesTextUpdate
+                                                                                  .value));
+
+                                                                  ScaffoldMessenger
+                                                                      .of(
+                                                                      context)
+                                                                      .showSnackBar(
+                                                                      SnackBar(
+                                                                          backgroundColor:
+                                                                          ColorManager
+                                                                              .primary,
+                                                                          content:
+                                                                          Text(
+                                                                              'تم التعديل'
+                                                                                  .tr)));
+                                                                  reportCtrl
+                                                                      .allIndustrialActivitiesIdUpdate
+                                                                      .value =
+                                                                  0;
+                                                                  reportCtrl
+                                                                      .allIndustrialActivitiesTextUpdate
+                                                                      .value =
+                                                                      "Choose the type of industrial activity"
+                                                                          .tr;
+                                                                  reportCtrl
+                                                                      .photoIndustrialUpdate
+                                                                      .value =
+                                                                  "";
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                                style: TextButton
+                                                                    .styleFrom(
+                                                                    backgroundColor:
+                                                                    ColorManager
+                                                                        .primary),
+                                                                child: Text(
+                                                                  "تعديل",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                      15,
+                                                                      color: ColorManager
+                                                                          .white),
+                                                                )),
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ));
+                                            },
+                                            child: Container(
                                               width: 250,
                                               decoration: BoxDecoration(
                                                   borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  color: ColorManager.secondary
-                                                      .withOpacity(
-                                                          OpicityValue.o3)),
+                                                  BorderRadius.circular(
+                                                      4),
+                                                  color:
+                                                  ColorManager.primary),
                                               child: Center(
                                                 child: Text(
-                                                    "${reportCtrl.ActvitesList[index].industrialActivity!.name!}:  ${reportCtrl.ActvitesList[index].distance!}${"M".tr}",
-                                                    overflow:
-                                                        TextOverflow.ellipsis),
+                                                    "${reportCtrl
+                                                        .ActvitesList[index]
+                                                        .industrialActivity!
+                                                        .name!}:  ${reportCtrl
+                                                        .ActvitesList[index]
+                                                        .distance!}${"M".tr}",
+                                                    style: const TextStyle(
+                                                        color: Colors.white),
+                                                    overflow: TextOverflow
+                                                        .ellipsis),
                                               ),
                                             ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                reportCtrl.removeActivites(
-                                                    reportCtrl
-                                                        .ActvitesList[index]
-                                                        .industrialActivityId!);
-                                              },
-                                              child: Container(
-                                                height: 25,
-                                                width: 25,
-                                                decoration: const BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color: Colors.red),
-                                                child: const Icon(Icons.clear,
-                                                    color: Colors.white),
-                                              ),
-                                            )
-                                          ],
-                                        ),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              reportCtrl.removeActivites(
+                                                  reportCtrl
+                                                      .ActvitesList[index]
+                                                      .industrialActivityId!);
+                                            },
+                                            child: Container(
+                                              height: 20,
+                                              width: 20,
+                                              decoration: const BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Colors.red),
+                                              child: const Icon(Icons.clear,
+                                                  size: 20,
+                                                  color: Colors.white),
+                                            ),
+                                          )
+                                        ],
                                       ),
                                     ),
-                                  )
+                              ),
+                            )
                                 : SizedBox()),
                             // Obx(() => reportCtrl.ActvitesListReport.isNotEmpty
                             //     ? SizedBox(
@@ -4327,85 +5175,94 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                         onTap: () {
                                           showModalBottomSheet(
                                               context: context,
-                                              builder: (ctx) => SizedBox(
+                                              builder: (ctx) =>
+                                                  SizedBox(
                                                     height:
-                                                        SizeConfig.screenHeight,
-                                                    child: Obx(() => reportCtrl
-                                                            .surroundingBuildings
-                                                            .isEmpty
+                                                    SizeConfig.screenHeight,
+                                                    child: Obx(() =>
+                                                    reportCtrl
+                                                        .surroundingBuildings
+                                                        .isEmpty
                                                         ? const Center(
-                                                            child:
-                                                                CircularProgressIndicator(),
-                                                          )
+                                                      child:
+                                                      CircularProgressIndicator(),
+                                                    )
                                                         : ListView.builder(
-                                                            itemCount: reportCtrl
-                                                                .surroundingBuildings
-                                                                .length,
-                                                            itemBuilder:
-                                                                (context,
-                                                                    index) {
-                                                              return Padding(
-                                                                padding: const EdgeInsets
-                                                                        .symmetric(
-                                                                    horizontal:
-                                                                        AppPadding
-                                                                            .p60,
-                                                                    vertical:
-                                                                        AppPadding
-                                                                            .p16),
+                                                        itemCount: reportCtrl
+                                                            .surroundingBuildings
+                                                            .length,
+                                                        itemBuilder:
+                                                            (context,
+                                                            index) {
+                                                          return Padding(
+                                                            padding: const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal:
+                                                                AppPadding
+                                                                    .p60,
+                                                                vertical:
+                                                                AppPadding
+                                                                    .p16),
+                                                            child:
+                                                            GestureDetector(
+                                                              onTap: () {
+                                                                reportCtrl
+                                                                    .surroundingBuildingsText
+                                                                    .value =
+                                                                    reportCtrl
+                                                                        .surroundingBuildings[index]
+                                                                        .name;
+                                                                reportCtrl
+                                                                    .surroundingBuildingId
+                                                                    .value =
+                                                                    reportCtrl
+                                                                        .surroundingBuildings[index]
+                                                                        .id;
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                              child:
+                                                              Container(
+                                                                alignment:
+                                                                Alignment
+                                                                    .center,
+                                                                height: SizeConfig
+                                                                    .screenHeight! /
+                                                                    MediaSize
+                                                                        .m12,
+                                                                width: double
+                                                                    .infinity,
+                                                                decoration: BoxDecoration(
+                                                                    borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                        BorderRadiusValues
+                                                                            .br10),
+                                                                    border: Border
+                                                                        .all(
+                                                                        width:
+                                                                        AppSize
+                                                                            .s1,
+                                                                        color: ColorManager
+                                                                            .grey)),
                                                                 child:
-                                                                    GestureDetector(
-                                                                  onTap: () {
-                                                                    reportCtrl
-                                                                            .surroundingBuildingsText
-                                                                            .value =
-                                                                        reportCtrl
-                                                                            .surroundingBuildings[index]
-                                                                            .name;
-                                                                    reportCtrl
-                                                                            .surroundingBuildingId
-                                                                            .value =
-                                                                        reportCtrl
-                                                                            .surroundingBuildings[index]
-                                                                            .id;
-                                                                    Navigator.pop(
-                                                                        context);
-                                                                  },
-                                                                  child:
-                                                                      Container(
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .center,
-                                                                    height: SizeConfig
-                                                                            .screenHeight! /
-                                                                        MediaSize
-                                                                            .m12,
-                                                                    width: double
-                                                                        .infinity,
-                                                                    decoration: BoxDecoration(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(BorderRadiusValues
-                                                                                .br10),
-                                                                        border: Border.all(
-                                                                            width:
-                                                                                AppSize.s1,
-                                                                            color: ColorManager.grey)),
-                                                                    child:
-                                                                        Center(
-                                                                      child: Text(
-                                                                          reportCtrl
-                                                                              .surroundingBuildings[
-                                                                                  index]
-                                                                              .name,
-                                                                          textAlign: TextAlign
-                                                                              .center,
-                                                                          style:
-                                                                              getSemiBoldStyle(color: ColorManager.secondary)),
-                                                                    ),
-                                                                  ),
+                                                                Center(
+                                                                  child: Text(
+                                                                      reportCtrl
+                                                                          .surroundingBuildings[
+                                                                      index]
+                                                                          .name,
+                                                                      textAlign: TextAlign
+                                                                          .center,
+                                                                      style:
+                                                                      getSemiBoldStyle(
+                                                                          color: ColorManager
+                                                                              .secondary)),
                                                                 ),
-                                                              );
-                                                            })),
+                                                              ),
+                                                            ),
+                                                          );
+                                                        })),
                                                   ));
                                         },
                                         child: Container(
@@ -4414,15 +5271,15 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                             decoration: BoxDecoration(
                                               border: Border.all(
                                                   color:
-                                                      ColorManager.secondary),
+                                                  ColorManager.secondary),
                                               borderRadius:
-                                                  BorderRadius.circular(5),
+                                              BorderRadius.circular(5),
                                               color: Colors.white,
                                             ),
                                             child: Center(
                                               child: Row(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                                                MainAxisAlignment.center,
                                                 children: [
                                                   Text(reportCtrl
                                                       .surroundingBuildingsText
@@ -4441,18 +5298,18 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                               height: 40,
                                               child: TextFormField(
                                                 keyboardType:
-                                                    TextInputType.number,
+                                                TextInputType.number,
                                                 onChanged: (v) {
                                                   reportCtrl.surroundingDistance
                                                       .value = double.parse(v);
                                                 },
                                                 initialValue: "0.0",
                                                 decoration:
-                                                    const InputDecoration(),
+                                                const InputDecoration(),
                                               ))),
                                     ],
                                   ),
-                                  SizedBox(height: 25),
+                                  const SizedBox(height: 25),
                                   Row(
                                     children: [
                                       Stack(
@@ -4465,15 +5322,16 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                               decoration: BoxDecoration(
                                                 color: Colors.grey,
                                                 borderRadius:
-                                                    BorderRadius.circular(8),
+                                                BorderRadius.circular(8),
                                               ),
                                               child: Obx(
-                                                () => reportCtrl.images != ""
+                                                    () =>
+                                                reportCtrl.images != ""
                                                     ? Image.file(
-                                                        File(reportCtrl.images),
-                                                        fit: BoxFit.cover,
-                                                      )
-                                                    : SizedBox(),
+                                                  File(reportCtrl.images),
+                                                  fit: BoxFit.cover,
+                                                )
+                                                    : const SizedBox(),
                                               )),
                                           GestureDetector(
                                             onTap: () {
@@ -4485,7 +5343,7 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                               decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   color:
-                                                      ColorManager.secondary),
+                                                  ColorManager.secondary),
                                               child: const Icon(
                                                 Icons.add,
                                                 color: Colors.white,
@@ -4494,22 +5352,22 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                           )
                                         ],
                                       ),
-                                      Spacer(),
+                                      const Spacer(),
                                       GestureDetector(
                                         onTap: () {
                                           if (reportCtrl.surroundingBuildingId
-                                                  .value ==
+                                              .value ==
                                               0) {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(SnackBar(
-                                                    content: Text(
-                                                        'Please Enter Surrounding Buildings '
-                                                            .tr)));
+                                                content: Text(
+                                                    'Please Enter Surrounding Buildings '
+                                                        .tr)));
                                           } else if (reportCtrl.images == "") {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(SnackBar(
-                                                    content: Text(
-                                                        'يجب اختيار صوره'.tr)));
+                                                content: Text(
+                                                    'يجب اختيار صوره'.tr)));
                                           } else {
                                             reportCtrl.addBuildingsList(
                                                 reportCtrl.surroundingBuildingId
@@ -4520,18 +5378,27 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                                     .surroundingBuildingsText
                                                     .value,
                                                 File(reportCtrl.images));
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(SnackBar(
+                                                backgroundColor:
+                                                ColorManager.primary,
+                                                content:
+                                                Text('تم الاضافه'.tr)));
                                           }
                                         },
                                         child: Container(
-                                          width: 30,
-                                          height: 30,
-                                          decoration: BoxDecoration(
-                                              color: ColorManager.primary,
-                                              borderRadius:
-                                                  BorderRadius.circular(4)),
-                                          child: const Icon(Icons.add,
-                                              color: Colors.white),
-                                        ),
+                                            width: 70,
+                                            height: 30,
+                                            decoration: BoxDecoration(
+                                                color: ColorManager.primary,
+                                                borderRadius: BorderRadius
+                                                    .circular(4)),
+                                            child: const Center(
+                                                child: Text(
+                                                  "اضافه",
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                ))),
                                       ),
                                       Spacer(),
                                     ],
@@ -4540,63 +5407,440 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                               ),
                             ),
 
-                            Obx(() => reportCtrl.distanceOfList.isNotEmpty
+                            Obx(() =>
+                            reportCtrl.distanceOfList.isNotEmpty
                                 ? SizedBox(
-                                    height: 50,
-                                    child: ListView.builder(
-                                      itemCount:
-                                          reportCtrl.distanceOfList.length,
-                                      physics: const BouncingScrollPhysics(),
-                                      shrinkWrap: true,
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (_, index) => Padding(
-                                        padding: const EdgeInsets.all(8),
-                                        child: Stack(
-                                          alignment: Alignment.topLeft,
-                                          children: [
-                                            Container(
+                              height: 50,
+                              child: ListView.builder(
+                                itemCount:
+                                reportCtrl.distanceOfList.length,
+                                physics: const BouncingScrollPhysics(),
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (_, index) =>
+                                    Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Stack(
+                                        alignment: Alignment.topLeft,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              Utility.showBottomSheet(
+                                                  context,
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                    CrossAxisAlignment
+                                                        .start,
+                                                    children: [
+                                                      Center(
+                                                        child: LabelWidget(
+                                                            label: 'تعديل المبنى المحيط'
+                                                        ),
+                                                      ),
+                                                      // Center(
+                                                      //   child: Text(
+                                                      //     "تعديل المبنى المحيط",
+                                                      //     style: TextStyle(
+                                                      //         color:
+                                                      //         ColorManager
+                                                      //             .primary,
+                                                      //         fontSize: 18),
+                                                      //   ),
+                                                      // ),
+                                                      Row(
+                                                        crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                        mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceEvenly,
+                                                        children: [
+                                                          Column(
+                                                            crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                            children: [
+                                                              LabelWidget(
+                                                                  label:
+                                                                  'Surrounding Buildings'
+                                                                      .tr),
+                                                              GestureDetector(
+                                                                onTap: () {
+                                                                  showModalBottomSheet(
+                                                                      context:
+                                                                      context,
+                                                                      builder: (
+                                                                          ctx) =>
+                                                                          SizedBox(
+                                                                            height: SizeConfig
+                                                                                .screenHeight,
+                                                                            child: Obx(() =>
+                                                                            reportCtrl
+                                                                                .surroundingBuildings
+                                                                                .isEmpty
+                                                                                ? const Center(
+                                                                              child: CircularProgressIndicator(),
+                                                                            )
+                                                                                : ListView
+                                                                                .builder(
+                                                                                itemCount: reportCtrl
+                                                                                    .surroundingBuildings
+                                                                                    .length,
+                                                                                itemBuilder: (
+                                                                                    context,
+                                                                                    index) {
+                                                                                  return Padding(
+                                                                                    padding: const EdgeInsets
+                                                                                        .symmetric(
+                                                                                        horizontal: AppPadding
+                                                                                            .p60,
+                                                                                        vertical: AppPadding
+                                                                                            .p16),
+                                                                                    child: GestureDetector(
+                                                                                      onTap: () {
+                                                                                        reportCtrl
+                                                                                            .surroundingBuildingsTextUpdate
+                                                                                            .value =
+                                                                                            reportCtrl
+                                                                                                .surroundingBuildings[index]
+                                                                                                .name;
+                                                                                        reportCtrl
+                                                                                            .surroundingBuildingIdUpdate
+                                                                                            .value =
+                                                                                            reportCtrl
+                                                                                                .surroundingBuildings[index]
+                                                                                                .id;
+                                                                                        Navigator
+                                                                                            .pop(
+                                                                                            context);
+                                                                                      },
+                                                                                      child: Container(
+                                                                                        alignment: Alignment
+                                                                                            .center,
+                                                                                        height: SizeConfig
+                                                                                            .screenHeight! /
+                                                                                            MediaSize
+                                                                                                .m12,
+                                                                                        width: double
+                                                                                            .infinity,
+                                                                                        decoration: BoxDecoration(
+                                                                                            borderRadius: BorderRadius
+                                                                                                .circular(
+                                                                                                BorderRadiusValues
+                                                                                                    .br10),
+                                                                                            border: Border
+                                                                                                .all(
+                                                                                                width: AppSize
+                                                                                                    .s1,
+                                                                                                color: ColorManager
+                                                                                                    .grey)),
+                                                                                        child: Center(
+                                                                                          child: Text(
+                                                                                              reportCtrl
+                                                                                                  .surroundingBuildings[index]
+                                                                                                  .name,
+                                                                                              textAlign: TextAlign
+                                                                                                  .center,
+                                                                                              style: getSemiBoldStyle(
+                                                                                                  color: ColorManager
+                                                                                                      .secondary)),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  );
+                                                                                })),
+                                                                          ));
+                                                                },
+                                                                child: Container(
+                                                                    width: 250,
+                                                                    height: 40,
+                                                                    decoration: BoxDecoration(
+                                                                      border: Border
+                                                                          .all(
+                                                                          color:
+                                                                          ColorManager
+                                                                              .secondary),
+                                                                      borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                          5),
+                                                                      color: Colors
+                                                                          .white,
+                                                                    ),
+                                                                    child: Center(
+                                                                      child:
+                                                                      Row(
+                                                                        mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                        children: [
+                                                                          Obx(() =>
+                                                                              Flexible(
+                                                                                  child: Text(
+                                                                                    reportCtrl
+                                                                                        .surroundingBuildingsTextUpdate
+                                                                                        .value,
+                                                                                    overflow: TextOverflow
+                                                                                        .ellipsis,
+                                                                                  ))),
+                                                                          const Icon(
+                                                                              Icons
+                                                                                  .arrow_drop_down_rounded)
+                                                                        ],
+                                                                      ),
+                                                                    )),
+                                                              ),
+                                                              LabelWidget(
+                                                                  label:
+                                                                  'Distance'
+                                                                      .tr),
+                                                              SizedBox(
+                                                                width: 250,
+                                                                child:
+                                                                TextFormField(
+                                                                  keyboardType:
+                                                                  TextInputType
+                                                                      .number,
+                                                                  onChanged:
+                                                                      (v) {
+                                                                    reportCtrl
+                                                                        .surroundingDistance
+                                                                        .value =
+                                                                        double
+                                                                            .parse(
+                                                                            v);
+                                                                  },
+                                                                  initialValue: reportCtrl
+                                                                      .distanceOfList[
+                                                                  index]
+                                                                      .distance
+                                                                      .toString(),
+                                                                  decoration:
+                                                                  const InputDecoration(),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          Stack(
+                                                            alignment: Alignment
+                                                                .bottomLeft,
+                                                            children: [
+                                                              Container(
+                                                                  clipBehavior:
+                                                                  Clip
+                                                                      .antiAlias,
+                                                                  height: 100,
+                                                                  width: 100,
+                                                                  decoration:
+                                                                  BoxDecoration(
+                                                                    color: Colors
+                                                                        .grey,
+                                                                    borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                        8),
+                                                                  ),
+                                                                  child: Obx(
+                                                                        () =>
+                                                                    reportCtrl
+                                                                        .photoBuildingUpdate !=
+                                                                        ""
+                                                                        ? Image
+                                                                        .file(
+                                                                      File(
+                                                                          reportCtrl
+                                                                              .photoBuildingUpdate
+                                                                              .value),
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                    )
+                                                                        : SizedBox(),
+                                                                  )),
+                                                              GestureDetector(
+                                                                onTap: () {
+                                                                  reportCtrl
+                                                                      .selectPhoto();
+                                                                },
+                                                                child:
+                                                                Container(
+                                                                  width: 25,
+                                                                  height: 25,
+                                                                  decoration: BoxDecoration(
+                                                                      shape: BoxShape
+                                                                          .circle,
+                                                                      color: ColorManager
+                                                                          .secondary),
+                                                                  child:
+                                                                  const Icon(
+                                                                    Icons.add,
+                                                                    color: Colors
+                                                                        .white,
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 30,
+                                                      ),
+                                                      Center(
+                                                        child: SizedBox(
+                                                          width: 250,
+                                                          height: 40,
+                                                          child: TextButton(
+                                                              onPressed: () {
+                                                                reportCtrl
+                                                                    .distanceOfList[index] =
+                                                                    ReportBuildingss(
+                                                                        attachment: reportCtrl
+                                                                            .photoBuildingUpdate
+                                                                            .value ==
+                                                                            ""
+                                                                            ? null
+                                                                            : File(
+                                                                            reportCtrl
+                                                                                .photoBuildingUpdate
+                                                                                .value),
+                                                                        surroundingBuildingId: reportCtrl
+                                                                            .surroundingBuildingIdUpdate
+                                                                            .value ==
+                                                                            0
+                                                                            ? reportCtrl
+                                                                            .distanceOfList[
+                                                                        index]
+                                                                            .surroundingBuildingId
+                                                                            : reportCtrl
+                                                                            .surroundingBuildingIdUpdate
+                                                                            .value,
+                                                                        distance: reportCtrl
+                                                                            .surroundingDistance
+                                                                            .value ==
+                                                                            0.0
+                                                                            ? reportCtrl
+                                                                            .distanceOfList[index]
+                                                                            .distance
+                                                                            : reportCtrl
+                                                                            .surroundingDistance
+                                                                            .value,
+                                                                        surroundingBuilding: SurroundingBuilding(
+                                                                            id: reportCtrl
+                                                                                .surroundingBuildingIdUpdate
+                                                                                .value ==
+                                                                                0
+                                                                                ? reportCtrl
+                                                                                .distanceOfList[index]
+                                                                                .surroundingBuildingId
+                                                                                : reportCtrl
+                                                                                .surroundingBuildingIdUpdate
+                                                                                .value,
+                                                                            name: reportCtrl
+                                                                                .surroundingBuildingsTextUpdate
+                                                                                .value ==
+                                                                                'choose buildings'
+                                                                                    .tr
+                                                                                ? reportCtrl
+                                                                                .distanceOfList[index]
+                                                                                .surroundingBuilding!
+                                                                                .name
+                                                                                : reportCtrl
+                                                                                .surroundingBuildingsTextUpdate
+                                                                                .value));
+
+                                                                ScaffoldMessenger
+                                                                    .of(context)
+                                                                    .showSnackBar(
+                                                                    SnackBar(
+                                                                        backgroundColor:
+                                                                        ColorManager
+                                                                            .primary,
+                                                                        content: Text(
+                                                                            'تم التعديل'
+                                                                                .tr)));
+                                                                reportCtrl
+                                                                    .surroundingBuildingIdUpdate
+                                                                    .value = 0;
+                                                                reportCtrl
+                                                                    .surroundingBuildingsTextUpdate
+                                                                    .value =
+                                                                    'choose buildings'
+                                                                        .tr;
+                                                                reportCtrl
+                                                                    .photoBuildingUpdate
+                                                                    .value ==
+                                                                    "";
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                              style: TextButton
+                                                                  .styleFrom(
+                                                                  backgroundColor:
+                                                                  ColorManager
+                                                                      .primary),
+                                                              child: Text(
+                                                                "تعديل",
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                    15,
+                                                                    color: ColorManager
+                                                                        .white),
+                                                              )),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ));
+                                            },
+                                            child: Container(
                                               width: 250,
                                               decoration: BoxDecoration(
                                                   borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  color: ColorManager.secondary
-                                                      .withOpacity(
-                                                          OpicityValue.o3)),
+                                                  BorderRadius.circular(
+                                                      4),
+                                                  color:
+                                                  ColorManager.primary),
                                               child: Center(
                                                 child: Text(
-                                                    "${reportCtrl.distanceOfList[index].surroundingBuilding!.name!}:  ${reportCtrl.distanceOfList[index].distance!}${"M".tr}",
-                                                    overflow:
-                                                        TextOverflow.ellipsis),
+                                                    "${reportCtrl
+                                                        .distanceOfList[index]
+                                                        .surroundingBuilding!
+                                                        .name!}:  ${reportCtrl
+                                                        .distanceOfList[index]
+                                                        .distance!}${"M".tr}",
+                                                    style: const TextStyle(
+                                                        color: Colors.white),
+                                                    overflow: TextOverflow
+                                                        .ellipsis),
                                               ),
                                             ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                reportCtrl.removeDiatance(
-                                                    reportCtrl
-                                                        .distanceOfList[index]
-                                                        .surroundingBuildingId!);
-                                              },
-                                              child: Container(
-                                                height: 25,
-                                                width: 25,
-                                                decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color: Colors.red),
-                                                child: Icon(Icons.clear,
-                                                    color: Colors.white),
-                                              ),
-                                            )
-                                          ],
-                                        ),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              reportCtrl.removeDiatance(
+                                                  reportCtrl
+                                                      .distanceOfList[index]
+                                                      .surroundingBuildingId!);
+                                            },
+                                            child: Container(
+                                              height: 25,
+                                              width: 25,
+                                              decoration: const BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Colors.red),
+                                              child: const Icon(Icons.clear,
+                                                  color: Colors.white),
+                                            ),
+                                          )
+                                        ],
                                       ),
                                     ),
-                                  )
-                                : SizedBox()),
+                              ),
+                            )
+                                : const SizedBox()),
                             const ReportDividerWidget(),
 
                             LabelWidget(label: "Volume".tr),
 
-                            const ReportDividerWidget(),
                             const ReportDividerWidget(),
                             ReportTextFieldWidget(
                                 symbol: "M".tr,
@@ -4710,240 +5954,244 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                       double.parse(val!);
                                 }),
 
-                            Obx(() => reportCtrl.water.value == true ||
+                            Obx(() =>
+                            reportCtrl.water.value == true ||
+                                reportCtrl.earth.value == true
+                                ? Column(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                              children: [
+                                reportCtrl.water.value == true &&
                                     reportCtrl.earth.value == true
-                                ? Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      reportCtrl.water.value == true &&
-                                              reportCtrl.earth.value == true
-                                          ? LabelWidget(
-                                              label:
-                                                  "${"Water Pollution".tr} و ${"Soil contamination".tr}")
-                                          : reportCtrl.water.value == true
-                                              ? LabelWidget(
-                                                  label: "Water Pollution".tr)
-                                              : reportCtrl.earth.value == true
-                                                  ? LabelWidget(
-                                                      label:
-                                                          "Soil contamination"
-                                                              .tr)
-                                                  : const SizedBox(),
-                                      const ReportDividerWidget(),
-                                      ReportTextFieldWidget(
-                                          symbol: "PPT",
-                                          intialValue: "0",
-                                          controller: controllersalinity,
-                                          title: "Salinity".tr,
-                                          type: TextInputType.number,
-                                          onSavedFunction: (val) {
-                                            reportCtrl.changesalinity(val);
-                                          }),
-                                      ReportTextFieldWidget(
-                                          intialValue: "0",
-                                          symbol: "mg/L",
-                                          controller:
-                                              controllertotalDissolvedSolids,
-                                          title: "TotalDissolvedSolids".tr,
-                                          type: TextInputType.number,
-                                          onSavedFunction: (val) {
-                                            reportCtrl
-                                                .changetotalDissolvedSolids(
-                                                    val);
-                                          }),
-                                      ReportTextFieldWidget(
-                                          intialValue: "0",
-                                          controller: controllepH,
-                                          title: "PH".tr,
-                                          type: TextInputType.number,
-                                          onSavedFunction: (val) {
-                                            reportCtrl.changepH(val);
-                                          }),
-                                      ReportTextFieldWidget(
-                                          symbol: "μS/cm",
-                                          intialValue: "0",
-                                          controller:
-                                              controlleelectricalConnection,
-                                          title: "ElectricalConnection".tr,
-                                          type: TextInputType.number,
-                                          onSavedFunction: (val) {
-                                            reportCtrl
-                                                .changeelectricalConnection(
-                                                    val);
-                                          }),
-                                      ReportTextFieldWidget(
-                                          symbol: "μg/L",
-                                          intialValue: "0",
-                                          controller:
-                                              controllertotalOrganicCarbon,
-                                          title: "TotalOrganicCarbon".tr,
-                                          type: TextInputType.number,
-                                          onSavedFunction: (val) {
-                                            reportCtrl
-                                                .changetotalOrganicCarbon(val);
-                                          }),
+                                    ? LabelWidget(
+                                    label:
+                                    "${"Water Pollution"
+                                        .tr} و ${"Soil contamination".tr}")
+                                    : reportCtrl.water.value == true
+                                    ? LabelWidget(
+                                    label: "Water Pollution".tr)
+                                    : reportCtrl.earth.value == true
+                                    ? LabelWidget(
+                                    label:
+                                    "Soil contamination"
+                                        .tr)
+                                    : const SizedBox(),
+                                const ReportDividerWidget(),
+                                ReportTextFieldWidget(
+                                    symbol: "PPT",
+                                    intialValue: "0",
+                                    controller: controllersalinity,
+                                    title: "Salinity".tr,
+                                    type: TextInputType.number,
+                                    onSavedFunction: (val) {
+                                      reportCtrl.changesalinity(val);
+                                    }),
+                                ReportTextFieldWidget(
+                                    intialValue: "0",
+                                    symbol: "mg/L",
+                                    controller:
+                                    controllertotalDissolvedSolids,
+                                    title: "TotalDissolvedSolids".tr,
+                                    type: TextInputType.number,
+                                    onSavedFunction: (val) {
+                                      reportCtrl
+                                          .changetotalDissolvedSolids(
+                                          val);
+                                    }),
+                                ReportTextFieldWidget(
+                                    intialValue: "0",
+                                    controller: controllepH,
+                                    title: "PH".tr,
+                                    type: TextInputType.number,
+                                    onSavedFunction: (val) {
+                                      reportCtrl.changepH(val);
+                                    }),
+                                ReportTextFieldWidget(
+                                    symbol: "μS/cm",
+                                    intialValue: "0",
+                                    controller:
+                                    controlleelectricalConnection,
+                                    title: "ElectricalConnection".tr,
+                                    type: TextInputType.number,
+                                    onSavedFunction: (val) {
+                                      reportCtrl
+                                          .changeelectricalConnection(
+                                          val);
+                                    }),
+                                ReportTextFieldWidget(
+                                    symbol: "μg/L",
+                                    intialValue: "0",
+                                    controller:
+                                    controllertotalOrganicCarbon,
+                                    title: "TotalOrganicCarbon".tr,
+                                    type: TextInputType.number,
+                                    onSavedFunction: (val) {
+                                      reportCtrl
+                                          .changetotalOrganicCarbon(val);
+                                    }),
 
-                                      //water
-                                      Obx(() => reportCtrl.water.value == true
-                                          ? Column(
-                                              children: [
-                                                ReportTextFieldWidget(
-                                                    symbol: "NTU",
-                                                    intialValue: "0",
-                                                    controller:
-                                                        controlleturbidity,
-                                                    title: "Turbidity".tr,
-                                                    type: TextInputType.number,
-                                                    onSavedFunction: (val) {
-                                                      reportCtrl
-                                                          .changeturbidity(val);
-                                                    }),
-                                                ReportTextFieldWidget(
-                                                    intialValue: "0",
-                                                    symbol: "d".tr,
-                                                    controller:
-                                                        controllertempreture,
-                                                    title: "Temperature".tr,
-                                                    type: TextInputType.number,
-                                                    onSavedFunction: (val) {
-                                                      reportCtrl
-                                                          .changetemperature(
-                                                              val);
-                                                    }),
-                                                ReportTextFieldWidget(
-                                                    symbol: "mg/L",
-                                                    intialValue: "0",
-                                                    controller:
-                                                        controllerHardness,
-                                                    title: "Hardness".tr,
-                                                    type: TextInputType.number,
-                                                    onSavedFunction: (val) {
-                                                      reportCtrl.hardness
-                                                          .value = val!;
-                                                      print(reportCtrl
-                                                          .hardness.value);
-                                                    }),
-                                                ReportTextFieldWidget(
-                                                    intialValue: "0",
-                                                    symbol: "mg/L",
-                                                    controller:
-                                                        controllerdissolvedOxygen,
-                                                    title: "DissolvedOxygen".tr,
-                                                    type: TextInputType.number,
-                                                    onSavedFunction: (val) {
-                                                      reportCtrl
-                                                          .changedissolvedOxygen(
-                                                              val);
-                                                    }),
-                                                ReportTextFieldWidget(
-                                                    intialValue: "0",
-                                                    symbol: "m/g".tr,
-                                                    controller:
-                                                        controlletotalSuspendedSolids,
-                                                    title:
-                                                        "TotalSuspendedSolids"
-                                                            .tr,
-                                                    type: TextInputType.number,
-                                                    onSavedFunction: (val) {
-                                                      reportCtrl
-                                                          .changetotalSuspendedSolids(
-                                                              val);
-                                                    }),
-                                              ],
-                                            )
-                                          : SizedBox()),
+                                //water
+                                Obx(() =>
+                                reportCtrl.water.value == true
+                                    ? Column(
+                                  children: [
+                                    ReportTextFieldWidget(
+                                        symbol: "NTU",
+                                        intialValue: "0",
+                                        controller:
+                                        controlleturbidity,
+                                        title: "Turbidity".tr,
+                                        type: TextInputType.number,
+                                        onSavedFunction: (val) {
+                                          reportCtrl
+                                              .changeturbidity(val);
+                                        }),
+                                    ReportTextFieldWidget(
+                                        intialValue: "0",
+                                        symbol: "d".tr,
+                                        controller:
+                                        controllertempreture,
+                                        title: "Temperature".tr,
+                                        type: TextInputType.number,
+                                        onSavedFunction: (val) {
+                                          reportCtrl
+                                              .changetemperature(
+                                              val);
+                                        }),
+                                    ReportTextFieldWidget(
+                                        symbol: "mg/L",
+                                        intialValue: "0",
+                                        controller:
+                                        controllerHardness,
+                                        title: "Hardness".tr,
+                                        type: TextInputType.number,
+                                        onSavedFunction: (val) {
+                                          reportCtrl.hardness
+                                              .value = val!;
+                                          print(reportCtrl
+                                              .hardness.value);
+                                        }),
+                                    ReportTextFieldWidget(
+                                        intialValue: "0",
+                                        symbol: "mg/L",
+                                        controller:
+                                        controllerdissolvedOxygen,
+                                        title: "DissolvedOxygen".tr,
+                                        type: TextInputType.number,
+                                        onSavedFunction: (val) {
+                                          reportCtrl
+                                              .changedissolvedOxygen(
+                                              val);
+                                        }),
+                                    ReportTextFieldWidget(
+                                        intialValue: "0",
+                                        symbol: "m/g".tr,
+                                        controller:
+                                        controlletotalSuspendedSolids,
+                                        title:
+                                        "TotalSuspendedSolids"
+                                            .tr,
+                                        type: TextInputType.number,
+                                        onSavedFunction: (val) {
+                                          reportCtrl
+                                              .changetotalSuspendedSolids(
+                                              val);
+                                        }),
+                                  ],
+                                )
+                                    : SizedBox()),
 
-                                      //air
-                                    ],
-                                  )
+                                //air
+                              ],
+                            )
                                 : SizedBox()),
-                            Obx(() => reportCtrl.air.value == true
+                            Obx(() =>
+                            reportCtrl.air.value == true
                                 ? Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      LabelWidget(label: "air pollution".tr),
-                                      ReportTextFieldWidget(
-                                          intialValue: "0",
-                                          symbol: "o".tr,
-                                          controller: controllerozone,
-                                          title: "Ozone".tr,
-                                          type: TextInputType.number,
-                                          onSavedFunction: (val) {
-                                            reportCtrl.changeozone(val);
-                                          }),
-                                      ReportTextFieldWidget(
-                                          intialValue: "0",
-                                          symbol: "o".tr,
-                                          controller: controllernitrogenDioxide,
-                                          title: "NitrogenDioxide".tr,
-                                          type: TextInputType.number,
-                                          onSavedFunction: (val) {
-                                            reportCtrl
-                                                .changenitrogenDioxide(val);
-                                          }),
-                                      ReportTextFieldWidget(
-                                          intialValue: "0",
-                                          symbol: "o".tr,
-                                          controller: controllersulfurDioxide,
-                                          title: "SulfurDioxide".tr,
-                                          type: TextInputType.number,
-                                          onSavedFunction: (val) {
-                                            reportCtrl.changesulfurDioxide(val);
-                                          }),
-                                      ReportTextFieldWidget(
-                                          intialValue: "0",
-                                          controller: controllerFirstCarpone,
-                                          title: "FirstCarpone".tr,
-                                          type: TextInputType.number,
-                                          onSavedFunction: (val) {
-                                            reportCtrl.FirstCarpone.value =
-                                                val!;
-                                            print(
-                                                reportCtrl.FirstCarpone.value);
-                                          }),
-                                      ReportTextFieldWidget(
-                                          intialValue: "0",
-                                          controller: controllerSecoundCarpone,
-                                          title: "SecoundCarpone".tr,
-                                          type: TextInputType.number,
-                                          onSavedFunction: (val) {
-                                            reportCtrl.SecoundCarpone.value =
-                                                val!;
-                                          }),
-                                      ReportTextFieldWidget(
-                                          intialValue: "0",
-                                          symbol: "o".tr,
-                                          controller: controllerpM25,
-                                          title: "PM 25".tr,
-                                          type: TextInputType.number,
-                                          onSavedFunction: (val) {
-                                            reportCtrl.changepM25(val);
-                                          }),
-                                      ReportTextFieldWidget(
-                                          intialValue: "0",
-                                          symbol: "o".tr,
-                                          controller: controllerpM10,
-                                          title: "PM 10".tr,
-                                          type: TextInputType.number,
-                                          onSavedFunction: (val) {
-                                            reportCtrl.changepM10(val);
-                                          }),
-                                      ReportTextFieldWidget(
-                                          intialValue: "0",
-                                          symbol: "o".tr,
-                                          controller:
-                                              controllervolatileOrganicMatter,
-                                          title: "VolatileOrganicMatter".tr,
-                                          type: TextInputType.number,
-                                          onSavedFunction: (val) {
-                                            reportCtrl
-                                                .changevolatileOrganicMatter(
-                                                    val);
-                                          }),
-                                    ],
-                                  )
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                              children: [
+                                LabelWidget(label: "air pollution".tr),
+                                ReportTextFieldWidget(
+                                    intialValue: "0",
+                                    symbol: "o".tr,
+                                    controller: controllerozone,
+                                    title: "Ozone".tr,
+                                    type: TextInputType.number,
+                                    onSavedFunction: (val) {
+                                      reportCtrl.changeozone(val);
+                                    }),
+                                ReportTextFieldWidget(
+                                    intialValue: "0",
+                                    symbol: "o".tr,
+                                    controller: controllernitrogenDioxide,
+                                    title: "NitrogenDioxide".tr,
+                                    type: TextInputType.number,
+                                    onSavedFunction: (val) {
+                                      reportCtrl
+                                          .changenitrogenDioxide(val);
+                                    }),
+                                ReportTextFieldWidget(
+                                    intialValue: "0",
+                                    symbol: "o".tr,
+                                    controller: controllersulfurDioxide,
+                                    title: "SulfurDioxide".tr,
+                                    type: TextInputType.number,
+                                    onSavedFunction: (val) {
+                                      reportCtrl.changesulfurDioxide(val);
+                                    }),
+                                ReportTextFieldWidget(
+                                    intialValue: "0",
+                                    controller: controllerFirstCarpone,
+                                    title: "FirstCarpone".tr,
+                                    type: TextInputType.number,
+                                    onSavedFunction: (val) {
+                                      reportCtrl.FirstCarpone.value =
+                                      val!;
+                                      print(
+                                          reportCtrl.FirstCarpone.value);
+                                    }),
+                                ReportTextFieldWidget(
+                                    intialValue: "0",
+                                    controller: controllerSecoundCarpone,
+                                    title: "SecoundCarpone".tr,
+                                    type: TextInputType.number,
+                                    onSavedFunction: (val) {
+                                      reportCtrl.SecoundCarpone.value =
+                                      val!;
+                                    }),
+                                ReportTextFieldWidget(
+                                    intialValue: "0",
+                                    symbol: "o".tr,
+                                    controller: controllerpM25,
+                                    title: "PM 25".tr,
+                                    type: TextInputType.number,
+                                    onSavedFunction: (val) {
+                                      reportCtrl.changepM25(val);
+                                    }),
+                                ReportTextFieldWidget(
+                                    intialValue: "0",
+                                    symbol: "o".tr,
+                                    controller: controllerpM10,
+                                    title: "PM 10".tr,
+                                    type: TextInputType.number,
+                                    onSavedFunction: (val) {
+                                      reportCtrl.changepM10(val);
+                                    }),
+                                ReportTextFieldWidget(
+                                    intialValue: "0",
+                                    symbol: "o".tr,
+                                    controller:
+                                    controllervolatileOrganicMatter,
+                                    title: "VolatileOrganicMatter".tr,
+                                    type: TextInputType.number,
+                                    onSavedFunction: (val) {
+                                      reportCtrl
+                                          .changevolatileOrganicMatter(
+                                          val);
+                                    }),
+                              ],
+                            )
                                 : SizedBox()),
 
                             // ReportTextFieldWidget(
@@ -4971,113 +6219,124 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                             //     }),
                             LabelWidget(
                                 label:
-                                    "air condition at the time of measurement"
-                                        .tr),
+                                "air condition at the time of measurement"
+                                    .tr),
                             const ReportDividerWidget(),
                             LabelWidget(label: "Wind direction".tr),
-                            Obx(() => GestureDetector(
-                                onTap: () {
-                                  showModalBottomSheet(
-                                    context: context,
-                                    builder: (ctx) => SizedBox(
-                                        height: SizeConfig.screenHeight! /
-                                            MediaSize.m2_5,
-                                        child: ListView.builder(
-                                            itemCount: reportCtrl
-                                                .getAllWindDirection.length,
-                                            itemBuilder: (context, index) {
-                                              return InkWell(
-                                                onTap: () {
-                                                  reportCtrl
-                                                          .getAllWindDirectionText
-                                                          .value =
-                                                      reportCtrl
-                                                          .getAllWindDirection[
+                            Obx(() =>
+                                GestureDetector(
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                        context: context,
+                                        builder: (ctx) =>
+                                            SizedBox(
+                                                height: SizeConfig
+                                                    .screenHeight! /
+                                                    MediaSize.m2_5,
+                                                child: ListView.builder(
+                                                    itemCount: reportCtrl
+                                                        .getAllWindDirection
+                                                        .length,
+                                                    itemBuilder: (context,
+                                                        index) {
+                                                      return InkWell(
+                                                        onTap: () {
+                                                          reportCtrl
+                                                              .getAllWindDirectionText
+                                                              .value =
+                                                              reportCtrl
+                                                                  .getAllWindDirection[
                                                               index]
-                                                          .name;
-                                                  reportCtrl
-                                                          .getAllWindDirectionId
-                                                          .value =
-                                                      reportCtrl
-                                                          .getAllWindDirection[
+                                                                  .name;
+                                                          reportCtrl
+                                                              .getAllWindDirectionId
+                                                              .value =
+                                                              reportCtrl
+                                                                  .getAllWindDirection[
                                                               index]
-                                                          .id;
-                                                  Navigator.pop(context);
-                                                },
-                                                child: Padding(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal:
-                                                          AppPadding.p60,
-                                                      vertical: AppPadding.p16),
-                                                  child: Container(
-                                                    alignment: Alignment.center,
-                                                    height: SizeConfig
-                                                            .screenHeight! /
-                                                        MediaSize.m12,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                BorderRadiusValues
-                                                                    .br10),
-                                                        border: Border.all(
-                                                            width: AppSize.s1,
-                                                            color: ColorManager
-                                                                .grey)),
-                                                    child: Text(
-                                                        reportCtrl
-                                                            .getAllWindDirection[
+                                                                  .id;
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Padding(
+                                                          padding: const EdgeInsets
+                                                              .symmetric(
+                                                              horizontal:
+                                                              AppPadding.p60,
+                                                              vertical: AppPadding
+                                                                  .p16),
+                                                          child: Container(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            height: SizeConfig
+                                                                .screenHeight! /
+                                                                MediaSize.m12,
+                                                            decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                    BorderRadiusValues
+                                                                        .br10),
+                                                                border: Border
+                                                                    .all(
+                                                                    width: AppSize
+                                                                        .s1,
+                                                                    color: ColorManager
+                                                                        .grey)),
+                                                            child: Text(
+                                                                reportCtrl
+                                                                    .getAllWindDirection[
                                                                 index]
-                                                            .name,
-                                                        style: getSemiBoldStyle(
-                                                            color: ColorManager
-                                                                .secondary)),
-                                                  ),
-                                                ),
-                                              );
-                                            })),
-                                  );
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: AppPadding.p10),
-                                  margin: const EdgeInsets.only(
-                                      right: AppMargin.m30,
-                                      left: AppMargin.m30,
-                                      top: AppMargin.m20),
-                                  alignment: Alignment.centerRight,
-                                  height:
+                                                                    .name,
+                                                                style: getSemiBoldStyle(
+                                                                    color: ColorManager
+                                                                        .secondary)),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    })),
+                                      );
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: AppPadding.p10),
+                                      margin: const EdgeInsets.only(
+                                          right: AppMargin.m30,
+                                          left: AppMargin.m30,
+                                          top: AppMargin.m20),
+                                      alignment: Alignment.centerRight,
+                                      height:
                                       SizeConfig.screenHeight! / MediaSize.m16,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: AppSize.s1,
-                                        color: ColorManager.grey),
-                                    borderRadius: BorderRadius.circular(
-                                        BorderRadiusValues.br5),
-                                  ),
-                                  child: reportCtrl.loading.value
-                                      ? const BubbleLoader()
-                                      : Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Text(
-                                                reportCtrl
-                                                    .getAllWindDirectionText
-                                                    .value,
-                                                textAlign: TextAlign.center,
-                                                style: getSemiBoldStyle(
-                                                    color: ColorManager
-                                                        .secondary)),
-                                            const Spacer(),
-                                            Icon(
-                                              Icons.arrow_drop_down,
-                                              color: ColorManager.secondary,
-                                              size: AppSize.s30,
-                                            ),
-                                          ],
-                                        ),
-                                ))),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: AppSize.s1,
+                                            color: ColorManager.grey),
+                                        borderRadius: BorderRadius.circular(
+                                            BorderRadiusValues.br5),
+                                      ),
+                                      child: reportCtrl.loading.value
+                                          ? const BubbleLoader()
+                                          : Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Text(
+                                              reportCtrl
+                                                  .getAllWindDirectionText
+                                                  .value,
+                                              textAlign: TextAlign.center,
+                                              style: getSemiBoldStyle(
+                                                  color: ColorManager
+                                                      .secondary)),
+                                          const Spacer(),
+                                          Icon(
+                                            Icons.arrow_drop_down,
+                                            color: ColorManager.secondary,
+                                            size: AppSize.s30,
+                                          ),
+                                        ],
+                                      ),
+                                    ))),
                             const ReportDividerWidget(),
                             ReportTextFieldWidget(
                                 symbol: "d".tr,
@@ -5104,87 +6363,94 @@ class _UpdateReportScreenState extends State<UpdateReportScreen> {
                                 onSavedFunction: (val) {
                                   reportCtrl.relativehumidity.value = val!;
                                 }),
-                            Obx(() => reportCtrl.send.value
+                            Obx(() =>
+                            reportCtrl.send.value
                                 ? const Center(
-                                    child: CircularProgressIndicator(),
-                                  )
+                              child: CircularProgressIndicator(),
+                            )
                                 : SizedBox(
-                                    width: MediaQuery.of(context).size.width,
-                                    child: TextButton(
-                                        style: TextButton.styleFrom(
-                                            backgroundColor:
-                                                ColorManager.lightPrimary),
-                                        onPressed: () {
-                                          reportCtrl.UpdateReport(
-                                              context: context,
-                                              firstCarpone:
-                                                  controllerFirstCarpone.text,
-                                              secoundCarpone:
-                                                  controllerSecoundCarpone.text,
-                                              waterTemperature:
-                                                  controllerWaterTemperature
-                                                      .text,
-                                              // acidity: controllerAcidity.text,
-                                              epicenterId: widget.epicenterId!,
-                                              hardness: controllerHardness.text,
-                                              epicenterDepth:
-                                                  controllerDepth.text,
-                                              epicenterLenght:
-                                                  controllerHeight.text,
-                                              epicenterWidth:
-                                                  controllerWidth.text,
-                                              humidity: controllerrelativehumidity
-                                                  .text,
-                                              windSpeed:
-                                                  controllerWindspeed.text,
-                                              extentOfPolluationDescription:
-                                                  controllerotherNote.text,
-                                              // allKindsOfCarbon:
-                                              //     controllerallKindsOfCarbon.text,
-                                              dissolvedOxygen:
-                                                  controllerdissolvedOxygen
-                                                      .text,
-                                              electricalConnection:
-                                                  controlleelectricalConnection
-                                                      .text,
-                                              nitrogenDioxide:
-                                                  controllernitrogenDioxide
-                                                      .text,
-                                              ozone: controllerozone.text,
-                                              pH: controllepH.text,
-                                              pm10: controllerpM10.text,
-                                              pm25: controllerpM25.text,
-                                              salinity: controllersalinity.text,
-                                              sulfurDioxide:
-                                                  controllersulfurDioxide.text,
-                                              temperature:
-                                                  controllertempreture.text,
-                                              totalDissolvedSolids:
-                                                  controllertotalDissolvedSolids
-                                                      .text,
-                                              totalOrganicCarbon:
-                                                  controllertotalOrganicCarbon
-                                                      .text,
-                                              totalSuspendedSolids:
-                                                  controlletotalSuspendedSolids
-                                                      .text,
-                                              turbidity:
-                                                  controlleturbidity.text,
-                                              volatileOrganicMatter:
-                                                  controllervolatileOrganicMatter
-                                                      .text,
-                                              reportId: widget.report!.reportId);
-                                        },
-                                        child: Text(
-                                          "update report".tr,
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18),
-                                        )),
-                                  ))
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width,
+                              child: TextButton(
+                                  style: TextButton.styleFrom(
+                                      backgroundColor:
+                                      ColorManager.lightPrimary),
+                                  onPressed: () {
+                                    reportCtrl.UpdateReport(
+                                        context: context,
+                                        firstCarpone:
+                                        controllerFirstCarpone.text,
+                                        secoundCarpone:
+                                        controllerSecoundCarpone.text,
+                                        waterTemperature:
+                                        controllerWaterTemperature
+                                            .text,
+                                        // acidity: controllerAcidity.text,
+                                        epicenterId: widget.epicenterId!,
+                                        hardness: controllerHardness.text,
+                                        epicenterDepth:
+                                        controllerDepth.text,
+                                        epicenterLenght:
+                                        controllerHeight.text,
+                                        epicenterWidth:
+                                        controllerWidth.text,
+                                        humidity: controllerrelativehumidity
+                                            .text,
+                                        windSpeed:
+                                        controllerWindspeed.text,
+                                        extentOfPolluationDescription:
+                                        controllerotherNote.text,
+                                        // allKindsOfCarbon:
+                                        //     controllerallKindsOfCarbon.text,
+                                        dissolvedOxygen:
+                                        controllerdissolvedOxygen
+                                            .text,
+                                        electricalConnection:
+                                        controlleelectricalConnection
+                                            .text,
+                                        nitrogenDioxide:
+                                        controllernitrogenDioxide
+                                            .text,
+                                        ozone: controllerozone.text,
+                                        pH: controllepH.text,
+                                        pm10: controllerpM10.text,
+                                        pm25: controllerpM25.text,
+                                        salinity: controllersalinity.text,
+                                        sulfurDioxide:
+                                        controllersulfurDioxide.text,
+                                        temperature:
+                                        controllertempreture.text,
+                                        totalDissolvedSolids:
+                                        controllertotalDissolvedSolids
+                                            .text,
+                                        totalOrganicCarbon:
+                                        controllertotalOrganicCarbon
+                                            .text,
+                                        totalSuspendedSolids:
+                                        controlletotalSuspendedSolids
+                                            .text,
+                                        turbidity:
+                                        controlleturbidity.text,
+                                        volatileOrganicMatter:
+                                        controllervolatileOrganicMatter
+                                            .text,
+                                        reportId: widget.report!.reportId);
+                                  },
+                                  child: Text(
+                                    "update report".tr,
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18),
+                                  )),
+                            )),
+                            SizedBox(height: 10,)
                           ],
                         ),
-                      )),
+                      ),
+                    ),
+                  )),
             )));
   }
 }

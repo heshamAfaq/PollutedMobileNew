@@ -12,8 +12,11 @@ import 'package:enivronment/presentation/Home/home_screen.dart';
 import 'package:enivronment/presentation/Home/update_report.dart';
 import 'package:enivronment/presentation/resources/color_manager.dart';
 import 'package:enivronment/presentation/resources/strings_manager.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/basic.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:lottie/lottie.dart';
 
 // ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
@@ -430,6 +433,52 @@ class AddReportService {
     return null;
   }
 
+  Future<List<CitiesModel>?> getAllPollution() async {
+    try {
+      http.Response res = await http.get(
+        Uri.parse(Constants.polluationSourceEndPoint),
+        headers: <String, String>{
+          "Content-type": "application/json",
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${SharedPreferencesHelper.getTokenValue()}',
+          'lang': Get.locale!.languageCode
+        },
+      );
+      print(res.body);
+      if (res.statusCode == 200) {
+        print(res.body);
+        final mList = List<CitiesModel>.from(
+            jsonDecode(res.body).map((i) => CitiesModel.fromJson(i)));
+
+        return mList;
+      }
+    } catch (e) {}
+    return null;
+  }
+
+  Future<List<CitiesModel>?> getAllPotentialPollutants() async {
+    try {
+      http.Response res = await http.get(
+        Uri.parse(Constants.allPotentialPollutantsEndPoint),
+        headers: <String, String>{
+          "Content-type": "application/json",
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${SharedPreferencesHelper.getTokenValue()}',
+          'lang': Get.locale!.languageCode
+        },
+      );
+      print(res.body);
+      if (res.statusCode == 200) {
+        print(res.body);
+        final mList = List<CitiesModel>.from(
+            jsonDecode(res.body).map((i) => CitiesModel.fromJson(i)));
+
+        return mList;
+      }
+    } catch (e) {}
+    return null;
+  }
+
   Future<List<CitiesModel>?> getAllPlants() async {
     try {
       http.Response res = await http.get(
@@ -762,15 +811,40 @@ class AddReportService {
       print(response.statusCode);
       Get.defaultDialog(
         title: Constants.empty,
-        middleText: AppStrings.sucuss,
-        onConfirm: () => Get.offAll(() => HomeScreen()),
-        confirmTextColor: ColorManager.white,
-        buttonColor: ColorManager.primary,
-        backgroundColor: ColorManager.white,
+        middleText: AppStrings.update,
+        // onConfirm: () => Get.offAll(() => HomeScreen()),
+        // confirmTextColor: ColorManager.white,
+        // buttonColor: ColorManager.primary,
+        // backgroundColor: ColorManager.white,
+        radius: 25,
+        content: Column(
+          children: [
+            Lottie.asset('assets/images/sucess.json', height: 150),
+            TextButton(
+                style: TextButton.styleFrom(
+                    backgroundColor: ColorManager.primary
+                    ,shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)
+                )
+                ),
+                onPressed: () {
+                  Get.offAll(() => HomeScreen());
+                },
+                child:  Text("تم الارسال بنجاح",style: TextStyle(color:ColorManager.white,fontSize: 16 ),))
+          ],
+        ),
       );
       // Get.offAll(() => HomeScreen());
       return 200;
     } else if (response.statusCode == 400) {
+      Get.defaultDialog(
+        title: "توجد مشكله فى الارسال",
+        middleText: AppStrings.error,
+        onConfirm: () => Get.offAll(() => HomeScreen()),
+        confirmTextColor: ColorManager.white,
+        buttonColor: ColorManager.error,
+        backgroundColor: ColorManager.white,
+      );
       print(response.statusCode);
       log("error 400 : ${response.reasonPhrase}");
       log("Response: $response");
@@ -903,48 +977,38 @@ class AddReportService {
     // }
 
     for (int i = 0; i < allData.reportIndustrialActivitiesIds!.length; i++) {
+      print(allData.reportIndustrialActivitiesIds![i].toJson());
+      request.fields["ReportIndustrialActivitiesIds[$i].IndustrialActivityId"] =
+          "${allData.reportIndustrialActivitiesIds![i].industrialActivityId}";
+      reportActivityIds++;
+      request.fields["ReportIndustrialActivitiesIds[$i].Discription"] =
+          "${allData.reportIndustrialActivitiesIds![i].description}";
+      reportDescriptionIds++;
+      request.fields["ReportIndustrialActivitiesIds[$i].Distance"] =
+          "${allData.reportIndustrialActivitiesIds![i].distance}";
+      reportDistanceIds++;
       if (allData.reportIndustrialActivitiesIds![i].attachment == null) {
-        print(allData.reportIndustrialActivitiesIds![i].toJson());
       } else {
-        print(allData.reportIndustrialActivitiesIds![i].toJson());
-        request.fields[
-                "ReportIndustrialActivitiesIds[$reportActivityIds].IndustrialActivityId"] =
-            "${allData.reportIndustrialActivitiesIds![reportActivityIds].industrialActivityId}";
-        reportActivityIds++;
-        request.fields[
-                "ReportIndustrialActivitiesIds[$reportDescriptionIds].Discription"] =
-            "${allData.reportIndustrialActivitiesIds![reportDescriptionIds].description}";
-        reportDescriptionIds++;
-        request.fields[
-                "ReportIndustrialActivitiesIds[$reportDistanceIds].Distance"] =
-            "${allData.reportIndustrialActivitiesIds![reportDistanceIds].distance}";
-        reportDistanceIds++;
         request.files.add(await http.MultipartFile.fromPath(
-            'ReportIndustrialActivitiesIds[$reportIndastrilAttachments].Attachment',
-            allData.reportIndustrialActivitiesIds![reportIndastrilAttachments]
-                .attachment!.path));
+            'ReportIndustrialActivitiesIds[$i].Attachment',
+            allData.reportIndustrialActivitiesIds![i].attachment!.path));
         reportIndastrilAttachments++;
       }
     }
 
     for (var i = 0; i < allData.reportSurroundingBuildingsIds!.length; i++) {
+      print(allData.reportSurroundingBuildingsIds![i].attachment);
+      request.fields["ReportSurroundingBuildings[$i].SurroundingBuildingId"] =
+          "${allData.reportSurroundingBuildingsIds![i].surroundingBuildingId}";
+      reportSurroundingBuildingsIds++;
+      request.fields["ReportSurroundingBuildings[$i].Distance"] =
+          "${allData.reportSurroundingBuildingsIds![i].distance}";
+      reportSurroundingBuildingsDistance++;
       if (allData.reportSurroundingBuildingsIds![i].attachment == null) {
-        print(allData.reportSurroundingBuildingsIds![i].attachment);
       } else {
-        print(allData.reportSurroundingBuildingsIds![i].attachment);
-        request.fields[
-                "ReportSurroundingBuildings[$reportSurroundingBuildingsIds].SurroundingBuildingId"] =
-            "${allData.reportSurroundingBuildingsIds![reportSurroundingBuildingsIds].surroundingBuildingId}";
-        reportSurroundingBuildingsIds++;
-        request.fields[
-                "ReportSurroundingBuildings[$reportSurroundingBuildingsDistance].Distance"] =
-            "${allData.reportSurroundingBuildingsIds![reportSurroundingBuildingsDistance].distance}";
-        reportSurroundingBuildingsDistance++;
-
         request.files.add(await http.MultipartFile.fromPath(
-            'ReportSurroundingBuildings[$reportSurrouningAttachments].Attachment',
-            allData.reportSurroundingBuildingsIds![reportSurrouningAttachments]
-                .attachment!.path));
+            'ReportSurroundingBuildings[$i].Attachment',
+            allData.reportSurroundingBuildingsIds![i].attachment!.path));
         reportSurrouningAttachments++;
       }
     }
@@ -1041,20 +1105,44 @@ class AddReportService {
     print(response.reasonPhrase.toString());
     print(await response.stream.transform(utf8.decoder).join());
 
-
     if (response.statusCode == 200 || response.statusCode == 201) {
       print(response.statusCode);
       Get.defaultDialog(
         title: Constants.empty,
         middleText: AppStrings.update,
-        onConfirm: () => Get.offAll(() => HomeScreen()),
-        confirmTextColor: ColorManager.white,
-        buttonColor: ColorManager.primary,
-        backgroundColor: ColorManager.white,
+        // onConfirm: () => Get.offAll(() => HomeScreen()),
+        // confirmTextColor: ColorManager.white,
+        // buttonColor: ColorManager.primary,
+        // backgroundColor: ColorManager.white,
+        radius: 25,
+        content: Column(
+          children: [
+            Lottie.asset('assets/images/sucess.json', height: 150),
+            TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: ColorManager.primary
+                    ,shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8)
+              )
+              ),
+                onPressed: () {
+                  Get.offAll(() => HomeScreen());
+                },
+                child:  Text("تم الارسال بنجاح",style: TextStyle(color:ColorManager.white,fontSize: 16 ),))
+          ],
+        ),
       );
       // Get.offAll(() => HomeScreen());
       return 200;
     } else if (response.statusCode == 400) {
+      Get.defaultDialog(
+        title: "توجد مشكله فى الارسال",
+        middleText: AppStrings.error,
+        onConfirm: () => Get.offAll(() => HomeScreen()),
+        confirmTextColor: ColorManager.white,
+        buttonColor: ColorManager.error,
+        backgroundColor: ColorManager.white,
+      );
       print(response.statusCode);
       log("error 400 : ${response.reasonPhrase}");
       log("Response: $response");

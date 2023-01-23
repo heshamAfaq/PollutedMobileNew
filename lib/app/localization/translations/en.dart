@@ -219,5 +219,6 @@ const Map<String, String> en = {
   "choose image": "choose image",
   "Search by name or id": "search by name or id",
   "Search id": "search id",
-  "search": "search"
+  "search": "search",
+  "add another": "add another",
 };

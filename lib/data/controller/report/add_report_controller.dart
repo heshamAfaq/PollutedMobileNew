@@ -175,7 +175,11 @@ class AddReportController extends GetxController {
   final acidity = '0.0'.obs;
   final addServices = AddReportService();
   final underGroundWater = <CitiesModel>[].obs;
+  final medium_pollution = <CitiesModel>[].obs;
+  final potinal_pollution = <CitiesModel>[].obs;
   final groundWaterText = 'Choose the type of groundwater'.tr.obs;
+  final medium_pollutionText = 'polluted medium'.tr.obs;
+  final potinal_pollutionText = 'Potential Pollutants'.tr.obs;
   final waterGroundId = 0.obs;
   final plantList = <CitiesModel>[].obs;
   final plantText = 'Choose the type of vegetation'.tr.obs;
@@ -189,6 +193,8 @@ class AddReportController extends GetxController {
   final underGroundWaterList = [].obs;
   final semanticPollutionList = [].obs;
   final surroundingBuildingsList = [].obs;
+  final listmedium_pollution = <int>[].obs;
+  final listpotinal_pollution = <int>[].obs;
 
   final surroundedMediumsText =
       'Select the medium that has been contaminated'.tr.obs;
@@ -198,6 +204,7 @@ class AddReportController extends GetxController {
   final natureOfEpicenterId = 0.obs;
   final surroundingBuildings = <CitiesModel>[].obs;
   final surroundingBuildingsText = 'choose buildings'.tr.obs;
+  final surroundingBuildingsTextUpdate = 'choose buildings'.tr.obs;
   final surroundingBuildingsId = 0.obs;
   final getAllWindDirection = <CitiesModel>[].obs;
   final getAllWindDirectionText = 'choose wind direction'.tr.obs;
@@ -275,7 +282,9 @@ class AddReportController extends GetxController {
   // }
 
   final surroundingBuildingId = 0.obs;
+  final surroundingBuildingIdUpdate = 0.obs;
   final surroundingDistance = 0.0.obs;
+  final surroundingDistanceUpdate = 0.0.obs;
   final surroundingName = "".obs;
 
   addBuildingsList(
@@ -391,8 +400,10 @@ class AddReportController extends GetxController {
     // await getAllPollutantReactivities();
     await getPollutantPlace();
     underGroundWater.value = (await addServices.getAllUnderGroundWater())!;
+    medium_pollution.value = (await addServices.getAllPollution())!;
     plantList.value = (await addServices.getAllPlants())!;
     semanticPollution.value = (await addServices.semanticPollution())!;
+    potinal_pollution.value = (await addServices.getAllPotentialPollutants())!;
     surroundedMediums.value = (await addServices.surroundedMediums())!;
     natureOfEpicenter.value = (await addServices.natureOfEpicenter())!;
     surroundingBuildings.value = (await addServices.getSurroundingBuildings())!;
@@ -695,7 +706,10 @@ class AddReportController extends GetxController {
   final allIndustrialActivities = <IndustrialActivitiesModel>[].obs;
   final allIndustrialActivitiesText =
       "Choose the type of industrial activity".tr.obs;
+  final allIndustrialActivitiesTextUpdate =
+      "Choose the type of industrial activity".tr.obs;
   final allIndustrialActivitiesId = 0.obs;
+  final allIndustrialActivitiesIdUpdate = 0.obs;
   final allIndustrialActivitiesDescription = "".obs;
   final allIndustrialActivitiesDistance = 0.0.obs;
   final itemsindustrialActivities =
@@ -792,6 +806,7 @@ class AddReportController extends GetxController {
     String? secoundCarpone,
     required BuildContext context,
   }) async {
+    try{
     // if (residentialArea.isFalse) {
     //   ScaffoldMessenger.of(context).showSnackBar(
     //       SnackBar(content: Text('you must add Residential Area '.tr)));
@@ -849,10 +864,10 @@ class AddReportController extends GetxController {
     //   ScaffoldMessenger.of(context).showSnackBar(
     //       SnackBar(content: Text('please enter Industrial Activites'.tr)));
     // }
-    else if (polluationSourcesIds.isEmpty) {
+    else if (listmedium_pollution.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Contaminated media should be introduced'.tr)));
-    } else if (potentialPollutantsIds.isEmpty) {
+    } else if (listpotinal_pollution.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Please Enter Potential Pollutants '.tr)));
     }
@@ -976,8 +991,8 @@ class AddReportController extends GetxController {
             pollutantPlaceId: pollutantPlaceId.value,
             surfaceWaterId: surfaceWaterId.value,
             reportIndustrialActivitiesIds: ActvitesList,
-            reportPolluationSourcesIds: polluationSourcesIds,
-            reportPotentialPollutantsIds: potentialPollutantsIds,
+            reportPolluationSourcesIds: listmedium_pollution,
+            reportPotentialPollutantsIds: listpotinal_pollution,
             reportSurroundingBuildingsIds: distanceOfList,
             temperature: temperature,
             salinity: salinity,
@@ -1001,6 +1016,8 @@ class AddReportController extends GetxController {
       send.value = false;
       underGroundList.clear();
       plantsList.clear();
+    }}catch(e) {
+      send.value = false;
     }
   }
 
@@ -1071,24 +1088,19 @@ class AddReportController extends GetxController {
       } else if (imagesList.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('please enter HotSpot Images'.tr)));
-      }
-      else if (ActvitesList.isEmpty) {
+      } else if (ActvitesList.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('please enter Industrial Activites'.tr)));
-      }
-      else if (polluationSourcesIds.isEmpty) {
+      } else if (listmedium_pollution.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('Contaminated media should be introduced'.tr)));
-      } else if (potentialPollutantsIds.isEmpty) {
+      } else if (listpotinal_pollution.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Please Enter Potential Pollutants '.tr)));
-      }
-      else if (distanceOfList.isEmpty) {
+      } else if (distanceOfList.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Please Enter Surrounding Buildings '.tr)));
-
-      }
-      else if (epicenterWidth.value == 0.0) {
+      } else if (epicenterWidth.value == 0.0) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('you must enter width'.tr)));
       } else if (epicenterDepth.value == 0.0) {
@@ -1200,8 +1212,8 @@ class AddReportController extends GetxController {
           landFormId: landFormId.value,
           pollutantPlaceId: pollutantPlaceId.value,
           surfaceWaterId: surfaceWaterId.value,
-          reportPolluationSourcesIds: polluationSourcesIds,
-          reportPotentialPollutantsIds: potentialPollutantsIds,
+          reportPolluationSourcesIds: listmedium_pollution,
+          reportPotentialPollutantsIds: listpotinal_pollution,
           reportSurroundingBuildingsIds: distanceOfList,
           temperature: temperature.value,
           // salinity: salinity.value,
@@ -1232,7 +1244,9 @@ class AddReportController extends GetxController {
         ));
         send.value = false;
       }
-    } catch (e) {}
+    } catch (e) {
+      send.value = false;
+    }
   }
 
   final Location location = Location();
@@ -1597,6 +1611,28 @@ class AddReportController extends GetxController {
       print(e.toString());
     }
   }
+  final photoBuildingUpdate="".obs;
+  final photoIndustrialUpdate="".obs;
+  selectPhoto() async {
+    try {
+      final XFile? image = await _picker.pickImage(
+          source: ImageSource.gallery, imageQuality: 50);
+
+      if (image != null) photoBuildingUpdate.value = image.path;
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+  selectPhotoIndustrial() async {
+    try {
+      final XFile? image = await _picker.pickImage(
+          source: ImageSource.gallery, imageQuality: 50);
+
+      if (image != null) photoIndustrialUpdate.value = image.path;
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 
   selectImageIndustrail() async {
     try {
@@ -1651,10 +1687,12 @@ class ReportIndustrialActivitiesss {
     this.distance,
     this.industrialActivityId,
     this.industrialActivity,
+    this.photo
   });
 
   ReportIndustrialActivitiesss.fromJson(dynamic json) {
     attachment = json['attachment'];
+    photo = json['attachment'];
     description = json['description'];
     distance = json['distance'];
     industrialActivityId = json['industrialActivityId'];
@@ -1664,6 +1702,7 @@ class ReportIndustrialActivitiesss {
   }
 
   File? attachment;
+  String? photo;
   String? description;
   double? distance;
   int? industrialActivityId;

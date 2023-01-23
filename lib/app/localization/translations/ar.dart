@@ -115,7 +115,7 @@ const Map<String, String> ar = {
   "List of potential sites": "قائمه المواقع المحتمله",
   "details": "التفاصيل",
   "epicenter": "بؤره",
-  "update report": "تعديل التقرير",
+  "update report": "تعديل القياسات",
   "Spot reports": "تقارير البؤر",
   "ResponsibleAuthorities": "جهه مختصه",
   "Epicenter": "بؤره",
@@ -213,6 +213,7 @@ const Map<String, String> ar = {
   "Industrial activity": "الانشطه الصناعيه",
   "choose image": "اختيار صوره",
   "Search by name or id": "ابحث بالاسم ",
-  "Search id": "ابحث بالرقم ",
-  "search":"ابحث"
+  "Search id": "رقم البؤره",
+  "search": "ابحث",
+  "add another": "اضافه عنصر اخر"
 };
